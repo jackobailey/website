@@ -1,5 +1,5 @@
 # Site settings
-baseURL = "/"
+baseURL = "https://jack-bailey.netlify.com/"
 languageCode = "en-GB"
 title = "Jack Bailey, Political Scientist"
 theme = "hugo-split-theme"
