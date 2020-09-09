@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+
+<head>
+  <meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+
+<title>Hello R Markdown - Split - HTML Template Demo</title>
+<meta name="author" content="Jack Bailey" />
+<meta name="description" content="Split is a centrally-divided layout for a professional online presence with a big image or video left with alongside content." />
+<meta name="robots" content="index, follow" />
+<meta name="referrer" content="always" />
+
+
+<meta property="og:title" content="Hello R Markdown - Split - HTML Template Demo" />
+<meta property="og:description" content="Split is a centrally-divided layout for a professional online presence with a big image or video left with alongside content." />
+<meta property="og:url" content="//example.org" />
+
+<meta property="og:image" content="//example.org/images/social.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<meta name="twitter:site" content="@PoliSciJack" />
+
+
+<link rel="icon" href="//example.org/favicon.ico" />
+
+
+<link rel="stylesheet" href="//example.org/assets/css/split.css" type="text/css" media="screen" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+
+
+
+
+  <style>
+  
+    .fs-split .split-image { background-image: url("//example.org/images/background.jpg"); background-position: center center; }
+  
+  </style>
+
+
+
+
+
+</head>
+
+<body id="fullsingle" class="page-template-page-fullsingle-split">
+
+  <div class="fs-split">
+
+    
+    
+
+      <div class="split-image">
+
+      </div>
+
+    
+    
+
+    
+    <div class="split-content">
+      <div class="split-content-vertically-center">
+        
+        <div class="split-intro">
+  <h1>Hello R Markdown</h1>
+  
+</div>
+
+
+        
+        
+          
+          <div class="split-bio">
+  
+<script src="//example.orgrmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="r-markdown" class="section level1">
+<h1>R Markdown</h1>
+<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
+<p>You can embed an R code chunk like this:</p>
+<pre class="r"><code>summary(cars)
+##      speed           dist       
+##  Min.   : 4.0   Min.   :  2.00  
+##  1st Qu.:12.0   1st Qu.: 26.00  
+##  Median :15.0   Median : 36.00  
+##  Mean   :15.4   Mean   : 42.98  
+##  3rd Qu.:19.0   3rd Qu.: 56.00  
+##  Max.   :25.0   Max.   :120.00
+fit &lt;- lm(dist ~ speed, data = cars)
+fit
+## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Coefficients:
+## (Intercept)        speed  
+##     -17.579        3.932</code></pre>
+</div>
+<div id="including-plots" class="section level1">
+<h1>Including Plots</h1>
+<p>You can also embed plots. See Figure <a href="#fig:pie">1</a> for example:</p>
+<pre class="r"><code>par(mar = c(0, 1, 0, 1))
+pie(
+  c(280, 60, 20),
+  c(&#39;Sky&#39;, &#39;Sunny side of pyramid&#39;, &#39;Shady side of pyramid&#39;),
+  col = c(&#39;#0292D8&#39;, &#39;#F7EA39&#39;, &#39;#C4B632&#39;),
+  init.angle = -50, border = NA
+)</code></pre>
+<div class="figure"><span id="fig:pie"></span>
+<img src="//example.orgpost/2015-07-23-r-rmarkdown_files/figure-html/pie-1.png" alt="A fancy pie chart." width="672" />
+<p class="caption">
+Figure 1: A fancy pie chart.
+</p>
+</div>
+</div>
+
+</div>
+
+        
+
+        
+        <div class="split-credit">
+  <p>&copy;2020 Your Name - <a href="https://onepagelove.com/split">Split Template</a> by <a href="https://onepagelove.com">One Page Love</a></p>
+
+  <!--
+  To edit this credit you can remove the CC3.0 license for only $5 here: https://onepagelove.com/split
+  this really helps contribute towards us developing more templates and means the world to me!
+  Cheers, Rob (@robhope)
+  -->
+</div>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

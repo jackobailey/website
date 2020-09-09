@@ -1,0 +1,97 @@
+# Site settings
+baseURL = "https://www.jack-bailey.co.uk"
+languageCode = "en-GB"
+title = "Jack Bailey, Political Scientist"
+theme = "hugo-split-theme"
+disableKinds = ["section", "taxonomy", "taxonomyTerm", "RSS", "sitemap"]
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+
+# Copyright
+copyright = "&copy;2020, Jack Bailey"
+
+[params]
+
+  # Metadata for search engines and social sharing
+  author = "Jack Bailey"
+  description = "Split is a centrally-divided layout for a professional online presence with a big image or video left with alongside content."
+  shareImage = "images/social.jpg"
+  twitterHandle = "PoliSciJack"
+
+  # Favicon
+  favicon = "favicon.ico"
+
+  # Section - Visual
+  [params.visual]
+
+    # Image
+    [params.visual.image]
+      enable = true
+      file = "images/jack.jpg"
+      position = "center center"
+
+    # Video
+    [params.visual.video]
+      enable = false
+      mute = true
+      file = "videos/background.mp4"
+      # youtubeId = "dk9uNWPP7EA"
+
+  # Links
+  #
+  # Links List #1
+  [[params.links]]
+    [params.links.list1]
+      heading = "Work"
+      
+      [[params.links.list1.link]]
+        text = "Research"
+        url = "https://scholar.google.com/citations?user=82kKRKIAAAAJ"
+        
+      [[params.links.list1.link]]
+        text = "Presentations"
+        url = "/presentations"
+
+      [[params.links.list1.link]]
+        text = "CV"
+        url = "https://github.com/jackobailey/CV/raw/master/CV.pdf"
+        
+
+
+  # Links List #2
+  [[params.links]]
+    [params.links.list2]
+      heading = "Social"
+
+      [[params.links.list2.link]]
+        text = "Email"
+        url = "mailto:jack.bailey@manchester.ac.uk"
+        
+      [[params.links.list2.link]]
+        text = "Twitter"
+        url = "https://twitter.com/PoliSciJack"
+
+      [[params.links.list2.link]]
+        text = "GitHub"
+        url = "https://github.com/jackobailey"
+
+  # Links List #3
+  [[params.links]]
+    [params.links.list3]
+      heading = "Other"
+
+      [[params.links.list3.link]]
+        text = "Media"
+        url = "/media"
+
+      [[params.links.list3.link]]
+        text = ""
+        url = "#"
+
+      [[params.links.list3.link]]
+        text = ""
+        url = "#"
+
+  # The original template is released under the Creative Commons Attribution 3.0 License.
+  # Please keep the original attribution link when using for your own project.
+  # If you'd like to use the template without the attribution, you can check out
+  # the license option via the template author's website: https://onepagelove.com/split
