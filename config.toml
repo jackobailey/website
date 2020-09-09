@@ -1,5 +1,5 @@
 # Site settings
-baseURL = "https://cranky-williams-2fa150.netlify.app/"
+baseURL = "/"
 languageCode = "en-GB"
 title = "Jack Bailey, Political Scientist"
 theme = "hugo-split-theme"
