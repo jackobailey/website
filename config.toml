@@ -1,5 +1,5 @@
 # Site settings
-baseURL = "https://www.jack-bailey.co.uk"
+baseURL = "http://www.jack-bailey.co.uk"
 languageCode = "en-GB"
 title = "Jack Bailey, Political Scientist"
 theme = "hugo-split-theme"
