@@ -7,7 +7,7 @@ Description: Split is a centrally-divided layout for a professional online prese
 */
 /* -- CSS Reset -- */
 @import url("https://fonts.googleapis.com/css?family=Cabin:400,600");
-@import url("https://fonts.googleapis.com/css?family=Montserrat");
+@import url("https://fonts.googleapis.com/css?family=Raleway:400,700");
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -197,11 +197,12 @@ body.page-template-page-fullsingle-split p {
 /* This is the tagline font */
 .split-intro .tagline {
   color: #CCCCCC;
+  line-height: 70px;
 }
 
 .split-bio {
   padding: 40px 0 20px 0;
-  font-family: "Montserrat", serif;
+  font-family: "Raleway", serif;
 }
 @media (max-width: 1200px) {
   .split-bio {
@@ -347,7 +348,7 @@ body.page-template-page-fullsingle-split p {
   margin-bottom: 31px;
   color: #848d96;
   letter-spacing: 2px;
-  opacity: 0.5;
+  opacity: 0.6;
 }
 .split-lists .split-list ul li {
   font-size: 16px;
