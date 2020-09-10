@@ -192,11 +192,11 @@ body.page-template-page-fullsingle-split p {
   /* line-height: 16px; */
   /* margin-bottom: 40px; */
   /* letter-spacing: 0.4px; */
-  color: #CCCCCC;
+  color: #F7F4F3;
 }
 /* This is the tagline font */
 .split-intro .tagline {
-  color: #CCCCCC;
+  color: #F7F4F3;
   line-height: 70px;
 }
 
@@ -227,9 +227,9 @@ body.page-template-page-fullsingle-split p {
   border-bottom: 1px dotted #848d96;
 }
 .split-bio a:hover {
-  color: #CA486d;
+  color: #F24333;
   transition-duration: 0.1s;
-  border-bottom: 1px dotted #CA486d;
+  border-bottom: 1px dotted #F24333;
 }
 .split-bio em,
 .split-bio i {
@@ -360,7 +360,7 @@ body.page-template-page-fullsingle-split p {
   transition-duration: 0.5s;
 }
 .split-lists .split-list ul li a:hover {
-  color: #CA486d;
+  color: #F24333;
   transition-duration: 0.1s;
 }
 

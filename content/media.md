@@ -4,7 +4,7 @@ title: Media
 
 I welcome media requests.
 
-Some topics I can speak about include:
+Some topics I can speak on include:
 
 - British party politics
 - The economy and voting
