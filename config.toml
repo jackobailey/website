@@ -26,7 +26,7 @@ copyright = "&copy;2020, Jack Bailey"
     # Image
     [params.visual.image]
       enable = true
-      file = "images/jack.jpg"
+      file = "images/jack-lo-res.jpg"
       position = "center center"
 
     # Video
