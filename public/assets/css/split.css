@@ -184,15 +184,17 @@ body.page-template-page-fullsingle-split p {
   line-height: 80px;
   letter-spacing: -1px;
 }
+/* This is the title font, etc. */
 .split-intro h1 {
-  font-weight: 400;
-  text-transform: uppercase;
-  font-size: 16px;
-  line-height: 16px;
-  margin-bottom: 40px;
-  letter-spacing: 0.4px;
-  color: #47bec7;
+  /* font-weight: 400; */
+  /* text-transform: uppercase; */
+  font-size: 30px;
+  /* line-height: 16px; */
+  /* margin-bottom: 40px; */
+  /* letter-spacing: 0.4px; */
+  color: #CCCCCC;
 }
+/* This is the tagline font */
 .split-intro .tagline {
   color: #CCCCCC;
 }
@@ -216,15 +218,17 @@ body.page-template-page-fullsingle-split p {
   margin-bottom: 20px;
   line-height: inherit;
 }
+/* Link style */
 .split-bio a {
   color: #848d96;
+  font-weight: bold;
   transition-duration: 0.5s;
-  border-bottom: 1px dotted #848d96;
+  /* border-bottom: 1px dotted #848d96; */
 }
 .split-bio a:hover {
   color: #CA486d;
   transition-duration: 0.1s;
-  border-bottom: 1px dotted #CA486d;
+  /* border-bottom: 1px dotted #CA486d; */
 }
 .split-bio em,
 .split-bio i {
