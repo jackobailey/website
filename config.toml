@@ -18,7 +18,7 @@ copyright = "&copy;2020, Jack Bailey"
   twitterHandle = "PoliSciJack"
 
   # Favicon
-  favicon = "favicon.ico"
+  favicon = "ballot.ico"
 
   # Section - Visual
   [params.visual]
