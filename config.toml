@@ -84,8 +84,8 @@ copyright = "&copy;2020, Jack Bailey"
         url = "/media"
 
       [[params.links.list3.link]]
-        text = ""
-        url = "#"
+        text = "PoliSci ECRs"
+        url = "/polisciecrs"
 
       [[params.links.list3.link]]
         text = ""
