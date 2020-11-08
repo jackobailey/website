@@ -9,6 +9,6 @@ Services include:
 - Multilevel Regression and Post-Stratification (MRP)
 - Public opinion and survey research
 - Experiments and causal inference
-- Modelling and analysis.
+- Modelling and analysis
 
 To make a request, feel free to get in touch at [email](mailto:jackobailey@gmail.com).
