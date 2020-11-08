@@ -4,7 +4,7 @@ languageCode = "en-GB"
 title = "Jack Bailey, Political Scientist"
 theme = "hugo-split-theme"
 disableKinds = ["section", "taxonomy", "taxonomyTerm", "RSS", "sitemap"]
-ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\\.md$"]
 
 # Enter your tracking code to enable Google Analytics
 googleAnalytics = "UA-178824818-1"
@@ -91,8 +91,8 @@ copyright = "&copy;2020, Jack Bailey"
         url = "/polisciecrs"
 
       [[params.links.list3.link]]
-        text = ""
-        url = "#"
+        text = "Consulting"
+        url = "/consulting"
 
   # The original template is released under the Creative Commons Attribution 3.0 License.
   # Please keep the original attribution link when using for your own project.
