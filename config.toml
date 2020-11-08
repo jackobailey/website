@@ -85,14 +85,11 @@ copyright = "&copy;2020, Jack Bailey"
       [[params.links.list3.link]]
         text = "Media"
         url = "/media"
-
-      [[params.links.list3.link]]
-        text = "PoliSci ECRs"
-        url = "/polisciecrs"
-
+        
       [[params.links.list3.link]]
         text = "Consulting"
         url = "/consulting"
+
 
   # The original template is released under the Creative Commons Attribution 3.0 License.
   # Please keep the original attribution link when using for your own project.
