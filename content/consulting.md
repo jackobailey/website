@@ -11,4 +11,4 @@ Services include:
 - Experiments and causal inference
 - Modelling and analysis
 
-To make a request, feel free to get in touch at [email](mailto:jackobailey@gmail.com).
+To make a request, feel free to [get in touch](mailto:jackobailey@gmail.com).
