@@ -10,7 +10,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\
 googleAnalytics = "UA-178824818-1"
 
 # Copyright
-copyright = "&copy;2020, Jack Bailey"
+copyright = "&copy;2021, Jack Bailey"
 
 [params]
 
@@ -29,7 +29,7 @@ copyright = "&copy;2020, Jack Bailey"
     # Image
     [params.visual.image]
       enable = true
-      file = "images/jack-lo-res.jpeg"
+      file = "images/jack-lo-res.jpg"
       position = "center center"
 
     # Video
