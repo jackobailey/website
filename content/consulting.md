@@ -2,7 +2,7 @@
 title: Consulting
 ---
 
-I welcome consulting requests from candidates, political parties, non-profits, and other organisations.
+I welcome consulting requests from pollsters, political candidates, political parties, non-profits, and other organisations.
 
 Services include:
 
