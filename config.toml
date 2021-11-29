@@ -66,16 +66,16 @@ copyright = "&copy;2021, Jack Bailey"
       heading = "Social"
 
       [[params.links.list2.link]]
-        text = "Email"
-        url = "mailto:jack.bailey@manchester.ac.uk"
-        
-      [[params.links.list2.link]]
         text = "Twitter"
         url = "https://twitter.com/PoliSciJack"
 
       [[params.links.list2.link]]
         text = "GitHub"
         url = "https://github.com/jackobailey"
+        
+        [[params.links.list2.link]]
+        text = "LinkedIn"
+        url = "https://www.linkedin.com/in/jack-bailey-776221227/"
 
   # Links List #3
   [[params.links]]
@@ -89,6 +89,10 @@ copyright = "&copy;2021, Jack Bailey"
       [[params.links.list3.link]]
         text = "Consulting"
         url = "/consulting"
+        
+      [[params.links.list3.link]]
+        text = "Email"
+        url = "mailto:jack.bailey@manchester.ac.uk"
 
 
   # The original template is released under the Creative Commons Attribution 3.0 License.
