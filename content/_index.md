@@ -7,5 +7,3 @@ I am a Research Associate on the [British Election Study](https://www.britishele
 I research [economic voting](https://en.wikipedia.org/wiki/Economic_voting) and British politics. I am also interested in political polling and statistics.
 
 Feel free to get in touch below.
-
-<!-- To embed a relative link use [luctus urna]({{< ref "presentations.md" >}}) -->

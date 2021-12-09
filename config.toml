@@ -51,8 +51,8 @@ copyright = "&copy;2021, Jack Bailey"
         url = "https://scholar.google.com/citations?user=82kKRKIAAAAJ"
         
       [[params.links.list1.link]]
-        text = "Presentations"
-        url = "/presentations"
+        text = "Blog"
+        url = "https://www.filedrawer.blog"
 
       [[params.links.list1.link]]
         text = "CV"
