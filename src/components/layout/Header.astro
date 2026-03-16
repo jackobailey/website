@@ -1,0 +1,52 @@
+---
+import { siteConfig } from "@/site.config";
+
+const pathname = Astro.url.pathname;
+const navItems = [
+  { href: "/", label: "Home" },
+  { href: "/blog/", label: "Writing" },
+  { href: "/notes/", label: "Notebook" },
+  { href: "/polls/", label: "Polls" }
+];
+---
+
+<header class="pt-8">
+  <div class="page-shell">
+    <div class="chrome-panel flex flex-col gap-4 pb-4 sm:flex-row sm:items-center sm:justify-between">
+      <a
+        href="/"
+        class="inline-flex items-center gap-1 text-xl font-semibold tracking-[0.02em] text-ink"
+        aria-label={`${siteConfig.name} home`}
+      >
+        <img
+          src="/images/navbar-logo.png"
+          alt=""
+          aria-hidden="true"
+          class="h-7 w-7 shrink-0 sm:h-8 sm:w-8"
+        />
+        <span>JACK BAILEY</span>
+      </a>
+
+      <nav aria-label="Primary navigation">
+        <ul class="flex flex-wrap items-center gap-x-6 gap-y-2">
+          {navItems.map((item) => {
+            const isActive =
+              item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+
+            return (
+              <li>
+                <a
+                  href={item.href}
+                  class:list={["nav-link", isActive && "nav-link-active"]}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>

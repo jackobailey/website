@@ -1,0 +1,196 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import TagList from "@/components/ui/TagList.astro";
+import { getBlogPosts, getTagEntries } from "@/lib/content";
+import { formatDate, getReadingTime } from "@/lib/format";
+import { buildTagLookup, getTagCounts, getTagHref, getTagLabel } from "@/lib/tags";
+
+const [posts, tags] = await Promise.all([getBlogPosts(), getTagEntries()]);
+const tagLookup = buildTagLookup(tags);
+const tagCounts = getTagCounts(posts);
+const curatedTags = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
+---
+
+<BaseLayout
+  title="Writing"
+  description="Public-facing writing on polling, elections, campaigns, and political change."
+>
+  <section class="page-shell pt-4 pb-14 sm:pt-5 sm:pb-20" data-filter-shell>
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1.45fr)_280px]">
+      <div class="min-w-0">
+        <div class="space-y-8" data-post-list>
+          {posts.map((post, index) => (
+            <article
+              class:list={[index === 0 ? "pt-0" : "surface pt-4 sm:pt-6"]}
+              data-post-card
+              data-search={`${post.data.title} ${post.data.summary} ${post.data.tags.join(" ")}`.toLowerCase()}
+              data-tags={post.data.tags.join(",")}
+            >
+              <div class="grid gap-5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-center">
+                {post.data.image && (
+                  <a
+                    href={`/blog/${post.slug}/`}
+                    class="block h-32 w-32 self-center overflow-hidden sm:h-32 sm:w-32"
+                    aria-hidden="true"
+                    tabindex="-1"
+                  >
+                    <img
+                      src={post.data.image}
+                      alt={post.data.imageAlt ?? ""}
+                      class="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                  </a>
+                )}
+
+                <div class="min-w-0">
+                  <p class="eyebrow mt-2">{formatDate(post.data.date)}</p>
+                  <h2 class="mt-3 text-3xl font-semibold tracking-tight text-ink">
+                    <a href={`/blog/${post.slug}/`} class="hover:text-accent">
+                      {post.data.title}
+                    </a>
+                  </h2>
+                  <p class="mt-4 max-w-3xl text-base leading-8 text-ink">{post.data.summary}</p>
+                  <div class="mt-4 flex flex-wrap gap-4 text-sm text-muted">
+                    <span>{getReadingTime(post.body)}</span>
+                  </div>
+                  <div class="mt-5">
+                    <TagList
+                      items={post.data.tags.map((slug) => ({
+                        slug,
+                        label: getTagLabel(slug, tagLookup),
+                        href: getTagHref(slug)
+                      }))}
+                    />
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <p class="surface mt-8 hidden pt-4 text-sm text-ink" data-empty-state>
+          No posts match that search yet. Try another topic or clear the search.
+        </p>
+      </div>
+
+      <aside class="editorial-sidebar lg:sticky lg:top-8 lg:h-fit">
+        <div class="space-y-6">
+          <label for="blog-search" class="sr-only">Search posts</label>
+          <input
+            id="blog-search"
+            type="search"
+            placeholder="Search posts"
+            data-blog-search
+            class="glass-input"
+          />
+
+          <div class="space-y-3">
+            <p class="eyebrow">Topics</p>
+            <button
+              type="button"
+              class="filter-pill"
+              data-tag-filter
+              data-tag=""
+            >
+              <span>All topics</span>
+              <span>{posts.length}</span>
+            </button>
+            {curatedTags.map((tag) => (
+              <button
+                type="button"
+                class="filter-pill"
+                data-tag-filter
+                data-tag={tag.slug}
+              >
+                <span>{tag.data.name}</span>
+                <span>{tagCounts.get(tag.slug) ?? 0}</span>
+              </button>
+            ))}
+          </div>
+
+          <div class="flex items-center justify-between gap-4 text-sm font-medium">
+            <p class="text-ink">
+              <span data-results-count>{posts.length}</span> posts
+            </p>
+            <a href="/blog/tags/" class="text-ink hover:text-accent">
+              Full tag index
+            </a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <script>
+    const shell = document.querySelector("[data-filter-shell]");
+
+    if (shell) {
+      const searchInput = shell.querySelector("[data-blog-search]") as HTMLInputElement | null;
+      const tagButtons = Array.from(shell.querySelectorAll<HTMLElement>("[data-tag-filter]"));
+      const postCards = Array.from(shell.querySelectorAll<HTMLElement>("[data-post-card]"));
+      const countNode = shell.querySelector("[data-results-count]") as HTMLElement | null;
+      const emptyState = shell.querySelector("[data-empty-state]") as HTMLElement | null;
+      const params = new URLSearchParams(window.location.search);
+      let activeTag = params.get("tag") ?? "";
+
+      function syncButtons() {
+        for (const button of tagButtons) {
+          const isActive = button.dataset.tag === activeTag;
+          button.classList.toggle("border-accent", isActive);
+          button.classList.toggle("text-accent", isActive);
+        }
+      }
+
+      function updateUrl() {
+        const next = new URL(window.location.href);
+
+        if (activeTag) {
+          next.searchParams.set("tag", activeTag);
+        } else {
+          next.searchParams.delete("tag");
+        }
+
+        window.history.replaceState({}, "", next);
+      }
+
+      function applyFilters() {
+        const query = searchInput?.value?.toLowerCase().trim() ?? "";
+        let visibleCount = 0;
+
+        for (const card of postCards) {
+          const searchBlob = card.dataset.search ?? "";
+          const tags = (card.dataset.tags ?? "").split(",").filter(Boolean);
+          const matchesSearch = query === "" || searchBlob.includes(query);
+          const matchesTag = activeTag === "" || tags.includes(activeTag);
+          const visible = matchesSearch && matchesTag;
+          card.classList.toggle("hidden", !visible);
+
+          if (visible) {
+            visibleCount += 1;
+          }
+        }
+
+        if (countNode) {
+          countNode.textContent = String(visibleCount);
+        }
+
+        emptyState?.classList.toggle("hidden", visibleCount > 0);
+      }
+
+      searchInput?.addEventListener("input", applyFilters);
+
+      for (const button of tagButtons) {
+        button.addEventListener("click", () => {
+          activeTag = button.dataset.tag ?? "";
+          syncButtons();
+          updateUrl();
+          applyFilters();
+        });
+      }
+
+      syncButtons();
+      applyFilters();
+    }
+  </script>
+</BaseLayout>

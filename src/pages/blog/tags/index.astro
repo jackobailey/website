@@ -1,0 +1,37 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageIntro from "@/components/ui/PageIntro.astro";
+import { getBlogPosts, getTagEntries } from "@/lib/content";
+import { getTagCounts, getTagHref } from "@/lib/tags";
+
+const [posts, tags] = await Promise.all([getBlogPosts(), getTagEntries()]);
+const tagCounts = getTagCounts(posts);
+const tagsWithPosts = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
+---
+
+<BaseLayout
+  title="Tag Index"
+  description="Curated topic pages for browsing writing on polling, elections, and public affairs."
+>
+  <PageIntro
+    eyebrow="Tags"
+    title="Browse by topic"
+    description="These topic pages are intentionally curated. They help readers discover recurring themes without turning the site into a pile of thin archive pages."
+  />
+
+  <section class="page-shell pb-14 sm:pb-20">
+    <div class="grid gap-8 md:grid-cols-2">
+      {tagsWithPosts.map((tag) => (
+        <article class="surface surface-strong pt-6">
+          <p class="text-sm font-semibold text-ink">{tagCounts.get(tag.slug) ?? 0} posts</p>
+          <h2 class="mt-3 text-2xl font-semibold tracking-tight text-ink">
+            <a href={getTagHref(tag.slug)} class="hover:text-accent">
+              {tag.data.name}
+            </a>
+          </h2>
+          <p class="mt-3 text-base leading-8 text-ink">{tag.data.description}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

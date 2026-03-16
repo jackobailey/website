@@ -1,0 +1,37 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageIntro from "@/components/ui/PageIntro.astro";
+import { getNotesEntries, getTagEntries } from "@/lib/content";
+import { getTagCounts, getTagHref } from "@/lib/tags";
+
+const [notes, tags] = await Promise.all([getNotesEntries(), getTagEntries()]);
+const tagCounts = getTagCounts(notes);
+const tagsWithNotes = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
+---
+
+<BaseLayout
+  title="Notebook Tags"
+  description="Topic pages for browsing notebook entries on methods, research questions, data work, and early ideas."
+>
+  <PageIntro
+    eyebrow="Tags"
+    title="Browse notebook entries by topic"
+    description="These topic pages group together developing ideas, methods questions, and open notebook entries."
+  />
+
+  <section class="page-shell pb-14 sm:pb-20">
+    <div class="grid gap-8 md:grid-cols-2">
+      {tagsWithNotes.map((tag) => (
+        <article class="surface surface-strong pt-6">
+          <p class="text-sm font-semibold text-ink">{tagCounts.get(tag.slug) ?? 0} notebook entries</p>
+          <h2 class="mt-3 text-2xl font-semibold tracking-tight text-ink">
+            <a href={getTagHref(tag.slug, "/notes/tags")} class="hover:text-accent">
+              {tag.data.name}
+            </a>
+          </h2>
+          <p class="mt-3 text-base leading-8 text-ink">{tag.data.description}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

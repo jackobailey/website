@@ -1,0 +1,81 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageIntro from "@/components/ui/PageIntro.astro";
+import TagList from "@/components/ui/TagList.astro";
+import { getBlogPosts, getTagEntries } from "@/lib/content";
+import { formatDate, getReadingTime } from "@/lib/format";
+import { buildTagLookup, getTagCounts, getTagHref, getTagLabel } from "@/lib/tags";
+
+export async function getStaticPaths() {
+  const [posts, tags] = await Promise.all([getBlogPosts(), getTagEntries()]);
+  const tagCounts = getTagCounts(posts);
+
+  return tags
+    .filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0)
+    .map((tag) => ({
+      params: { tag: tag.slug },
+      props: {
+        tag,
+        posts: posts.filter((post) => post.data.tags.includes(tag.slug))
+      }
+    }));
+}
+
+const { tag, posts } = Astro.props;
+const tagLookup = buildTagLookup(await getTagEntries());
+---
+
+<BaseLayout
+  title={tag.data.seoTitle ?? `${tag.data.name} posts`}
+  description={tag.data.seoDescription ?? tag.data.description}
+>
+  <PageIntro eyebrow="Tag" title={tag.data.name} description={tag.data.description} />
+
+  <section class="page-shell pb-14 sm:pb-20">
+    <div class="grid gap-8 md:grid-cols-2">
+      {posts.map((post) => (
+        <article class="surface surface-strong pt-6">
+          <div class="grid gap-5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-center">
+            {post.data.image && (
+              <a
+                href={`/blog/${post.slug}/`}
+                class="block h-32 w-32 self-center overflow-hidden sm:h-32 sm:w-32"
+                aria-hidden="true"
+                tabindex="-1"
+              >
+                <img
+                  src={post.data.image}
+                  alt={post.data.imageAlt ?? ""}
+                  class="h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </a>
+            )}
+
+            <div class="min-w-0">
+              <p class="eyebrow mt-2">{formatDate(post.data.date)}</p>
+              <h2 class="mt-3 text-2xl font-semibold tracking-tight text-ink">
+                <a href={`/blog/${post.slug}/`} class="hover:text-accent">
+                  {post.data.title}
+                </a>
+              </h2>
+              <p class="mt-3 text-base leading-8 text-ink">{post.data.summary}</p>
+              <div class="mt-4 flex flex-wrap gap-4 text-sm text-muted">
+                <span>{getReadingTime(post.body)}</span>
+              </div>
+              <div class="mt-5">
+                <TagList
+                  items={post.data.tags.map((slug) => ({
+                    slug,
+                    label: getTagLabel(slug, tagLookup),
+                    href: getTagHref(slug)
+                  }))}
+                />
+              </div>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

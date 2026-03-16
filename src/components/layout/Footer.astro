@@ -1,0 +1,66 @@
+---
+import { siteConfig } from "@/site.config";
+---
+
+<footer class="pb-8 pt-3">
+  <div class="page-shell">
+    <div class="flex flex-col gap-3 pt-4 sm:flex-row sm:items-center sm:justify-between">
+      <p class="text-xs leading-5 text-black/55">
+        Content licensed under{" "}
+        <a
+          href="https://creativecommons.org/licenses/by/4.0/"
+          class="text-inherit hover:text-accent"
+          target="_blank"
+          rel="noreferrer"
+        >
+          CC BY 4.0
+        </a>
+      </p>
+      <div class="inline-flex items-center gap-1">
+        <a href={`mailto:${siteConfig.email}`} class="footer-icon-link" aria-label="Email" title="Email">
+          <i class="bi bi-envelope-fill" aria-hidden="true"></i>
+        </a>
+        <a
+          href={siteConfig.social.bluesky}
+          class="footer-icon-link"
+          aria-label="Bluesky"
+          title="Bluesky"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <i class="bi bi-bluesky" aria-hidden="true"></i>
+        </a>
+        <a
+          href={siteConfig.social.github}
+          class="footer-icon-link"
+          aria-label="GitHub"
+          title="GitHub"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <i class="bi bi-github" aria-hidden="true"></i>
+        </a>
+        <a
+          href={siteConfig.social.linkedin}
+          class="footer-icon-link"
+          aria-label="LinkedIn"
+          title="LinkedIn"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <i class="bi bi-linkedin" aria-hidden="true"></i>
+        </a>
+        <a
+          href={siteConfig.social.scholar}
+          class="footer-icon-link"
+          aria-label="Google Scholar"
+          title="Google Scholar"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <i class="ai ai-google-scholar" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

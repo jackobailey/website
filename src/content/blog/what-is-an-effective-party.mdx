@@ -1,0 +1,53 @@
+---
+title: Understanding 'Effective' Parties
+summary: Why do political scientists describe some countries with hundreds of parties as two-party systems? The answer lies in the effective number of parties.
+date: 2026-03-16
+tags:
+  - Explainers
+image: /images/blog/what-is-an-effective-party.png
+imageAlt: Abstract coral thumbnail for What is an 'Effective' Party?
+featured: false
+---
+
+import TwoPartyEffectiveNumberInteractive from "@/components/blog/TwoPartyEffectiveNumberInteractive";
+
+In 2024, *74 parties* contested [the general election in the UK](https://en.wikipedia.org/wiki/2024_United_Kingdom_general_election), while *744 parties* contested [the general election in India](https://en.wikipedia.org/wiki/Results_of_the_2024_Indian_general_election). Yet political scientists describe both countries as having 'two-party systems'. How on Earth does this make any sense?
+
+According to political scientists, democratic party systems come in one of two forms:
+
+* Two-party systems where there are only two dominant parties. These are most common in countries that use [majoritarian electoral systems](https://en.wikipedia.org/wiki/Winner-take-all_system) like first-past-the-post, typically in the Anglophone world.
+* Multiparty systems where there are more than two dominant parties. These are most common in countries that use [proportional representation](https://en.wikipedia.org/wiki/Proportional_representation), typically in Europe and Latin America.
+
+So how do political scientists distinguish between each kind of system?
+
+## Measuring the Number of Parties
+
+One way we could do this would be to count the number of parties. If we wanted to know the number of *vote-winning* parties, we could count how many parties won one or more votes. Likewise, if we wanted to know the number of *seat-winning* parties, we could count how many parties won one or more seats. But, as the Indian case shows, there is a problem with this approach: sometimes lots of parties win only a small number of votes or seats. And it doesn't seem right to give them the same weight as larger, more dominant, parties.
+
+To get around this, political scientists count [the *effective* number of parties](https://en.wikipedia.org/wiki/Effective_number_of_parties) instead. Developed by [Markku Laakso and Rein Taagepera](https://journals.sagepub.com/doi/10.1177/001041407901200101), it measures how many *equally-large* parties we would need to reproduce the fragmentation that we have observed. Where actual parties split the vote evenly, the actual and effective number of parties are equal. Otherwise, the effective number of parties will always be smaller than or equal to the actual number of parties.
+
+For technical reasons, we represent the *effective* number of parties with $N_2$ and the *actual* number of parties with $N_0$. If we have some set of vote or seat shares, which we represent using the letter $p$, we can calculate the effective number of parties as follows:
+
+$$
+N_2 = \frac{1}{\sum_{i=1}^{N_0} p_i^2}
+$$
+
+Or, to put it in Plain English, we take each party's share of votes or seats, square it, add those numbers together, and divide one by the result.
+
+## Building Our Intuition
+
+Let's imagine a simple election where only two parties compete. By moving the slider on the left, you can control Party 1's share of the vote and, as a result, change the effective number of parties. What happens?
+
+<TwoPartyEffectiveNumberInteractive client:load />
+
+You should see that when you move the slider all the way to the left, so that Party 1 receives no votes at all, the effective number of parties is one. Party 2 receives all the votes, so, effectively and actually, there's only one party.
+
+As you move the slider to the middle, increasing the vote share for Party 1, you should see that the effective number of parties grows. Then, when both Party 1 and Party 2 win 50% of the vote, the effective number of parties reaches its maximum value of two. This makes sense. Remember that effective parties are equal in size by design. So, where the actual parties are also equal in size, the two counts become equivalent.
+
+After this point, as Party 1's vote share increases past 50% and it comes to dominate, the effective number of parties declines to reflect the dwindling support for Party 2. This process continues until, as before, the effective number of parties is one.
+
+## Why is this Useful?
+
+The effective number of parties is one of the most common metrics in all of political science. The reason why is that it does something that a simple count cannot: it tells us how many parties structure political competition.
+
+This makes it much easier to compare one country to another or even to itself over time. No more treating a tiny party that wins a handful of votes as equal to a major party that can form a government. For instance, think about India. While it had ten times as many actual vote-winning parties the UK, it had 5.25 effective vote-winning to the UK's 4.75, a much smaller gap.

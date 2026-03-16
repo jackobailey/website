@@ -1,0 +1,31 @@
+---
+interface Props {
+  eyebrow?: string;
+  title: string;
+  description: string;
+  updated?: string;
+  note?: string;
+  className?: string;
+}
+
+const { eyebrow, title, description, updated, note, className } = Astro.props;
+---
+
+<section class:list={["interactive-panel px-5 py-5 sm:px-6 sm:py-6", className]}>
+  <div class="space-y-3">
+    {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+    <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div class="space-y-2">
+        <h2 class="text-2xl font-semibold tracking-tight text-ink">{title}</h2>
+        <p class="max-w-2xl text-base leading-7 text-ink">{description}</p>
+      </div>
+      {updated && <p class="text-sm text-ink">{updated}</p>}
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <slot />
+  </div>
+
+  {note && <p class="mt-6 text-sm leading-6 text-ink">{note}</p>}
+</section>

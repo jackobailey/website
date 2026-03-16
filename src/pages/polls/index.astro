@@ -1,0 +1,114 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PollAverageChart from "@/components/charts/PollAverageChart";
+import { getPollEntries } from "@/lib/content";
+import { formatDate } from "@/lib/format";
+import pointData from "@/data/polls/point-data.json";
+import predictionData from "@/data/polls/prediction-data.json";
+import pollSummaryTextRaw from "@/data/polls/poll_summary.txt?raw";
+
+const pollEntries = await getPollEntries();
+const featuredPoll = pollEntries.find((entry) => entry.data.featured) ?? pollEntries[0];
+const partyFilter = new Set(["Labour", "Conservative", "Reform", "Lib Dem", "Green", "SNP", "Other"]);
+const latestPredictionDate = predictionData.reduce(
+  (latest, row) => (row.date > latest ? row.date : latest),
+  ""
+);
+const pointWindowStart = latestPredictionDate
+  ? new Date(`${latestPredictionDate}T00:00:00Z`)
+  : new Date("2026-03-01T00:00:00Z");
+pointWindowStart.setUTCFullYear(pointWindowStart.getUTCFullYear() - 2);
+const filteredPointData = pointData
+  .filter((row) => new Date(`${row.date}T00:00:00Z`) >= pointWindowStart)
+  .map((row) => ({
+    date: row.date,
+    pollster: row.pollster,
+    gb: row.gb,
+    lab: row.lab,
+    con: row.con,
+    ref: row.ref,
+    ld: row.ld,
+    grn: row.grn,
+    snp: row.snp,
+    oth: row.oth
+  }));
+const filteredPredictionData = predictionData.filter(
+  (row) =>
+    partyFilter.has(row.party) &&
+    new Date(`${row.date}T00:00:00Z`) >= pointWindowStart
+);
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  name: "UK Poll of Polls",
+  description: "A public-facing polling average for readers who want a clear sense of UK voting intention.",
+  dateModified: latestPredictionDate
+};
+const summaryText =
+  pollSummaryTextRaw.trim() ||
+  (featuredPoll?.data.takeaway ??
+    "The current picture is best understood as a stable pattern rather than a dramatic single-week shift.");
+const methodologyText =
+  featuredPoll?.data.methodology ??
+  "The average combines recent UK voting-intention polls and smooths them over time so single surveys do not dominate the picture.";
+---
+
+<BaseLayout
+  title="Polls"
+  description="A clear, public-facing polling average with written takeaways and a plain-English methods note."
+  structuredData={structuredData}
+>
+  <section class="page-shell pt-6 pb-8 sm:pt-8">
+    <section>
+      <div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
+        <h1 class="text-[1.65rem] font-semibold tracking-tight text-ink sm:text-[1.8rem]">
+          UK Poll of Polls
+        </h1>
+      </div>
+
+      <PollAverageChart
+        client:visible
+        pointData={filteredPointData}
+        predictionData={filteredPredictionData}
+        updatedLabel={latestPredictionDate ? formatDate(new Date(`${latestPredictionDate}T12:00:00Z`)) : undefined}
+      />
+
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        <section class="interactive-subpanel p-4 sm:p-5">
+          <div class="flex min-h-6 items-start justify-between gap-3">
+            <p class="eyebrow">Summary</p>
+            <div class="group relative">
+              <button
+                type="button"
+                class="inline-flex h-6 w-6 items-center justify-center text-[0.9rem] transition-opacity duration-150 hover:opacity-100 focus:opacity-100 focus:outline-none"
+                style="color: #AAAAAA;"
+                aria-label="AI summary disclosure"
+              >
+                <i class="bi bi-stars" aria-hidden="true"></i>
+              </button>
+              <div
+                class="pointer-events-none absolute right-0 top-7 z-10 w-44 rounded-lg border bg-white px-3 py-2 text-[0.75rem] leading-5 text-ink opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
+                style="border-color: var(--line-color);"
+              >
+                This summary is AI-generated
+              </div>
+            </div>
+          </div>
+          <p class="mt-3 text-sm leading-6 text-ink">
+            {summaryText}
+          </p>
+        </section>
+
+        <section class="interactive-subpanel p-4 sm:p-5">
+          <div class="flex min-h-6 items-start justify-between gap-3">
+            <p class="eyebrow">Methodology</p>
+            <span class="h-6 w-6" aria-hidden="true"></span>
+          </div>
+          <p class="mt-3 text-sm leading-6 text-ink">
+            {methodologyText}
+          </p>
+        </section>
+      </div>
+    </section>
+  </section>
+</BaseLayout>

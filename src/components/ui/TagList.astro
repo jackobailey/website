@@ -1,0 +1,29 @@
+---
+interface TagItem {
+  slug: string;
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: TagItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="flex flex-wrap gap-3" aria-label="Topics">
+  {items.map((item) => (
+    <li>
+      {item.href ? (
+        <a href={item.href} class="pill">
+          {item.label}
+        </a>
+      ) : (
+        <span class="pill">
+          {item.label}
+        </span>
+      )}
+    </li>
+  ))}
+</ul>

@@ -1,0 +1,204 @@
+@import "@fontsource/ubuntu-sans/400.css";
+@import "@fontsource/ubuntu-sans/500.css";
+@import "@fontsource/ubuntu-sans/700.css";
+@import "katex/dist/katex.min.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --line-color: rgba(17, 17, 17, 0.12);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply overflow-x-hidden bg-canvas font-sans text-ink antialiased;
+    background: #ffffff;
+    min-height: 100vh;
+  }
+
+  ::selection {
+    @apply bg-accent text-white;
+  }
+
+  a {
+    @apply transition-colors duration-150;
+  }
+}
+
+@layer components {
+  .page-shell {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .surface {
+    border-top: 1px solid var(--line-color);
+  }
+
+  .surface-strong {
+    border-top-color: transparent;
+  }
+
+  .chrome-panel {
+    border-bottom: 1px solid var(--line-color);
+  }
+
+  .section-space {
+    @apply pb-10 pt-6 sm:pb-14 sm:pt-8;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.2em] text-accent;
+  }
+
+  .headline {
+    @apply max-w-3xl text-4xl font-semibold tracking-tight text-ink sm:text-5xl;
+  }
+
+  .lede {
+    @apply max-w-2xl text-lg leading-8 text-ink;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-2 rounded-full px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-white;
+    background: #f76f5c;
+  }
+
+  .nav-link {
+    @apply inline-flex items-center py-1 text-base font-medium text-ink hover:text-accent;
+  }
+
+  .nav-link-active {
+    @apply text-accent;
+  }
+
+  .button-primary {
+    @apply inline-flex items-center justify-center gap-2 pb-1 text-base font-medium text-ink;
+    border-bottom: 2px solid #f76f5c;
+  }
+
+  .button-primary:hover {
+    color: #f76f5c;
+  }
+
+  .button-secondary {
+    @apply inline-flex items-center justify-center gap-2 pb-1 text-base font-medium text-ink;
+    border-bottom: 1px solid rgba(17, 17, 17, 0.18);
+  }
+
+  .button-secondary:hover,
+  .pill:hover,
+  .filter-pill:hover {
+    color: #f76f5c;
+    border-color: #f76f5c;
+  }
+
+  .pill:hover {
+    color: #ffffff;
+    background: #e56553;
+  }
+
+  .card-grid {
+    @apply grid gap-6 md:grid-cols-2 xl:grid-cols-3;
+  }
+
+  .interactive-panel {
+    background: rgba(255, 255, 255, 0.68);
+    border: 1px solid rgba(17, 17, 17, 0.08);
+    border-radius: 1.4rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .interactive-subpanel {
+    background: rgba(255, 255, 255, 0.56);
+    border: 1px solid rgba(17, 17, 17, 0.08);
+    border-radius: 1rem;
+  }
+
+  .prose-editorial {
+    @apply prose prose-slate max-w-reading prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-accent prose-a:no-underline hover:prose-a:text-ink prose-blockquote:border-l-accent prose-blockquote:text-ink prose-strong:text-ink;
+  }
+
+  .glass-input {
+    @apply w-full border-b px-0 py-3 text-base text-ink outline-none placeholder:text-muted;
+    background: transparent;
+    border-color: rgba(17, 17, 17, 0.16);
+  }
+
+  .glass-input:focus {
+    border-color: #f76f5c;
+    box-shadow: none;
+  }
+
+  .filter-pill {
+    @apply flex w-full items-center justify-between border-b px-0 py-3 text-left text-base text-ink;
+    border-color: rgba(17, 17, 17, 0.12);
+  }
+
+  .panel-rule {
+    border-color: rgba(17, 17, 17, 0.12);
+  }
+
+  .footer-icon-link {
+    @apply inline-flex h-8 w-8 items-center justify-center text-base text-ink hover:text-accent;
+  }
+
+  .meta-link {
+    @apply inline-flex items-center gap-2 pb-1 text-base font-medium text-ink;
+    border-bottom: 1px solid rgba(17, 17, 17, 0.16);
+  }
+
+  .meta-link:hover {
+    color: #f76f5c;
+    border-color: #f76f5c;
+  }
+
+  .meta-inline-link {
+    @apply inline-flex items-center pb-[1px] text-sm font-normal text-muted;
+    border-bottom: 1px solid rgba(17, 17, 17, 0.16);
+  }
+
+  .meta-inline-link:hover {
+    color: #f76f5c;
+    border-color: #f76f5c;
+  }
+
+  .editorial-sidebar {
+    border-top: 1px solid rgba(17, 17, 17, 0.12);
+    padding-top: 1.5rem;
+  }
+
+  .prose-editorial {
+    color: #111111;
+  }
+
+  .prose-editorial :where(h2, h3, h4) {
+    color: #111111;
+  }
+
+  .prose-editorial :where(hr) {
+    border-color: rgba(17, 17, 17, 0.12);
+  }
+
+  .prose-editorial :where(blockquote) {
+    background: transparent;
+    border-radius: 0;
+    padding: 0 0 0 1rem;
+  }
+
+  @media (min-width: 1024px) {
+    .editorial-sidebar {
+      border-top: 0;
+      border-left: 1px solid rgba(17, 17, 17, 0.12);
+      padding-top: 0;
+      padding-left: 1.5rem;
+    }
+  }
+}

@@ -1,0 +1,28 @@
+<button
+  type="button"
+  class="meta-inline-link"
+  data-copy-link
+>
+  Copy link
+</button>
+
+<script>
+  const buttons = document.querySelectorAll("[data-copy-link]");
+
+  for (const button of buttons) {
+    button.addEventListener("click", async () => {
+      const original = button.textContent;
+
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        button.textContent = "Link copied";
+      } catch {
+        button.textContent = "Copy failed";
+      }
+
+      window.setTimeout(() => {
+        button.textContent = original;
+      }, 1800);
+    });
+  }
+</script>
