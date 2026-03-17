@@ -1,0 +1,36 @@
+---
+title: Fragmentation, Concentration, Proliferation
+summary: Some thoughts on modelling party-system fragmentation.
+date: 2026-03-17
+tags:
+  - fragmentation
+  - effective-parties
+image: /images/notes/fragmentation-concentration-proliferation.png
+imageAlt: Abstract coral shapes on a dark blurred background
+---
+
+import EffectivePartyInteractive from "@/components/blog/EffectivePartyInteractive";
+
+Almost all research on party-system fragmentation operationalises the phenomena using the effective number of parties. A well-conducted recent example of this is [Vicente Valentim and Elias Dinas' paper in the *British Journal of Political Science*](https://www.cambridge.org/core/journals/british-journal-of-political-science/article/does-partysystem-fragmentation-affect-the-quality-of-democracy/202A72173869E4CAA583822FB6518672). And it cites all sorts of papers that take a similar approach.
+
+However, there are two ways to alter fragmentation when measured using the effective number of parties. First, we can increase or decrease the *actual* number of parties. In other words, we can adjust how many parties *proliferate*. Second, we can increase or decrease how much support is focussed on a small number of parties. That is, we can adjust the *concentration* of support.
+
+We can see this in action if we consider the simplest model that links effective parties, $N_2$, and actual parties, $N_0$:
+
+$$
+N_2 = N_0 ^ \theta
+$$
+
+Here, the effective number of parties, $N_2$, measures *fragmentation*; the actual number of parties, $N_0$, measures the *proliferation* of actual political parties; and the model's sole parameter, $\theta$, measures the *concentration* of support across actual parties, ranging from $\theta = 0$, where $N_2 = 1$, to $\theta = 1$, where $N_2 = N_0$.
+
+<EffectivePartyInteractive client:load />
+
+The interactive above shows how party-system fragmentation as measured using the effective number of parties changes as we adjust $N_0$ and $\theta$. The key takeaway here is that there are two parameters, not one. So modelling the effective number of parties does not tell us much about the specific mechanism at play: is it that the predictor in question causes parties to proliferate (or not) or is it that it adjusts the extent to which support is concentrated in a handful of parties?
+
+One final point: while I have treated $\theta$ as a parameter here, we could arguably treat *any* of the elements in the equation as parameters if we wanted. To see why, note that we can rearrange the equation above to get:
+
+$$
+\theta = \frac{\log \left( N_2 \right)}{\log \left( N_0 \right)}
+$$
+
+And, incidentally, this is the equation for [efficiency](https://en.wikipedia.org/wiki/Entropy_(information_theory)#Efficiency_(normalized_entropy)) (i.e. normalised entropy) in information theory, which makes sense given that the effective number of parties is an information theoretic quantity in its own right.
