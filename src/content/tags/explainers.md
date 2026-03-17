@@ -1,6 +1,6 @@
 ---
 name: Explainers
-description: Plain-English pieces that break down concepts, assumptions, and recurring misunderstandings in political analysis.
+description: Plain-English pieces that break down concepts in political science.
 seoTitle: Political explainers
 seoDescription: Explainers on polling, elections, political data, and interpretation.
 featured: false
