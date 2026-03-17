@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 const DEFAULT_N0 = 5;
 const DEFAULT_THETA = 0.65;
@@ -21,6 +21,18 @@ function getThetaDescription(theta: number) {
   }
 
   return "At θ = 1, the effective number of parties matches the actual number exactly.";
+}
+
+function getInteractiveDescription(n0: number, theta: number): ReactNode {
+  if (n0 === 1) {
+    return (
+      <>
+        At N<sub>0</sub> = 1, the effective count is 1 regardless of what value &theta; takes.
+      </>
+    );
+  }
+
+  return getThetaDescription(theta);
 }
 
 export default function EffectivePartyInteractive() {
@@ -117,7 +129,7 @@ export default function EffectivePartyInteractive() {
                 </div>
               </div>
 
-              <p className="text-sm leading-6 text-black/70">{getThetaDescription(theta)}</p>
+              <p className="text-sm leading-6 text-black/70">{getInteractiveDescription(n0, theta)}</p>
             </div>
           </div>
         </div>
