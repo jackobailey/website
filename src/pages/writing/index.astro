@@ -29,7 +29,7 @@ const curatedTags = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
               <div class="grid gap-5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-center">
                 {post.data.image && (
                   <a
-                    href={`/blog/${post.slug}/`}
+                    href={`/writing/${post.slug}/`}
                     class="block h-32 w-32 self-center overflow-hidden sm:h-32 sm:w-32"
                     aria-hidden="true"
                     tabindex="-1"
@@ -46,7 +46,7 @@ const curatedTags = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
                 <div class="min-w-0">
                   <p class="eyebrow mt-2">{formatDate(post.data.date)}</p>
                   <h2 class="mt-3 text-3xl font-semibold tracking-tight text-ink">
-                    <a href={`/blog/${post.slug}/`} class="hover:text-accent">
+                    <a href={`/writing/${post.slug}/`} class="hover:text-accent">
                       {post.data.title}
                     </a>
                   </h2>
@@ -76,12 +76,12 @@ const curatedTags = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
 
       <aside class="editorial-sidebar lg:sticky lg:top-8 lg:h-fit">
         <div class="space-y-6">
-          <label for="blog-search" class="sr-only">Search posts</label>
+          <label for="writing-search" class="sr-only">Search posts</label>
           <input
-            id="blog-search"
+            id="writing-search"
             type="search"
             placeholder="Search posts"
-            data-blog-search
+            data-writing-search
             class="glass-input"
           />
 
@@ -113,7 +113,7 @@ const curatedTags = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
             <p class="text-ink">
               <span data-results-count>{posts.length}</span> posts
             </p>
-            <a href="/blog/tags/" class="text-ink hover:text-accent">
+            <a href="/writing/tags/" class="text-ink hover:text-accent">
               Full tag index
             </a>
           </div>
@@ -126,7 +126,7 @@ const curatedTags = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
     const shell = document.querySelector("[data-filter-shell]");
 
     if (shell) {
-      const searchInput = shell.querySelector("[data-blog-search]") as HTMLInputElement | null;
+      const searchInput = shell.querySelector("[data-writing-search]") as HTMLInputElement | null;
       const tagButtons = Array.from(shell.querySelectorAll<HTMLElement>("[data-tag-filter]"));
       const postCards = Array.from(shell.querySelectorAll<HTMLElement>("[data-post-card]"));
       const countNode = shell.querySelector("[data-results-count]") as HTMLElement | null;

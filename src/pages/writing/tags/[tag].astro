@@ -38,7 +38,7 @@ const tagLookup = buildTagLookup(await getTagEntries());
           <div class="grid gap-5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-center">
             {post.data.image && (
               <a
-                href={`/blog/${post.slug}/`}
+                href={`/writing/${post.slug}/`}
                 class="block h-32 w-32 self-center overflow-hidden sm:h-32 sm:w-32"
                 aria-hidden="true"
                 tabindex="-1"
@@ -55,7 +55,7 @@ const tagLookup = buildTagLookup(await getTagEntries());
             <div class="min-w-0">
               <p class="eyebrow mt-2">{formatDate(post.data.date)}</p>
               <h2 class="mt-3 text-2xl font-semibold tracking-tight text-ink">
-                <a href={`/blog/${post.slug}/`} class="hover:text-accent">
+                <a href={`/writing/${post.slug}/`} class="hover:text-accent">
                   {post.data.title}
                 </a>
               </h2>
