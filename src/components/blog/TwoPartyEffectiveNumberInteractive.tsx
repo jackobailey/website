@@ -206,7 +206,7 @@ export default function TwoPartyEffectiveNumberInteractive() {
               <g transform={`translate(${calloutX}, ${calloutY})`}>
                 <rect width={calloutWidth} height={calloutHeight} rx="14" fill="rgba(255,255,255,0.82)" />
                 <text x={calloutWidth / 2} y="26" textAnchor="middle" fontSize="22" fontWeight="600" fill="#111111">
-                  N2 = {effectiveNumber.toFixed(2)}
+                  N₂ = {effectiveNumber.toFixed(2)}
                 </text>
               </g>
 
