@@ -1,0 +1,25 @@
+---
+title: Effective Parties as Collisions
+summary: A collision-based interpretation and an agent-based model.
+date: 2026-03-18
+tags:
+  - effective-parties
+image: /images/notes/effective-parties-as-collisions.png
+imageAlt: Abstract orange shapes on a blurred warm background
+---
+
+import EffectivePartiesCollisionInteractive from "@/components/blog/EffectivePartiesCollisionInteractive";
+
+We compute the effective number of parties, $N_2$, such that:
+
+$$
+N_2 = \frac{1}{\sum_{i=1}^{N_0} p_i^2}
+$$
+
+Where $N_0$ is the actual number of parties and $p$ their respective shares.
+
+The squared term in the denominator is deliberate: the logic is one of *collision*. [Rae (1968)](https://journals.sagepub.com/doi/10.1177/001041406800100305) sets it all out very well. If we were to take all voters, put them in a room, rearrange them at random, and then let them introduce themselves to one another, the probability that someone who voted for party $i$ would meet someone else who voted in the same way is, in the limit, $p_i^2$. By summing these probabilities across parties, we get the probability that any two voters, regardless of what party they vote for, will have voted for the same party. We can then take the reciprocal of this probability to convert back into units of parties.
+
+<EffectivePartiesCollisionInteractive client:load />
+
+The interactive above shows a simple agent-based model. On the right-hand side there are 250 'voters' in a room. Half are orange and half are purple, giving $N_2 = \frac{1}{0.5^2 + 0.5^2} = 2$. Once the simulation starts, the voters move around the room at random, colliding into one another. As these collisions accumulate, the total number of collisions divided by the number of collisions between voters of the same colour converges on the effective number of parties.
