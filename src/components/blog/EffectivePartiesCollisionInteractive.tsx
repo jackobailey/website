@@ -4,7 +4,9 @@ const BOX_WIDTH = 620;
 const BOX_HEIGHT = 520;
 const PARTICLE_RADIUS = 6;
 const PARTICLE_COUNT = 200;
-const DEFAULT_ORANGE_COUNT = PARTICLE_COUNT / 2;
+const SHARE_STEPS = 100;
+const PARTICLES_PER_STEP = PARTICLE_COUNT / SHARE_STEPS;
+const DEFAULT_ORANGE_STEPS = SHARE_STEPS / 2;
 const MAX_DT_MS = 32;
 const MIN_SPEED = 96;
 const MAX_SPEED = 152;
@@ -134,10 +136,11 @@ export default function EffectivePartiesCollisionInteractive() {
   const frameRef = useRef<number | null>(null);
   const lastFrameTimeRef = useRef<number | null>(null);
   const restartSeedRef = useRef(2);
-  const particlesRef = useRef<Particle[]>(createParticles(1, DEFAULT_ORANGE_COUNT));
+  const [orangeSteps, setOrangeSteps] = useState(DEFAULT_ORANGE_STEPS);
+  const orangeCount = orangeSteps * PARTICLES_PER_STEP;
+  const particlesRef = useRef<Particle[]>(createParticles(1, orangeCount));
   const activeCollisionPairsRef = useRef<Set<string>>(new Set());
   const statsRef = useRef<CollisionStats>({ total: 0, sameColor: 0 });
-  const [orangeCount, setOrangeCount] = useState(DEFAULT_ORANGE_COUNT);
   const [particles, setParticles] = useState<Particle[]>(() => particlesRef.current);
   const [stats, setStats] = useState<CollisionStats>(statsRef.current);
   const [simulationState, setSimulationState] = useState<SimulationState>("idle");
@@ -330,10 +333,10 @@ export default function EffectivePartiesCollisionInteractive() {
                   id="orange-share"
                   type="range"
                   min="0"
-                  max={PARTICLE_COUNT}
+                  max={SHARE_STEPS}
                   step="1"
-                  value={orangeCount}
-                  onChange={(event) => setOrangeCount(Number(event.target.value))}
+                  value={orangeSteps}
+                  onChange={(event) => setOrangeSteps(Number(event.target.value))}
                   aria-label="Orange share"
                   className="w-full accent-[#F76F5C]"
                 />
