@@ -3,12 +3,14 @@ import { useEffect, useRef, useState } from "react";
 const BOX_WIDTH = 620;
 const BOX_HEIGHT = 520;
 const PARTICLE_RADIUS = 6;
-const PARTICLE_COUNT = 250;
-const PARTY_SPLIT = PARTICLE_COUNT / 2;
+const PARTICLE_COUNT = 200;
+const DEFAULT_ORANGE_COUNT = PARTICLE_COUNT / 2;
 const MAX_DT_MS = 32;
 const MIN_SPEED = 96;
 const MAX_SPEED = 152;
-const PARTY_COLORS = ["#3B0F70", "#F76F5C"] as const;
+const PURPLE = "#3B0F70";
+const ORANGE = "#F76F5C";
+const PARTY_COLORS = [PURPLE, ORANGE] as const;
 
 type Particle = {
   id: number;
@@ -24,7 +26,7 @@ type CollisionStats = {
   sameColor: number;
 };
 
-type SimulationState = "idle" | "running" | "stopped";
+type SimulationState = "idle" | "running" | "paused";
 
 function createRng(seed: number) {
   let value = seed >>> 0;
@@ -87,13 +89,23 @@ function createParticle(
   };
 }
 
-function createParticles(seed: number) {
+function createParticles(seed: number, orangeCount: number) {
   const rng = createRng(seed);
   const particles: Particle[] = [];
+  const colors: Particle["color"][] = Array.from({ length: PARTICLE_COUNT }, (_, index) =>
+    index < orangeCount ? ORANGE : PURPLE
+  );
+
+  for (let index = colors.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(rng() * (index + 1));
+    const currentColor = colors[index];
+
+    colors[index] = colors[swapIndex];
+    colors[swapIndex] = currentColor;
+  }
 
   for (let index = 0; index < PARTICLE_COUNT; index += 1) {
-    const color = index < PARTY_SPLIT ? PARTY_COLORS[0] : PARTY_COLORS[1];
-    particles.push(createParticle(index, color, particles, rng));
+    particles.push(createParticle(index, colors[index], particles, rng));
   }
 
   return particles;
@@ -111,16 +123,27 @@ function formatEffectiveParties(stats: CollisionStats) {
   return (stats.total / stats.sameColor).toFixed(2);
 }
 
+function getExpectedEffectiveParties(orangeCount: number) {
+  const orangeShare = orangeCount / PARTICLE_COUNT;
+  const purpleShare = 1 - orangeShare;
+
+  return 1 / (orangeShare * orangeShare + purpleShare * purpleShare);
+}
+
 export default function EffectivePartiesCollisionInteractive() {
   const frameRef = useRef<number | null>(null);
   const lastFrameTimeRef = useRef<number | null>(null);
   const restartSeedRef = useRef(2);
-  const particlesRef = useRef<Particle[]>(createParticles(1));
+  const particlesRef = useRef<Particle[]>(createParticles(1, DEFAULT_ORANGE_COUNT));
   const activeCollisionPairsRef = useRef<Set<string>>(new Set());
   const statsRef = useRef<CollisionStats>({ total: 0, sameColor: 0 });
+  const [orangeCount, setOrangeCount] = useState(DEFAULT_ORANGE_COUNT);
   const [particles, setParticles] = useState<Particle[]>(() => particlesRef.current);
   const [stats, setStats] = useState<CollisionStats>(statsRef.current);
   const [simulationState, setSimulationState] = useState<SimulationState>("idle");
+  const purpleCount = PARTICLE_COUNT - orangeCount;
+  const purplePercentage = ((purpleCount / PARTICLE_COUNT) * 100).toFixed(0);
+  const orangePercentage = ((orangeCount / PARTICLE_COUNT) * 100).toFixed(0);
 
   useEffect(() => {
     return () => {
@@ -129,6 +152,10 @@ export default function EffectivePartiesCollisionInteractive() {
       }
     };
   }, []);
+
+  useEffect(() => {
+    resetSimulation(simulationState === "running" ? "running" : "idle");
+  }, [orangeCount]);
 
   function step(timestamp: number) {
     const previousTimestamp = lastFrameTimeRef.current ?? timestamp;
@@ -225,12 +252,12 @@ export default function EffectivePartiesCollisionInteractive() {
     frameRef.current = requestAnimationFrame(step);
   }
 
-  function startSimulation() {
+  function resetSimulation(nextState: SimulationState) {
     if (frameRef.current !== null) {
       cancelAnimationFrame(frameRef.current);
     }
 
-    const initialParticles = createParticles(restartSeedRef.current);
+    const initialParticles = createParticles(restartSeedRef.current, orangeCount);
     restartSeedRef.current += 1;
 
     particlesRef.current = initialParticles;
@@ -240,40 +267,55 @@ export default function EffectivePartiesCollisionInteractive() {
 
     setParticles(initialParticles);
     setStats(statsRef.current);
-    setSimulationState("running");
+    setSimulationState(nextState);
 
-    frameRef.current = requestAnimationFrame(step);
+    if (nextState === "running") {
+      frameRef.current = requestAnimationFrame(step);
+    } else {
+      frameRef.current = null;
+    }
   }
 
-  function stopSimulation() {
+  function startSimulation() {
+    resetSimulation("running");
+  }
+
+  function pauseSimulation() {
     if (frameRef.current !== null) {
       cancelAnimationFrame(frameRef.current);
       frameRef.current = null;
     }
 
-    setSimulationState("stopped");
+    setSimulationState("paused");
   }
 
-  function handleButtonClick() {
+  function resumeSimulation() {
+    lastFrameTimeRef.current = null;
+    setSimulationState("running");
+    frameRef.current = requestAnimationFrame(step);
+  }
+
+  function handlePlayPauseClick() {
     if (simulationState === "running") {
-      stopSimulation();
+      pauseSimulation();
+      return;
+    }
+
+    if (simulationState === "paused") {
+      resumeSimulation();
       return;
     }
 
     startSimulation();
   }
 
-  function getButtonLabel() {
-    if (simulationState === "running") {
-      return "Stop";
-    }
-
-    if (simulationState === "stopped") {
-      return "Restart";
-    }
-
-    return "Start";
+  function handleRestartClick() {
+    resetSimulation(simulationState === "running" ? "running" : "idle");
   }
+
+  const expectedN2 = getExpectedEffectiveParties(orangeCount);
+  const observedN2 = formatEffectiveParties(stats);
+  const playPauseLabel = simulationState === "running" ? "Pause" : "Play";
 
   return (
     <div className="not-prose my-10 w-full max-w-none sm:-mx-6 sm:w-[calc(100%+3rem)] lg:-mx-12 lg:w-[calc(100%+6rem)]">
@@ -281,29 +323,71 @@ export default function EffectivePartiesCollisionInteractive() {
         <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
           <div className="border-b border-black/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
             <p className="eyebrow">Collision Model</p>
-            <p className="mt-4 text-sm leading-6 text-black/70">
-              Half of the particles are purple and half orange. As they collide, the total
-              collisions divided by those of the same colour converges on the effective number of
-              parties, here N<sub>2</sub> = 2.
-            </p>
 
-            <div className="mt-8 space-y-6">
+            <div className="mt-6 space-y-6">
+              <div className="space-y-3 border-b border-black/10 pb-6">
+                <input
+                  id="orange-share"
+                  type="range"
+                  min="0"
+                  max={PARTICLE_COUNT}
+                  step="1"
+                  value={orangeCount}
+                  onChange={(event) => setOrangeCount(Number(event.target.value))}
+                  aria-label="Orange share"
+                  className="w-full accent-[#F76F5C]"
+                />
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="block h-6 w-6 rounded-full"
+                      style={{ backgroundColor: PURPLE }}
+                      aria-hidden="true"
+                    />
+                    <span className="text-sm font-semibold tabular-nums text-[#111111]">
+                      {purplePercentage}%
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold tabular-nums text-[#111111]">
+                      {orangePercentage}%
+                    </span>
+                    <span
+                      className="block h-6 w-6 rounded-full"
+                      style={{ backgroundColor: ORANGE }}
+                      aria-hidden="true"
+                    />
+                  </div>
+                </div>
+              </div>
+
               <div className="border-b border-black/10 pb-6">
-                <p className="flex flex-nowrap items-baseline justify-center gap-2 whitespace-nowrap text-3xl font-semibold tracking-tight tabular-nums text-[#111111] sm:text-4xl">
-                  <span className="font-medium tracking-normal text-[#111111]">
-                    N<sub>2</sub> =
-                  </span>
-                  <span className="text-[#111111]">{formatEffectiveParties(stats)}</span>
+                <p className="text-base font-semibold tracking-tight text-[#111111] sm:text-lg">
+                  Expected N<sub>2</sub>:{" "}
+                  <span className="tabular-nums">{expectedN2.toFixed(2)}</span>
+                </p>
+                <p className="mt-3 text-base font-semibold tracking-tight text-[#111111] sm:text-lg">
+                  Observed N<sub>2</sub>: <span className="tabular-nums">{observedN2}</span>
                 </p>
               </div>
 
-              <button
-                type="button"
-                onClick={handleButtonClick}
-                className="inline-flex w-full items-center justify-center rounded-full bg-[#F76F5C] px-5 py-3 text-sm font-semibold tracking-[0.08em] text-white transition-colors duration-150 hover:bg-[#e56553] focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2"
-              >
-                {getButtonLabel()}
-              </button>
+              <div className="space-y-3">
+                <button
+                  type="button"
+                  onClick={handlePlayPauseClick}
+                  className="inline-flex w-full items-center justify-center rounded-full bg-[#F76F5C] px-5 py-3 text-sm font-semibold tracking-[0.08em] text-white transition-colors duration-150 hover:bg-[#e56553] focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2"
+                >
+                  {playPauseLabel}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleRestartClick}
+                  className="inline-flex w-full items-center justify-center rounded-full border border-black/15 px-5 py-3 text-sm font-semibold tracking-[0.08em] text-[#111111] transition-colors duration-150 hover:border-[#F76F5C] hover:text-[#F76F5C] focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2"
+                >
+                  Restart
+                </button>
+              </div>
             </div>
           </div>
 
