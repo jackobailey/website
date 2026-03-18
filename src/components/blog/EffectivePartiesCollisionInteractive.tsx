@@ -46,24 +46,52 @@ function getRandomSpeed(rng: () => number) {
   return MIN_SPEED + rng() * (MAX_SPEED - MIN_SPEED);
 }
 
+function wrapCoordinate(value: number, size: number) {
+  return ((value % size) + size) % size;
+}
+
+function wrapDisplacement(delta: number, size: number) {
+  if (delta > size / 2) {
+    return delta - size;
+  }
+
+  if (delta < -size / 2) {
+    return delta + size;
+  }
+
+  return delta;
+}
+
+function getRenderOffsets(coordinate: number, size: number) {
+  const offsets = [0];
+
+  if (coordinate < PARTICLE_RADIUS) {
+    offsets.push(size);
+  }
+
+  if (coordinate > size - PARTICLE_RADIUS) {
+    offsets.push(-size);
+  }
+
+  return offsets;
+}
+
 function createParticle(
   id: number,
   color: Particle["color"],
   particles: Particle[],
   rng: () => number
 ) {
-  const radius = PARTICLE_RADIUS;
-
   for (let attempt = 0; attempt < 4000; attempt += 1) {
-    const x = radius + rng() * (BOX_WIDTH - radius * 2);
-    const y = radius + rng() * (BOX_HEIGHT - radius * 2);
+    const x = rng() * BOX_WIDTH;
+    const y = rng() * BOX_HEIGHT;
     const angle = rng() * Math.PI * 2;
     const speed = getRandomSpeed(rng);
     const overlaps = particles.some((particle) => {
-      const dx = particle.x - x;
-      const dy = particle.y - y;
+      const dx = wrapDisplacement(particle.x - x, BOX_WIDTH);
+      const dy = wrapDisplacement(particle.y - y, BOX_HEIGHT);
 
-      return dx * dx + dy * dy < (radius * 2 + 1.5) ** 2;
+      return dx * dx + dy * dy < (PARTICLE_RADIUS * 2 + 1.5) ** 2;
     });
 
     if (!overlaps) {
@@ -83,8 +111,8 @@ function createParticle(
 
   return {
     id,
-    x: radius + rng() * (BOX_WIDTH - radius * 2),
-    y: radius + rng() * (BOX_HEIGHT - radius * 2),
+    x: rng() * BOX_WIDTH,
+    y: rng() * BOX_HEIGHT,
     vx: Math.cos(angle) * speed,
     vy: Math.sin(angle) * speed,
     color
@@ -168,27 +196,9 @@ export default function EffectivePartiesCollisionInteractive() {
 
     const nextParticles = particlesRef.current.map((particle) => ({
       ...particle,
-      x: particle.x + particle.vx * dt,
-      y: particle.y + particle.vy * dt
+      x: wrapCoordinate(particle.x + particle.vx * dt, BOX_WIDTH),
+      y: wrapCoordinate(particle.y + particle.vy * dt, BOX_HEIGHT)
     }));
-
-    for (const particle of nextParticles) {
-      if (particle.x <= PARTICLE_RADIUS) {
-        particle.x = PARTICLE_RADIUS;
-        particle.vx = Math.abs(particle.vx);
-      } else if (particle.x >= BOX_WIDTH - PARTICLE_RADIUS) {
-        particle.x = BOX_WIDTH - PARTICLE_RADIUS;
-        particle.vx = -Math.abs(particle.vx);
-      }
-
-      if (particle.y <= PARTICLE_RADIUS) {
-        particle.y = PARTICLE_RADIUS;
-        particle.vy = Math.abs(particle.vy);
-      } else if (particle.y >= BOX_HEIGHT - PARTICLE_RADIUS) {
-        particle.y = BOX_HEIGHT - PARTICLE_RADIUS;
-        particle.vy = -Math.abs(particle.vy);
-      }
-    }
 
     const nextActivePairs = new Set<string>();
     let totalCollisions = statsRef.current.total;
@@ -199,8 +209,8 @@ export default function EffectivePartiesCollisionInteractive() {
 
       for (let j = i + 1; j < nextParticles.length; j += 1) {
         const particleB = nextParticles[j];
-        const dx = particleB.x - particleA.x;
-        const dy = particleB.y - particleA.y;
+        const dx = wrapDisplacement(particleB.x - particleA.x, BOX_WIDTH);
+        const dy = wrapDisplacement(particleB.y - particleA.y, BOX_HEIGHT);
         const distanceSquared = dx * dx + dy * dy;
         const minDistance = PARTICLE_RADIUS * 2;
         const pairKey = `${particleA.id}:${particleB.id}`;
@@ -217,10 +227,10 @@ export default function EffectivePartiesCollisionInteractive() {
         const overlap = minDistance - distance;
 
         if (overlap > 0) {
-          particleA.x -= nx * (overlap / 2);
-          particleA.y -= ny * (overlap / 2);
-          particleB.x += nx * (overlap / 2);
-          particleB.y += ny * (overlap / 2);
+          particleA.x = wrapCoordinate(particleA.x - nx * (overlap / 2), BOX_WIDTH);
+          particleA.y = wrapCoordinate(particleA.y - ny * (overlap / 2), BOX_HEIGHT);
+          particleB.x = wrapCoordinate(particleB.x + nx * (overlap / 2), BOX_WIDTH);
+          particleB.y = wrapCoordinate(particleB.y + ny * (overlap / 2), BOX_HEIGHT);
         }
 
         const relativeVelocity =
@@ -403,18 +413,25 @@ export default function EffectivePartiesCollisionInteractive() {
                 viewBox={`0 0 ${BOX_WIDTH} ${BOX_HEIGHT}`}
                 className="block h-full w-full"
                 role="img"
-                aria-label="A box of moving particles used to estimate the effective number of parties from collision frequencies"
+                aria-label="A wraparound field of moving particles used to estimate the effective number of parties from collision frequencies"
               >
-                {particles.map((particle) => (
-                  <circle
-                    key={particle.id}
-                    cx={particle.x}
-                    cy={particle.y}
-                    r={PARTICLE_RADIUS}
-                    fill={particle.color}
-                    opacity="0.96"
-                  />
-                ))}
+                {particles.flatMap((particle) => {
+                  const xOffsets = getRenderOffsets(particle.x, BOX_WIDTH);
+                  const yOffsets = getRenderOffsets(particle.y, BOX_HEIGHT);
+
+                  return xOffsets.flatMap((xOffset) =>
+                    yOffsets.map((yOffset) => (
+                      <circle
+                        key={`${particle.id}:${xOffset}:${yOffset}`}
+                        cx={particle.x + xOffset}
+                        cy={particle.y + yOffset}
+                        r={PARTICLE_RADIUS}
+                        fill={particle.color}
+                        opacity="0.96"
+                      />
+                    ))
+                  );
+                })}
               </svg>
             </div>
           </div>
