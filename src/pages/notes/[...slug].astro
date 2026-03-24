@@ -47,7 +47,7 @@ const structuredData = {
         <header class="surface surface-strong space-y-5 pt-6 sm:pt-7">
           {note.data.image ? (
             <div class="grid gap-5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-center">
-              <div class="h-32 w-32 self-center overflow-hidden rounded-3xl ring-1 ring-ink/10">
+              <div class="hidden h-32 w-32 self-center overflow-hidden rounded-3xl ring-1 ring-ink/10 sm:block">
                 <img
                   src={note.data.image}
                   alt={note.data.imageAlt ?? ""}
