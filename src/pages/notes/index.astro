@@ -9,12 +9,18 @@ const [notes, tags] = await Promise.all([getNotesEntries(), getTagEntries()]);
 const tagLookup = buildTagLookup(tags);
 const tagCounts = getTagCounts(notes);
 const curatedTags = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
+const priorityNotes = notes.filter((note) => Boolean(note.data.image)).slice(0, 3);
 ---
 
 <BaseLayout
   title="Notebook"
   description="An open notebook of research questions, methods thoughts, and developing ideas."
 >
+  <Fragment slot="head">
+    {priorityNotes.map((note) => (
+      <link rel="preload" as="image" href={note.data.image} />
+    ))}
+  </Fragment>
   <section class="page-shell pt-4 pb-14 sm:pt-5 sm:pb-20" data-filter-shell>
     <div class="grid gap-10 lg:grid-cols-[minmax(0,1.45fr)_280px]">
       <div class="min-w-0">
@@ -38,7 +44,11 @@ const curatedTags = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
                       src={note.data.image}
                       alt={note.data.imageAlt ?? ""}
                       class="h-full w-full object-cover"
-                      loading="lazy"
+                      width="1024"
+                      height="1024"
+                      loading={index < 3 ? "eager" : "lazy"}
+                      fetchpriority={index < 2 ? "high" : "auto"}
+                      decoding="async"
                     />
                   </a>
                 )}

@@ -9,12 +9,18 @@ const [posts, tags] = await Promise.all([getBlogPosts(), getTagEntries()]);
 const tagLookup = buildTagLookup(tags);
 const tagCounts = getTagCounts(posts);
 const curatedTags = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
+const priorityPosts = posts.filter((post) => Boolean(post.data.image)).slice(0, 3);
 ---
 
 <BaseLayout
   title="Writing"
   description="Public-facing writing on polling, elections, campaigns, and political change."
 >
+  <Fragment slot="head">
+    {priorityPosts.map((post) => (
+      <link rel="preload" as="image" href={post.data.image} />
+    ))}
+  </Fragment>
   <section class="page-shell pt-4 pb-14 sm:pt-5 sm:pb-20" data-filter-shell>
     <div class="grid gap-10 lg:grid-cols-[minmax(0,1.45fr)_280px]">
       <div class="min-w-0">
@@ -38,7 +44,11 @@ const curatedTags = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
                       src={post.data.image}
                       alt={post.data.imageAlt ?? ""}
                       class="h-full w-full object-cover"
-                      loading="lazy"
+                      width="1024"
+                      height="1024"
+                      loading={index < 3 ? "eager" : "lazy"}
+                      fetchpriority={index < 2 ? "high" : "auto"}
+                      decoding="async"
                     />
                   </a>
                 )}
