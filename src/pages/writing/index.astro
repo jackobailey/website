@@ -30,7 +30,7 @@ const curatedTags = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
                 {post.data.image && (
                   <a
                     href={`/writing/${post.slug}/`}
-                    class="hidden h-32 w-32 self-center overflow-hidden sm:block sm:h-32 sm:w-32"
+                    class="hidden h-32 w-32 self-center overflow-hidden rounded-3xl ring-1 ring-ink/10 sm:block sm:h-32 sm:w-32"
                     aria-hidden="true"
                     tabindex="-1"
                   >

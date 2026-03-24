@@ -39,7 +39,7 @@ const tagLookup = buildTagLookup(await getTagEntries());
             {note.data.image && (
               <a
                 href={`/notes/${note.slug}/`}
-                class="block h-32 w-32 self-center overflow-hidden sm:h-32 sm:w-32"
+                class="block h-32 w-32 self-center overflow-hidden rounded-3xl ring-1 ring-ink/10 sm:h-32 sm:w-32"
                 aria-hidden="true"
                 tabindex="-1"
               >
