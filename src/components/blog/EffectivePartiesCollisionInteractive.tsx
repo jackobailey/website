@@ -50,13 +50,15 @@ function createParticle(
   id: number,
   color: Particle["color"],
   particles: Particle[],
-  rng: () => number
+  rng: () => number,
+  boxWidth: number,
+  boxHeight: number
 ) {
   const radius = PARTICLE_RADIUS;
 
   for (let attempt = 0; attempt < 4000; attempt += 1) {
-    const x = radius + rng() * (BOX_WIDTH - radius * 2);
-    const y = radius + rng() * (BOX_HEIGHT - radius * 2);
+    const x = radius + rng() * (boxWidth - radius * 2);
+    const y = radius + rng() * (boxHeight - radius * 2);
     const angle = rng() * Math.PI * 2;
     const speed = getRandomSpeed(rng);
     const overlaps = particles.some((particle) => {
@@ -83,15 +85,20 @@ function createParticle(
 
   return {
     id,
-    x: radius + rng() * (BOX_WIDTH - radius * 2),
-    y: radius + rng() * (BOX_HEIGHT - radius * 2),
+    x: radius + rng() * (boxWidth - radius * 2),
+    y: radius + rng() * (boxHeight - radius * 2),
     vx: Math.cos(angle) * speed,
     vy: Math.sin(angle) * speed,
     color
   };
 }
 
-function createParticles(seed: number, orangeCount: number) {
+function createParticles(
+  seed: number,
+  orangeCount: number,
+  boxWidth: number,
+  boxHeight: number
+) {
   const rng = createRng(seed);
   const particles: Particle[] = [];
   const colors: Particle["color"][] = Array.from({ length: PARTICLE_COUNT }, (_, index) =>
@@ -107,7 +114,7 @@ function createParticles(seed: number, orangeCount: number) {
   }
 
   for (let index = 0; index < PARTICLE_COUNT; index += 1) {
-    particles.push(createParticle(index, colors[index], particles, rng));
+    particles.push(createParticle(index, colors[index], particles, rng, boxWidth, boxHeight));
   }
 
   return particles;
@@ -125,6 +132,10 @@ function formatEffectiveParties(stats: CollisionStats) {
   return (stats.total / stats.sameColor).toFixed(2);
 }
 
+function formatCount(count: number) {
+  return count.toLocaleString("en-GB");
+}
+
 function getExpectedEffectiveParties(orangeCount: number) {
   const orangeShare = orangeCount / PARTICLE_COUNT;
   const purpleShare = 1 - orangeShare;
@@ -136,9 +147,13 @@ export default function EffectivePartiesCollisionInteractive() {
   const frameRef = useRef<number | null>(null);
   const lastFrameTimeRef = useRef<number | null>(null);
   const restartSeedRef = useRef(2);
+  const simulationBoxRef = useRef<HTMLDivElement | null>(null);
   const [orangeSteps, setOrangeSteps] = useState(DEFAULT_ORANGE_STEPS);
   const orangeCount = orangeSteps * PARTICLES_PER_STEP;
-  const particlesRef = useRef<Particle[]>(createParticles(1, orangeCount));
+  const [boxSize, setBoxSize] = useState({ width: BOX_WIDTH, height: BOX_HEIGHT });
+  const particlesRef = useRef<Particle[]>(
+    createParticles(1, orangeCount, BOX_WIDTH, BOX_HEIGHT)
+  );
   const activeCollisionPairsRef = useRef<Set<string>>(new Set());
   const statsRef = useRef<CollisionStats>({ total: 0, sameColor: 0 });
   const [particles, setParticles] = useState<Particle[]>(() => particlesRef.current);
@@ -157,8 +172,39 @@ export default function EffectivePartiesCollisionInteractive() {
   }, []);
 
   useEffect(() => {
+    const element = simulationBoxRef.current;
+
+    if (!element) {
+      return;
+    }
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      const entry = entries[0];
+
+      if (!entry) {
+        return;
+      }
+
+      const nextWidth = Math.max(PARTICLE_RADIUS * 2 + 1, Math.round(entry.contentRect.width));
+      const nextHeight = Math.max(PARTICLE_RADIUS * 2 + 1, Math.round(entry.contentRect.height));
+
+      setBoxSize((current) => {
+        if (current.width === nextWidth && current.height === nextHeight) {
+          return current;
+        }
+
+        return { width: nextWidth, height: nextHeight };
+      });
+    });
+
+    resizeObserver.observe(element);
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  useEffect(() => {
     resetSimulation(simulationState === "running" ? "running" : "idle");
-  }, [orangeCount]);
+  }, [orangeCount, boxSize.height, boxSize.width]);
 
   function step(timestamp: number) {
     const previousTimestamp = lastFrameTimeRef.current ?? timestamp;
@@ -176,16 +222,16 @@ export default function EffectivePartiesCollisionInteractive() {
       if (particle.x <= PARTICLE_RADIUS) {
         particle.x = PARTICLE_RADIUS;
         particle.vx = Math.abs(particle.vx);
-      } else if (particle.x >= BOX_WIDTH - PARTICLE_RADIUS) {
-        particle.x = BOX_WIDTH - PARTICLE_RADIUS;
+      } else if (particle.x >= boxSize.width - PARTICLE_RADIUS) {
+        particle.x = boxSize.width - PARTICLE_RADIUS;
         particle.vx = -Math.abs(particle.vx);
       }
 
       if (particle.y <= PARTICLE_RADIUS) {
         particle.y = PARTICLE_RADIUS;
         particle.vy = Math.abs(particle.vy);
-      } else if (particle.y >= BOX_HEIGHT - PARTICLE_RADIUS) {
-        particle.y = BOX_HEIGHT - PARTICLE_RADIUS;
+      } else if (particle.y >= boxSize.height - PARTICLE_RADIUS) {
+        particle.y = boxSize.height - PARTICLE_RADIUS;
         particle.vy = -Math.abs(particle.vy);
       }
     }
@@ -260,7 +306,12 @@ export default function EffectivePartiesCollisionInteractive() {
       cancelAnimationFrame(frameRef.current);
     }
 
-    const initialParticles = createParticles(restartSeedRef.current, orangeCount);
+    const initialParticles = createParticles(
+      restartSeedRef.current,
+      orangeCount,
+      boxSize.width,
+      boxSize.height
+    );
     restartSeedRef.current += 1;
 
     particlesRef.current = initialParticles;
@@ -323,7 +374,7 @@ export default function EffectivePartiesCollisionInteractive() {
   return (
     <div className="not-prose my-10 w-full max-w-none sm:-mx-6 sm:w-[calc(100%+3rem)] lg:-mx-12 lg:w-[calc(100%+6rem)]">
       <section className="interactive-panel overflow-hidden">
-        <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+        <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:items-stretch">
           <div className="border-b border-black/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
             <p className="eyebrow">Collision Model</p>
 
@@ -365,13 +416,27 @@ export default function EffectivePartiesCollisionInteractive() {
               </div>
 
               <div className="border-b border-black/10 pb-6">
-                <p className="text-base font-semibold tracking-tight text-[#111111] sm:text-lg">
+                <p className="text-sm font-semibold tracking-tight text-[#111111] sm:text-base">
                   Expected N<sub>2</sub>:{" "}
                   <span className="tabular-nums">{expectedN2.toFixed(2)}</span>
                 </p>
-                <p className="mt-3 text-base font-semibold tracking-tight text-[#111111] sm:text-lg">
+                <p className="mt-2 text-sm font-semibold tracking-tight text-[#111111] sm:text-base">
                   Observed N<sub>2</sub>: <span className="tabular-nums">{observedN2}</span>
                 </p>
+                <div className="mt-4 space-y-2 border-t border-black/10 pt-4">
+                  <p className="text-sm font-semibold tracking-tight text-[#111111] sm:text-base">
+                    Total:{" "}
+                    <span className="tabular-nums text-[#111111]">
+                      {formatCount(stats.total)}
+                    </span>
+                  </p>
+                  <p className="text-sm font-semibold tracking-tight text-[#111111] sm:text-base">
+                    Similar:{" "}
+                    <span className="tabular-nums text-[#111111]">
+                      {formatCount(stats.sameColor)}
+                    </span>
+                  </p>
+                </div>
               </div>
 
               <div className="space-y-3">
@@ -394,13 +459,14 @@ export default function EffectivePartiesCollisionInteractive() {
             </div>
           </div>
 
-          <div className="p-1 sm:p-2 lg:p-3">
+          <div className="p-1 sm:p-2 lg:flex lg:p-3">
             <div
-              className="interactive-subpanel aspect-[31/26] w-full overflow-hidden p-0"
+              ref={simulationBoxRef}
+              className="interactive-subpanel h-full min-h-[320px] w-full overflow-hidden p-0 lg:min-h-0"
               style={{ background: "rgba(17,17,17,0.035)" }}
             >
               <svg
-                viewBox={`0 0 ${BOX_WIDTH} ${BOX_HEIGHT}`}
+                viewBox={`0 0 ${boxSize.width} ${boxSize.height}`}
                 className="block h-full w-full"
                 role="img"
                 aria-label="A box of moving particles used to estimate the effective number of parties from collision frequencies"
