@@ -1,0 +1,269 @@
+---
+const chartWidth = 520;
+const chartHeight = 420;
+const padding = {
+  top: 32,
+  right: 44,
+  bottom: 68,
+  left: 92
+};
+const ticks = [0, 25, 50, 75, 100];
+
+function getX(share: number) {
+  const axisWidth = chartWidth - padding.left - padding.right;
+
+  return padding.left + (share / 100) * axisWidth;
+}
+
+function getY(share: number) {
+  const axisHeight = chartHeight - padding.top - padding.bottom;
+
+  return padding.top + axisHeight - (share / 100) * axisHeight;
+}
+
+const initialParty2Share = 50;
+const initialParty1Share = 100 - initialParty2Share;
+---
+
+<div class="not-prose my-10" data-two-party-vote-share-interactive>
+  <section class="interactive-panel overflow-hidden">
+    <div class="grid lg:grid-cols-[minmax(250px,0.82fr)_minmax(0,1.18fr)]">
+      <div class="border-b border-black/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
+        <p class="eyebrow">The Two Party Case</p>
+
+        <div class="mt-6 space-y-5">
+          <div class="flex items-end justify-between gap-4 border-b border-black/10 pb-4">
+            <div>
+              <p class="text-sm leading-6 text-black/70">Party 1</p>
+              <p
+                class="text-lg font-semibold tracking-tight tabular-nums text-[#111111] sm:text-[1.5rem]"
+                data-party1-value
+              >
+                {initialParty1Share}%
+              </p>
+            </div>
+            <div class="text-right">
+              <p class="text-sm leading-6 text-black/70">Party 2</p>
+              <p
+                class="text-lg font-semibold tracking-tight tabular-nums text-[#111111] sm:text-[1.5rem]"
+                data-party2-value
+              >
+                {initialParty2Share}%
+              </p>
+            </div>
+          </div>
+
+          <p class="text-sm leading-6 text-black/70">
+            Once there are two parties, the result is no longer pinned to a single point.
+            Instead, it must fall on the line that intersects the points where the first party and
+            the second party win 100%.
+          </p>
+        </div>
+      </div>
+
+      <div class="p-4 pl-7 sm:p-6 sm:pl-10">
+        <svg
+          data-chart
+          viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+          class="h-auto w-full select-none touch-none"
+          style="touch-action: none;"
+          role="img"
+          aria-label="Two-party vote-share chart with a draggable point constrained to the line of possible outcomes"
+        >
+          {
+            ticks.map((tick) => {
+              const x = getX(tick);
+              const y = getY(tick);
+
+              return (
+                <g>
+                  <line
+                    x1={padding.left}
+                    x2={chartWidth - padding.right}
+                    y1={y}
+                    y2={y}
+                    stroke="rgba(17,17,17,0.12)"
+                    stroke-dasharray="4 5"
+                  />
+                  <line
+                    x1={x}
+                    x2={x}
+                    y1={padding.top}
+                    y2={chartHeight - padding.bottom}
+                    stroke="rgba(17,17,17,0.08)"
+                  />
+                  <text
+                    x={padding.left - 18}
+                    y={y + 7}
+                    text-anchor="end"
+                    font-size="22"
+                    fill="#111111"
+                  >
+                    {tick}%
+                  </text>
+                  <text
+                    x={x}
+                    y={chartHeight - padding.bottom + 34}
+                    text-anchor="middle"
+                    font-size="22"
+                    fill="#111111"
+                  >
+                    {tick}%
+                  </text>
+                </g>
+              );
+            })
+          }
+
+          <line
+            x1={padding.left}
+            x2={padding.left}
+            y1={padding.top}
+            y2={chartHeight - padding.bottom}
+            stroke="rgba(17,17,17,0.24)"
+            stroke-width="2"
+          />
+          <line
+            x1={padding.left}
+            x2={chartWidth - padding.right}
+            y1={chartHeight - padding.bottom}
+            y2={chartHeight - padding.bottom}
+            stroke="rgba(17,17,17,0.24)"
+            stroke-width="2"
+          />
+
+          <line
+            data-guide-x
+            x1={getX(initialParty2Share)}
+            x2={getX(initialParty2Share)}
+            y1={getY(initialParty1Share)}
+            y2={chartHeight - padding.bottom}
+            stroke="rgba(17,17,17,0.16)"
+            stroke-dasharray="4 5"
+          />
+          <line
+            data-guide-y
+            x1={padding.left}
+            x2={getX(initialParty2Share)}
+            y1={getY(initialParty1Share)}
+            y2={getY(initialParty1Share)}
+            stroke="rgba(17,17,17,0.16)"
+            stroke-dasharray="4 5"
+          />
+
+          <line
+            x1={getX(0)}
+            x2={getX(100)}
+            y1={getY(100)}
+            y2={getY(0)}
+            stroke="#F76F5C"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+
+          <circle
+            data-point
+            cx={getX(initialParty2Share)}
+            cy={getY(initialParty1Share)}
+            r="13"
+            fill="#F76F5C"
+            stroke="#FFFFFF"
+            stroke-width="4"
+          />
+        </svg>
+
+        <p class="mt-3 text-center text-xs font-medium uppercase tracking-[0.12em] text-black/45">
+          Click and drag the point
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script is:inline>
+  (() => {
+    const chartWidth = 520;
+    const chartHeight = 420;
+    const padding = { top: 32, right: 44, bottom: 68, left: 92 };
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    function getX(share) {
+      const axisWidth = chartWidth - padding.left - padding.right;
+      return padding.left + (share / 100) * axisWidth;
+    }
+
+    function getY(share) {
+      const axisHeight = chartHeight - padding.top - padding.bottom;
+      return padding.top + axisHeight - (share / 100) * axisHeight;
+    }
+
+    for (const root of document.querySelectorAll("[data-two-party-vote-share-interactive]")) {
+      const chart = root.querySelector("[data-chart]");
+      const point = root.querySelector("[data-point]");
+      const guideX = root.querySelector("[data-guide-x]");
+      const guideY = root.querySelector("[data-guide-y]");
+      const party1Value = root.querySelector("[data-party1-value]");
+      const party2Value = root.querySelector("[data-party2-value]");
+
+      if (!chart || !point || !guideX || !guideY || !party1Value || !party2Value) {
+        continue;
+      }
+
+      let activePointerId = null;
+
+      function updateShare(clientX) {
+        const rect = chart.getBoundingClientRect();
+        const axisWidth = rect.width * ((chartWidth - padding.left - padding.right) / chartWidth);
+        const axisLeft = rect.left + rect.width * (padding.left / chartWidth);
+        const relativeX = clamp(clientX - axisLeft, 0, axisWidth);
+        const party2Share = Math.round((relativeX / axisWidth) * 100);
+        const party1Share = 100 - party2Share;
+        const pointX = getX(party2Share);
+        const pointY = getY(party1Share);
+
+        point.setAttribute("cx", String(pointX));
+        point.setAttribute("cy", String(pointY));
+        guideX.setAttribute("x1", String(pointX));
+        guideX.setAttribute("x2", String(pointX));
+        guideX.setAttribute("y1", String(pointY));
+        guideY.setAttribute("x2", String(pointX));
+        guideY.setAttribute("y1", String(pointY));
+        guideY.setAttribute("y2", String(pointY));
+        party1Value.textContent = `${party1Share}%`;
+        party2Value.textContent = `${party2Share}%`;
+      }
+
+      chart.addEventListener("pointerdown", (event) => {
+        activePointerId = event.pointerId;
+        chart.setPointerCapture(event.pointerId);
+        updateShare(event.clientX);
+      });
+
+      chart.addEventListener("pointermove", (event) => {
+        if (activePointerId !== event.pointerId) {
+          return;
+        }
+
+        updateShare(event.clientX);
+      });
+
+      const stopDragging = (event) => {
+        if (activePointerId !== event.pointerId) {
+          return;
+        }
+
+        activePointerId = null;
+
+        if (chart.hasPointerCapture(event.pointerId)) {
+          chart.releasePointerCapture(event.pointerId);
+        }
+      };
+
+      chart.addEventListener("pointerup", stopDragging);
+      chart.addEventListener("pointercancel", stopDragging);
+    }
+  })();
+</script>

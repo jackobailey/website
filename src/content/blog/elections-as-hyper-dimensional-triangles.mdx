@@ -1,0 +1,54 @@
+---
+title: Elections are Really Triangles
+summary: Thinking geometrically about the space of possible election results.
+date: 2026-03-28
+tags:
+  - explainers
+image: /images/blog/elections-as-hyper-dimensional-triangles.png
+imageAlt: Abstract coral gradient artwork
+featured: false
+---
+
+import OnePartyElectionInteractive from "@/components/blog/OnePartyElectionInteractive";
+import ThreePartyVoteShareInteractive from "@/components/blog/ThreePartyVoteShareInteractive.astro";
+import TwoPartyVoteShareInteractive from "@/components/blog/TwoPartyVoteShareInteractive.astro";
+
+No one thinks "I love mathematics, so I'm going to study politics". It just doesn't happen. And while it is mainly benign, it has had an impact on the sort of questions that political scientists study. Consider elections. Typically, political science emphasises function over form. This is not unreasonable: function clearly matters if we want to live free lives. But there is also a lot of value in considering *how* elections work rather than focussing on what elections *do*.
+
+In this post, I'm going to elaborate on this point and try to convince you of something very *strange*: that elections are really hyper-dimensional triangles in disguise. I'll also keep the mathematics to a minimum and make my point using visual interactives. That way, you can build your intuitions through play rather than thinking through the implications of obtuse equations.
+
+Let's go step by step.
+
+## Step 1: Elections with One Party
+
+Democracy with one party is no democracy at all. Still, imagine that you lived somewhere where there is only a single party that you can vote for. Before you cast a vote, what do you know about the result? Since there's only one party, we know that it *must* receive all of the votes. As such, its vote share will *always* be 100%. In other words, the result is pre-determined.
+
+We can plot this on a simple graph. Imagine a continuum that represents the vote share for this party. In general, parties can receive vote shares between 0% (where they receive no votes) and 100% (where they receive them all). In this case, where there is only one party, the possible range of outcomes will collapse to a single point: the result always has to be 100% because there is no one else to vote for.
+
+<OnePartyElectionInteractive />
+
+## Step 2: Elections with Two Parties
+
+Now imagine that a new party entered the picture. All of a sudden, you have a choice between two competing sides. Sure, it's not much of a choice, but voting for one or the other is better than voting for the one every time. Before you vote, what do you know about the result now? First, you know that the result *is not* pre-determined. Now, there are a range of outcomes. Second, since the vote shares must add up to 100%, you also know that whatever vote share the first party gets, the second party must get 100% minus that amount. For example, if the first party won 60% of the vote, that means that the second party must have won 100% - 60% = 40% of the vote.
+
+Let's add a new dimension to our graph. We'll keep the continuum that we added for the first party, but we'll also add another for the second party too. By doing this, we will add a new dimension to our graph. Before, it was one-dimensional: the first party's vote share could go from 0% to 100%. Now, it will be two-dimensional instead: both the first *and* second party's vote shares go from 0% to 100% and the actual outcome lies somewhere on the plot.
+
+<TwoPartyVoteShareInteractive />
+
+However, because both parties' vote shares *have to* add up to 100%—it is not possible for one party to win, say, 60% and the other 85%—this places a hard constraint on the possible result. As such, we know with *absolute certainty* that the actual result, whatever it might be, *must* lie on the line that connects the point where the first party wins 100% of the vote and where the second party wins 100% of the vote instead.
+
+## Step 3: Elections with Three Parties
+
+Before we add another party, consider what you think might happen next. (And, if you're not sure, remember that I mentioned 'hyper-dimensional triangles' above...)
+
+Ok, now let's add our third party. When we add the vote share continuum for the third party, we move from a two-dimensional to a three-dimensional space. But, since the vote shares for all three parties *must* add up to 100%, we know that the result must also lie not on a line, like in the previous case, but on [a plane](https://en.wikipedia.org/wiki/Plane_(mathematics)) instead. And not just any plane, the result must lie on an *equilateral triangle*. You might be able to see where I'm going here.
+
+<ThreePartyVoteShareInteractive />
+
+## Step 4: Elections with Even More Parties
+
+So far, we've seen that as we move from one party, to two parties, to three parties, the possible election results have moved from lying on a point, to a line, to a plane. If we added another party, the result would next lie somewhere inside a triangular pyramid. And if we kept adding more and more parties, this pattern would continue, into more and more dimensions (which, unfortunately, are hard for our three-dimensional minds to grasp).
+
+In general, if there are $N$ parties competing in an election, then the result must fall somewhere in an $N-1$-dimensional triangle. After pyramids, we lack names for these shapes, so we just start calling them N-cells. For example, a four-dimensional triangle is called a [5-cell](https://en.wikipedia.org/wiki/5-cell) since we need five axes to define it.
+
+So what are the implications? The first is that, when we perform functions on vote shares (or any other shares for that matter), we are actually mapping these hyper-dimensional triangles onto spaces with different dimensions. This is a bit like how if you drop a (nearly) two-dimensional object like a handkerchief onto a three-dimensional object like a lightbulb, it will distort around it and take the three-dimensional object's shape. [The effective number of parties](/writing/what-is-an-effective-party/) is a good example of such a mapping, but there are probably many others. The second is that it shows the benefit of thinking about elections in the abstract. Sure, political scientists might not be natural mathematicians, but there is a lot we can learn by pretending we are.

@@ -1,0 +1,389 @@
+---
+const chartWidth = 620;
+const chartHeight = 500;
+const origin = { x: 118, y: 274 };
+const vertex1 = { x: 118, y: 18 };
+const vertex2 = { x: 542, y: 194 };
+const vertex3 = { x: 236, y: 466 };
+const initialShares = {
+  party1: 34,
+  party2: 33,
+  party3: 33
+};
+
+function interpolate(start: { x: number; y: number }, end: { x: number; y: number }, t: number) {
+  return {
+    x: start.x + (end.x - start.x) * t,
+    y: start.y + (end.y - start.y) * t
+  };
+}
+const verticalAxisTicks = [0, 25, 50, 75, 100];
+const angledAxisTicks = [25, 50, 75, 100];
+
+function getPointFromShares(party1: number, party2: number, party3: number) {
+  return {
+    x:
+      (party1 / 100) * vertex1.x +
+      (party2 / 100) * vertex2.x +
+      (party3 / 100) * vertex3.x,
+    y:
+      (party1 / 100) * vertex1.y +
+      (party2 / 100) * vertex2.y +
+      (party3 / 100) * vertex3.y
+  };
+}
+
+const initialPoint = getPointFromShares(initialShares.party1, initialShares.party2, initialShares.party3);
+---
+
+<div class="not-prose my-10" data-three-party-vote-share-interactive>
+  <section class="interactive-panel overflow-hidden">
+    <div class="grid lg:grid-cols-[minmax(250px,0.72fr)_minmax(0,1.28fr)]">
+      <div class="border-b border-black/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
+        <p class="eyebrow">The Three Party Case</p>
+
+        <div class="mt-6 space-y-5">
+          <div class="grid grid-cols-3 gap-4 border-b border-black/10 pb-4">
+            <div>
+              <p class="text-sm leading-6 text-black/70">Party 1</p>
+              <p
+                class="text-base font-semibold tracking-tight tabular-nums text-[#111111] sm:text-[1.4rem]"
+                data-party1-value
+              >
+                {initialShares.party1}%
+              </p>
+            </div>
+            <div>
+              <p class="text-sm leading-6 text-black/70">Party 2</p>
+              <p
+                class="text-base font-semibold tracking-tight tabular-nums text-[#111111] sm:text-[1.4rem]"
+                data-party2-value
+              >
+                {initialShares.party2}%
+              </p>
+            </div>
+            <div>
+              <p class="text-sm leading-6 text-black/70">Party 3</p>
+              <p
+                class="text-base font-semibold tracking-tight tabular-nums text-[#111111] sm:text-[1.4rem]"
+                data-party3-value
+              >
+                {initialShares.party3}%
+              </p>
+            </div>
+          </div>
+
+          <p class="text-sm leading-6 text-black/70">
+            Once there are three parties, the possible results are not fixed to a line. Instead,
+            they spread out and can sit anywhere across a plane. In particular, a triangle.
+          </p>
+        </div>
+      </div>
+
+      <div class="flex flex-col justify-center p-3 pl-4 sm:p-4 sm:pl-6">
+        <svg
+          data-chart
+          viewBox={`0 0 ${chartWidth} ${chartHeight}`}
+          class="block h-auto w-full select-none touch-none"
+          style="touch-action: none;"
+          role="img"
+          aria-label="Three-party vote-share chart with a draggable point constrained to a triangular plane of possible outcomes"
+        >
+          <line
+            x1={origin.x}
+            y1={origin.y}
+            x2={origin.x + 1.04 * (vertex1.x - origin.x)}
+            y2={origin.y + 1.04 * (vertex1.y - origin.y)}
+            stroke="rgba(17,17,17,0.24)"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+          <line
+            x1={origin.x}
+            y1={origin.y}
+            x2={origin.x + 1.05 * (vertex2.x - origin.x)}
+            y2={origin.y + 1.05 * (vertex2.y - origin.y)}
+            stroke="rgba(17,17,17,0.24)"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+          <line
+            x1={origin.x}
+            y1={origin.y}
+            x2={origin.x + 1.05 * (vertex3.x - origin.x)}
+            y2={origin.y + 1.05 * (vertex3.y - origin.y)}
+            stroke="rgba(17,17,17,0.24)"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+
+          {
+            verticalAxisTicks.map((tick) => {
+              const point = interpolate(origin, vertex1, tick / 100);
+
+              return (
+                <text
+                  x={point.x - 20}
+                  y={point.y + 6}
+                  text-anchor="end"
+                  font-size="18"
+                  fill="#111111"
+                >
+                  {tick}%
+                </text>
+              );
+            })
+          }
+
+          {
+            angledAxisTicks.map((tick) => {
+              const point = interpolate(origin, vertex2, tick / 100);
+
+              return (
+                <text
+                  x={point.x + 2}
+                  y={point.y - 12}
+                  text-anchor="middle"
+                  font-size="18"
+                  fill="#111111"
+                >
+                  {tick}%
+                </text>
+              );
+            })
+          }
+
+          {
+            angledAxisTicks.map((tick) => {
+              const point = interpolate(origin, vertex3, tick / 100);
+
+              return (
+                <text
+                  x={point.x - 18}
+                  y={point.y + 6}
+                  text-anchor="end"
+                  font-size="18"
+                  fill="#111111"
+                >
+                  {tick}%
+                </text>
+              );
+            })
+          }
+
+          <polygon
+            points={`${vertex1.x},${vertex1.y} ${vertex2.x},${vertex2.y} ${vertex3.x},${vertex3.y}`}
+            fill="rgba(247,111,92,0.22)"
+            stroke="#F76F5C"
+            stroke-width="4"
+            stroke-linejoin="round"
+          />
+
+          <polygon
+            data-hit-plane
+            points={`${vertex1.x},${vertex1.y} ${vertex2.x},${vertex2.y} ${vertex3.x},${vertex3.y}`}
+            fill="transparent"
+          />
+
+          <circle
+            data-point
+            cx={initialPoint.x}
+            cy={initialPoint.y}
+            r="13"
+            fill="#F76F5C"
+            stroke="#FFFFFF"
+            stroke-width="4"
+          />
+        </svg>
+
+        <p class="mt-1 text-center text-xs font-medium uppercase tracking-[0.12em] text-black/45">
+          Click and drag the point
+        </p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script is:inline>
+  (() => {
+    const chartWidth = 620;
+    const chartHeight = 500;
+    const vertex1 = { x: 118, y: 18 };
+    const vertex2 = { x: 542, y: 194 };
+    const vertex3 = { x: 236, y: 466 };
+
+    function dot(a, b) {
+      return a.x * b.x + a.y * b.y;
+    }
+
+    function subtract(a, b) {
+      return { x: a.x - b.x, y: a.y - b.y };
+    }
+
+    function add(a, b) {
+      return { x: a.x + b.x, y: a.y + b.y };
+    }
+
+    function scale(vector, factor) {
+      return { x: vector.x * factor, y: vector.y * factor };
+    }
+
+    function getSvgPoint(chart, clientX, clientY) {
+      const rect = chart.getBoundingClientRect();
+      const scaleX = chartWidth / rect.width;
+      const scaleY = chartHeight / rect.height;
+
+      return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+      };
+    }
+
+    function getClosestPointOnTriangle(point, a, b, c) {
+      const ab = subtract(b, a);
+      const ac = subtract(c, a);
+      const ap = subtract(point, a);
+      const d1 = dot(ab, ap);
+      const d2 = dot(ac, ap);
+
+      if (d1 <= 0 && d2 <= 0) {
+        return { point: a, weights: [1, 0, 0] };
+      }
+
+      const bp = subtract(point, b);
+      const d3 = dot(ab, bp);
+      const d4 = dot(ac, bp);
+
+      if (d3 >= 0 && d4 <= d3) {
+        return { point: b, weights: [0, 1, 0] };
+      }
+
+      const vc = d1 * d4 - d3 * d2;
+
+      if (vc <= 0 && d1 >= 0 && d3 <= 0) {
+        const v = d1 / (d1 - d3);
+
+        return {
+          point: add(a, scale(ab, v)),
+          weights: [1 - v, v, 0]
+        };
+      }
+
+      const cp = subtract(point, c);
+      const d5 = dot(ab, cp);
+      const d6 = dot(ac, cp);
+
+      if (d6 >= 0 && d5 <= d6) {
+        return { point: c, weights: [0, 0, 1] };
+      }
+
+      const vb = d5 * d2 - d1 * d6;
+
+      if (vb <= 0 && d2 >= 0 && d6 <= 0) {
+        const w = d2 / (d2 - d6);
+
+        return {
+          point: add(a, scale(ac, w)),
+          weights: [1 - w, 0, w]
+        };
+      }
+
+      const va = d3 * d6 - d5 * d4;
+
+      if (va <= 0 && d4 - d3 >= 0 && d5 - d6 >= 0) {
+        const bc = subtract(c, b);
+        const w = (d4 - d3) / (d4 - d3 + (d5 - d6));
+
+        return {
+          point: add(b, scale(bc, w)),
+          weights: [0, 1 - w, w]
+        };
+      }
+
+      const denominator = 1 / (va + vb + vc);
+      const v = vb * denominator;
+      const w = vc * denominator;
+      const u = 1 - v - w;
+
+      return {
+        point: {
+          x: a.x * u + b.x * v + c.x * w,
+          y: a.y * u + b.y * v + c.y * w
+        },
+        weights: [u, v, w]
+      };
+    }
+
+    function roundShares(weights) {
+      const raw = weights.map((weight) => weight * 100);
+      const floors = raw.map((value) => Math.floor(value));
+      let remainder = 100 - floors.reduce((total, value) => total + value, 0);
+      const order = raw
+        .map((value, index) => ({ index, fraction: value - floors[index] }))
+        .sort((left, right) => right.fraction - left.fraction);
+
+      for (let index = 0; index < order.length && remainder > 0; index += 1) {
+        floors[order[index].index] += 1;
+        remainder -= 1;
+      }
+
+      return floors;
+    }
+
+    for (const root of document.querySelectorAll("[data-three-party-vote-share-interactive]")) {
+      const chart = root.querySelector("[data-chart]");
+      const point = root.querySelector("[data-point]");
+      const plane = root.querySelector("[data-hit-plane]");
+      const party1Value = root.querySelector("[data-party1-value]");
+      const party2Value = root.querySelector("[data-party2-value]");
+      const party3Value = root.querySelector("[data-party3-value]");
+
+      if (!chart || !plane || !point || !party1Value || !party2Value || !party3Value) {
+        continue;
+      }
+
+      let activePointerId = null;
+
+      function updateFromPointer(clientX, clientY) {
+        const svgPoint = getSvgPoint(chart, clientX, clientY);
+        const result = getClosestPointOnTriangle(svgPoint, vertex1, vertex2, vertex3);
+        const shares = roundShares(result.weights);
+
+        point.setAttribute("cx", String(result.point.x));
+        point.setAttribute("cy", String(result.point.y));
+        party1Value.textContent = `${shares[0]}%`;
+        party2Value.textContent = `${shares[1]}%`;
+        party3Value.textContent = `${shares[2]}%`;
+      }
+
+      chart.addEventListener("pointerdown", (event) => {
+        activePointerId = event.pointerId;
+        chart.setPointerCapture(event.pointerId);
+        updateFromPointer(event.clientX, event.clientY);
+      });
+
+      chart.addEventListener("pointermove", (event) => {
+        if (activePointerId !== event.pointerId) {
+          return;
+        }
+
+        updateFromPointer(event.clientX, event.clientY);
+      });
+
+      const stopDragging = (event) => {
+        if (activePointerId !== event.pointerId) {
+          return;
+        }
+
+        activePointerId = null;
+
+        if (chart.hasPointerCapture(event.pointerId)) {
+          chart.releasePointerCapture(event.pointerId);
+        }
+      };
+
+      chart.addEventListener("pointerup", stopDragging);
+      chart.addEventListener("pointercancel", stopDragging);
+    }
+  })();
+</script>
