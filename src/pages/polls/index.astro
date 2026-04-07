@@ -3,8 +3,8 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import PollAverageChart from "@/components/charts/PollAverageChart";
 import { getPollEntries } from "@/lib/content";
 import { formatDate } from "@/lib/format";
-import pointData from "@/data/polls/point-data.json";
-import predictionData from "@/data/polls/prediction-data.json";
+import pointData from "@/data/polls/point_data.json";
+import predictionData from "@/data/polls/prediction_data.json";
 import pollSummaryTextRaw from "@/data/polls/poll_summary.txt?raw";
 
 const pollEntries = await getPollEntries();
