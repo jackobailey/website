@@ -67,5 +67,142 @@ const structuredItems = structuredData
       <slot />
     </main>
     <Footer />
+
+    <script is:inline>
+      (() => {
+        const PREVIEW_ID = "footnote-preview";
+        const VIEWPORT_MARGIN = 12;
+        const PREVIEW_GAP = 10;
+
+        const getPreviewElement = () => {
+          let preview = document.getElementById(PREVIEW_ID);
+
+          if (preview) {
+            return preview;
+          }
+
+          preview = document.createElement("div");
+          preview.id = PREVIEW_ID;
+          preview.className = "footnote-preview";
+          preview.setAttribute("role", "tooltip");
+          preview.setAttribute("aria-hidden", "true");
+          document.body.appendChild(preview);
+
+          return preview;
+        };
+
+        const getFootnoteMarkup = (reference) => {
+          const href = reference.getAttribute("href");
+
+          if (!href || !href.startsWith("#")) {
+            return "";
+          }
+
+          const footnoteId = decodeURIComponent(href.slice(1));
+          const footnote = document.getElementById(footnoteId);
+
+          if (!footnote) {
+            return "";
+          }
+
+          const clone = footnote.cloneNode(true);
+          clone.querySelectorAll("[data-footnote-backref]").forEach((node) => node.remove());
+
+          if (clone.children.length === 1 && clone.firstElementChild?.tagName === "P") {
+            return clone.firstElementChild.innerHTML.trim();
+          }
+
+          return clone.innerHTML.trim();
+        };
+
+        const positionPreview = (reference, preview) => {
+          const rect = reference.getBoundingClientRect();
+          const previewWidth = preview.offsetWidth;
+          const previewHeight = preview.offsetHeight;
+          const centeredLeft = rect.left + rect.width / 2 - previewWidth / 2;
+          const left = Math.min(
+            Math.max(centeredLeft, VIEWPORT_MARGIN),
+            window.innerWidth - previewWidth - VIEWPORT_MARGIN
+          );
+          const topAbove = rect.top - previewHeight - PREVIEW_GAP;
+          const topBelow = rect.bottom + PREVIEW_GAP;
+          const top =
+            topAbove >= VIEWPORT_MARGIN
+              ? topAbove
+              : Math.min(topBelow, window.innerHeight - previewHeight - VIEWPORT_MARGIN);
+
+          preview.style.left = `${Math.round(left)}px`;
+          preview.style.top = `${Math.round(Math.max(top, VIEWPORT_MARGIN))}px`;
+        };
+
+        const initFootnotePreviews = () => {
+          const references = document.querySelectorAll("a[data-footnote-ref]");
+
+          if (references.length === 0) {
+            return;
+          }
+
+          const preview = getPreviewElement();
+          let activeReference = null;
+
+          const hidePreview = () => {
+            if (activeReference) {
+              activeReference.removeAttribute("data-footnote-preview-active");
+            }
+
+            activeReference = null;
+            preview.dataset.visible = "false";
+            preview.setAttribute("aria-hidden", "true");
+          };
+
+          const showPreview = (reference) => {
+            const markup = getFootnoteMarkup(reference);
+
+            if (!markup) {
+              hidePreview();
+              return;
+            }
+
+            if (activeReference && activeReference !== reference) {
+              activeReference.removeAttribute("data-footnote-preview-active");
+            }
+
+            activeReference = reference;
+            activeReference.setAttribute("data-footnote-preview-active", "true");
+            preview.innerHTML = markup;
+            preview.dataset.visible = "false";
+            preview.setAttribute("aria-hidden", "false");
+            positionPreview(reference, preview);
+            preview.dataset.visible = "true";
+          };
+
+          references.forEach((reference) => {
+            if (reference.dataset.footnotePreviewBound === "true") {
+              return;
+            }
+
+            reference.dataset.footnotePreviewBound = "true";
+            reference.addEventListener("mouseenter", () => showPreview(reference));
+            reference.addEventListener("mouseleave", hidePreview);
+            reference.addEventListener("focus", () => showPreview(reference));
+            reference.addEventListener("blur", hidePreview);
+          });
+
+          window.addEventListener("scroll", hidePreview, true);
+          window.addEventListener("resize", hidePreview);
+          document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape") {
+              hidePreview();
+            }
+          });
+        };
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", initFootnotePreviews, { once: true });
+        } else {
+          initFootnotePreviews();
+        }
+      })();
+    </script>
   </body>
 </html>

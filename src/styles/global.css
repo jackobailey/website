@@ -365,6 +365,63 @@
     padding: 0 0 0 1rem;
   }
 
+  .prose-editorial :where(a[data-footnote-ref]) {
+    cursor: help;
+    font-weight: 600;
+  }
+
+  .prose-editorial :where(a[data-footnote-ref][data-footnote-preview-active]) {
+    color: #111111;
+  }
+
+  .footnote-preview {
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(17, 17, 17, 0.12);
+    border-radius: 0.85rem;
+    box-shadow: 0 14px 34px rgba(17, 17, 17, 0.12);
+    color: #111111;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    max-width: min(22rem, calc(100vw - 1.5rem));
+    opacity: 0;
+    padding: 0.7rem 0.85rem;
+    pointer-events: none;
+    position: fixed;
+    transform: translateY(0.25rem);
+    transition:
+      opacity 150ms ease,
+      transform 150ms ease,
+      visibility 150ms ease;
+    visibility: hidden;
+    z-index: 60;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .footnote-preview[data-visible="true"] {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+  }
+
+  .footnote-preview p {
+    margin: 0;
+  }
+
+  .footnote-preview p + p {
+    margin-top: 0.55rem;
+  }
+
+  .footnote-preview a {
+    color: #f76f5c;
+    text-decoration: none;
+  }
+
+  .footnote-preview em,
+  .footnote-preview strong {
+    color: #111111;
+  }
+
   @media (min-width: 1024px) {
     .editorial-sidebar {
       border-top: 0;
