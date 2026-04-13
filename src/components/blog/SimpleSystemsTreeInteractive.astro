@@ -1,0 +1,252 @@
+---
+const DARK = "#111111";
+const LINE = "#D2D2D2";
+const SECONDARY_FILL = "rgba(17, 17, 17, 0.04)";
+const NODE_RADIUS = 32;
+const NODE_LABEL_SIZE = 18;
+const CONNECTOR_WIDTH = 2.5;
+
+const firstPastThePost = {
+  title: "First-past-the-post",
+  nodes: [
+    { id: "d", label: "D", x: 240, y: 58, kind: "district" },
+    { id: "c1", label: "C1", x: 88, y: 182, kind: "primary" },
+    { id: "c2", label: "C2", x: 240, y: 182, kind: "primary" },
+    { id: "c3", label: "C3", x: 392, y: 182, kind: "primary" },
+    { id: "p1", label: "P1", x: 88, y: 308, kind: "secondary" },
+    { id: "p2", label: "P2", x: 240, y: 308, kind: "secondary" },
+    { id: "p3", label: "P3", x: 392, y: 308, kind: "secondary" }
+  ],
+  edges: [
+    { from: "d", to: "c1" },
+    { from: "d", to: "c2" },
+    { from: "d", to: "c3" },
+    { from: "c1", to: "p1" },
+    { from: "c2", to: "p2" },
+    { from: "c3", to: "p3" }
+  ]
+};
+
+const partyListPr = {
+  title: "Party-list PR",
+  nodes: [
+    { id: "d", label: "D", x: 240, y: 58, kind: "district" },
+    { id: "p1", label: "P1", x: 88, y: 182, kind: "primary" },
+    { id: "p2", label: "P2", x: 240, y: 182, kind: "primary" },
+    { id: "p3", label: "P3", x: 392, y: 182, kind: "primary" },
+    { id: "c1", label: "C1", x: 88, y: 308, kind: "secondary" },
+    { id: "c2", label: "C2", x: 240, y: 308, kind: "secondary" },
+    { id: "c3", label: "C3", x: 392, y: 308, kind: "secondary" }
+  ],
+  edges: [
+    { from: "d", to: "p1" },
+    { from: "d", to: "p2" },
+    { from: "d", to: "p3" },
+    { from: "p1", to: "c1" },
+    { from: "p2", to: "c2" },
+    { from: "p3", to: "c3" }
+  ]
+};
+
+type TreeNode = (typeof firstPastThePost.nodes)[number];
+type TreeNodes = typeof firstPastThePost.nodes;
+type TreeNodeKind = TreeNode["kind"];
+type Tree = typeof firstPastThePost;
+
+function getNode(nodeId: string, nodes: TreeNodes) {
+  const match = nodes.find((node) => node.id === nodeId);
+
+  if (!match) {
+    throw new Error(`Node "${nodeId}" not found.`);
+  }
+
+  return match;
+}
+
+function getNodeStyle(kind: TreeNodeKind) {
+  if (kind === "district") {
+    return { fill: DARK, text: "#FFFFFF", stroke: DARK };
+  }
+
+  if (kind === "primary") {
+    return {
+      fill: "rgba(247, 111, 92, 0.14)",
+      text: DARK,
+      stroke: "rgba(247, 111, 92, 0.72)"
+    };
+  }
+
+  return {
+    fill: SECONDARY_FILL,
+    text: DARK,
+    stroke: "rgba(17, 17, 17, 0.14)"
+  };
+}
+
+function getConnectorGroups(tree: Tree) {
+  const childrenByParent = new Map<string, TreeNode[]>();
+
+  for (const edge of tree.edges) {
+    const children = childrenByParent.get(edge.from) ?? [];
+    children.push(getNode(edge.to, tree.nodes));
+    childrenByParent.set(edge.from, children);
+  }
+
+  return Array.from(childrenByParent.entries()).map(([parentId, children]) => ({
+    parent: getNode(parentId, tree.nodes),
+    children: [...children].sort((a, b) => a.x - b.x)
+  }));
+}
+
+function getJoinY(parent: TreeNode, children: TreeNode[]) {
+  const parentBottom = parent.y + NODE_RADIUS;
+  const childTop = children[0].y - NODE_RADIUS;
+
+  return parentBottom + (childTop - parentBottom) * 0.48;
+}
+
+function formatNodeLabel(label: string) {
+  const match = label.match(/^([A-Z])(\d+)$/);
+
+  if (!match) {
+    return label;
+  }
+
+  const subscripts = ["₀", "₁", "₂", "₃", "₄", "₅", "₆", "₇", "₈", "₉"];
+
+  return `${match[1]}${match[2]
+    .split("")
+    .map((digit) => subscripts[Number(digit)])
+    .join("")}`;
+}
+
+const trees = [firstPastThePost, partyListPr];
+---
+
+<section class="interactive-panel overflow-hidden">
+  <div class="grid xl:grid-cols-2">
+    {
+      trees.map((tree, index) => (
+        <div class:list={["h-full p-5 sm:p-6", index > 0 && "border-t border-black/10 xl:border-l xl:border-t-0"]}>
+          <p class="eyebrow">
+            {tree.title}
+          </p>
+
+          <svg
+            viewBox="0 0 480 370"
+            class="mt-5 h-auto w-full"
+            role="img"
+            aria-label={`${tree.title} tree diagram showing the district at the top and the nesting order beneath it`}
+          >
+            {
+              getConnectorGroups(tree).map(({ parent, children }) => {
+                const parentBottom = parent.y + NODE_RADIUS;
+                const childTop = children[0].y - NODE_RADIUS;
+                const joinY = getJoinY(parent, children);
+
+                if (children.length === 1) {
+                  return (
+                    <>
+                      <line
+                        x1={parent.x}
+                        y1={parentBottom}
+                        x2={parent.x}
+                        y2={joinY}
+                        stroke={LINE}
+                        stroke-width={CONNECTOR_WIDTH}
+                        stroke-linecap="round"
+                      />
+                      <line
+                        x1={parent.x}
+                        y1={joinY}
+                        x2={children[0].x}
+                        y2={joinY}
+                        stroke={LINE}
+                        stroke-width={CONNECTOR_WIDTH}
+                        stroke-linecap="round"
+                      />
+                      <line
+                        x1={children[0].x}
+                        y1={joinY}
+                        x2={children[0].x}
+                        y2={childTop}
+                        stroke={LINE}
+                        stroke-width={CONNECTOR_WIDTH}
+                        stroke-linecap="round"
+                      />
+                    </>
+                  );
+                }
+
+                return (
+                  <>
+                    <line
+                      x1={parent.x}
+                      y1={parentBottom}
+                      x2={parent.x}
+                      y2={joinY}
+                      stroke={LINE}
+                      stroke-width={CONNECTOR_WIDTH}
+                      stroke-linecap="round"
+                    />
+                    <line
+                      x1={children[0].x}
+                      y1={joinY}
+                      x2={children[children.length - 1].x}
+                      y2={joinY}
+                      stroke={LINE}
+                      stroke-width={CONNECTOR_WIDTH}
+                      stroke-linecap="round"
+                    />
+                    {
+                      children.map((child) => (
+                        <line
+                          x1={child.x}
+                          y1={joinY}
+                          x2={child.x}
+                          y2={child.y - NODE_RADIUS}
+                          stroke={LINE}
+                          stroke-width={CONNECTOR_WIDTH}
+                          stroke-linecap="round"
+                        />
+                      ))
+                    }
+                  </>
+                );
+              })
+            }
+
+            {
+              tree.nodes.map((node) => {
+                const style = getNodeStyle(node.kind);
+
+                return (
+                  <g>
+                    <circle
+                      cx={node.x}
+                      cy={node.y}
+                      r={NODE_RADIUS}
+                      fill={style.fill}
+                      stroke={style.stroke}
+                      stroke-width="2"
+                    ></circle>
+                    <text
+                      x={node.x}
+                      y={node.y + NODE_LABEL_SIZE * 0.3}
+                      text-anchor="middle"
+                      font-size={NODE_LABEL_SIZE}
+                      font-weight="700"
+                      fill={style.text}
+                    >
+                      {formatNodeLabel(node.label)}
+                    </text>
+                  </g>
+                );
+              })
+            }
+          </svg>
+        </div>
+      ))
+    }
+  </div>
+</section>

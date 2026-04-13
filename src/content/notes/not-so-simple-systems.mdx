@@ -1,0 +1,95 @@
+---
+title: (Not So) Simple Systems
+summary: A note on the rank-size principle and the primary unit of competition.
+date: 2026-04-10
+tags:
+  - elections
+---
+
+import SignsAndDifferencesInteractive from "@/components/blog/SignsAndDifferencesInteractive";
+import RankSizePairwiseTable from "@/components/blog/RankSizePairwiseTable.astro";
+import RankSizePrincipleInteractive from "@/components/blog/RankSizePrincipleInteractive";
+import SimpleSystemsResultsInteractive from "@/components/blog/SimpleSystemsResultsInteractive.astro";
+import ToySntvResultsInteractive from "@/components/blog/ToySntvResultsInteractive.astro";
+
+In [*Votes from Seats*](https://www.cambridge.org/core/books/votes-from-seats/890D24F8D0DB2FF9CCEA1C77CE4E463F), Shugart and Taagepera specify two axioms that distinguish 'simple' electoral systems from their more complex alternatives:
+
+1. The system must only allocate seats within districts
+2. The system must allocate seats according to the *rank-size principle*, such that parties receive seats according to their relative vote shares
+
+According to Shugart and Taagepera, only two types of electoral system meet these criteria: [first-past-the-post](https://en.wikipedia.org/wiki/First-past-the-post_voting) and districted [party-list proportional representation](https://en.wikipedia.org/wiki/Party-list_proportional_representation).
+
+This note represents my attempt to make sense of simple systems and to understand the rank-size principle. I proceed in three steps. First, I formalise the rank-size principle and develop an index that determines whether a given election satisfies it or not. Second, I present evidence that---if we focus our attention on parties, as is common---some elections under first-past-the-post appear to violate the rank-size principle. Third, I show that if we shift our focus from parties to the system's *primary unit of competition*, we can overcome this problem *and* increase the number of electoral systems that qualify as being 'simple'.
+
+
+
+## Understanding the Rank-Size Principle
+
+Under the rank-size principle, ["the relative sizes of parties in voting are reflected in the allocation of seats. That is, the first seat in a district always goes to the party with the most votes in the district. Then, if there are more seats, other parties that have sufficient votes may obtain seats, and they obtain them in order"](https://www.cambridge.org/core/books/abs/votes-from-seats/components-of-simple-electoral-systems/CE8DD54C39683D46093EB299F29A49C9). In other words, the rank-size principle holds that the largest vote-winning party[^parties] must win the largest number of seats, the second-largest vote-winning party must win the second-largest number of seats, and so on. So how can we tell if an election does or does not violate the rank-size principle?
+
+[^parties]: Later in this piece, I will argue that we should move beyond thinking in terms of parties and instead think about the primary unit of competition. However, in this section, for the sake of elaboration, I will continue to refer to parties.
+
+Imagine an election with only two parties: Red and Blue. Now consider that---whether we care about votes, $v$; seats, $s$; or anything else---we can tell which party came out on top by computing the difference between their respective shares. For example, if the Reds won *more* votes than the Blues, then $v_R - v_B$ must be *positive*. Likewise, if the Reds won *fewer* votes than the Blues, $v_R - v_B$ must be *negative*. And, if both the Reds and the Blues won an *equal* share of the vote, then $v_R - v_B$ must be *zero*. As such, the *sign* of the difference between the parties' shares tells us which of the two is ahead.
+
+<SignsAndDifferencesInteractive client:load />
+
+The interactive above should make this intuition much clearer. If you set the Reds' vote share ahead of the Blues', the size of the difference may change but its *sign* will always be positive. The same is true if you set the Reds' vote share to fall behind the Blues': sometimes the Reds will trail behind, sometimes they will almost be equal, but the sign on the difference will always be negative. Finally, if you set the two parties to do equally well, then the difference will always be zero. This is useful since it creates what is known as a [balanced ternary system](https://en.wikipedia.org/wiki/Balanced_ternary): when the difference is positive, we can represent it with a +1; when it is negative, we can represent it with a -1; and, when it is zero, we can leave it as 0.
+
+<RankSizePairwiseTable />
+
+Now consider what happens when we compute the difference between the Reds' and the Blues' vote and seat shares, then multiply the resulting signs. There are three signs, giving $3 \times 3 = 9$ possible combinations, all shown in the table above. Consider rows one and two. In the first, Red wins *more* votes and *more* seats than Blue while, in the second, Red wins *fewer* votes and *fewer* seats than Blue. Both are rank-size consistent, since the largest of the two parties wins the most seats. Further, the product of both of their signs is also equal to +1. So, since we have enumerated every combination of signs, we know that positive products must *always* be rank-size consistent.
+
+Next, consider rows three and four. In the third row, Red wins *more* votes but *fewer* seats than Blue while, in the fourth row, Red wins *fewer* votes but *more* seats than Blue. Neither outcome is rank-size consistent, since the largest vote-winning party always wins fewer seats. In this case, however, the product of the signs is equal to -1. So, once again, we know that negative products can *never* be rank-size consistent.
+
+Finally, consider rows five to nine, where the two parties are tied in at least one respect. In rows five and six, the two parties win different numbers of votes but the same number of seats.[^equal_seats] In rows seven and eight, both parties win an equal number of votes but a different number of seats.[^equal_votes] In row nine, both parties have an equal number of votes *and* seats. Importantly, none violate the rank-size principle since they never result in the largest vote-winning party winning fewer seats than its rival. As such, since these outcomes always produce a product of 0, we know that zero-valued products of signs must also *always* be rank-size consistent.
+
+[^equal_seats]: This sometimes happens in low district magnitude elections where both parties are close to the quota. For example, in [Cape Verde's extra-national Africa-wide constituency 2011](https://en.wikipedia.org/wiki/2011_Cape_Verdean_parliamentary_election), the two competing parties each won one of the two available seats.
+
+[^equal_votes]: This outcome is less common, but does still happen. For instance, in [2017 in the Mutalau constituency on the small island of Niue](https://en.wikipedia.org/wiki/2017_Niuean_general_election), the two leading candidates each won 19 votes and the returning officer allocated the district's single seat by coin-toss.
+
+Taken together, this suggests that, so long as the product of signs is greater than or equal to zero, the pair's results *must* be rank-size consistent. We can formalise this property as:
+
+$$
+\rho_{ij} = \mathbf{I} \left[ \left( v_i - v_j \right) \left( s_i - s_j \right) < 0 \right]
+$$
+
+Where $\mathbf{I}\left(\right)$ is an indicator function that takes the value 1 where the rank-size principle is violated and 0 where it is not. Further, we can evaluate the election as a whole by repeating this process for each pair of parties, then summing their respective results:
+
+$$
+\rho = \sum_{i < j} \mathbf{I}\left[ \left( v_i - v_j \right)\left( s_i - s_j \right) < 0 \right]
+$$
+
+If this number, $\rho$, equals zero, then there are no violating pairs and the election satisfies the rank-size principle. Otherwise, if $\rho$ takes some positive value, there is at least one violating pair, so it cannot be rank-size consistent.
+
+
+<RankSizePrincipleInteractive client:load />
+
+To build your intuition even further, consider the toy example above. Here, we have three parties: Red, Blue, and Green. Red won 50% of the vote, Blue won 30% of the vote, and Green won 20% of the vote. By clicking the plus and minus signs either side of the seat counts, you can adjust how many seats each party won. Watch what happens when you do. Red starts with one seat and, since $R > B > G$ in the vote ranking and $R > B = G$ in the seat ranking, there are no violating pairs and the rank-size principle is preserved. In fact, we can add as many seats as we like to Red's total and it will still not violate the rank-size principle. However, if we take Red's seat and give it to Blue, the vote ranking is still $R > B > G$, but the seat ranking becomes $B > R = G$. This creates a violating pair that is inconsistent with the rank-size principle, since $R > B$ in the vote ranking, but $B > R$ in the seat ranking. If you now give two seats to Green, you will see the number of violating pairs increase from 1 to 2 to 3, the maximum possible amount, since this causes the seat ranking that emerges to be the opposite of the vote ranking: $G > B > R$.
+
+
+
+## The Problem With Parties
+
+First-past-the-post is perhaps the simplest electoral system. You vote for a candidate and whichever wins the most votes then wins the seat. But is it a 'simple system'? This depends on our perspective. Political scientists often focus on *parties* instead of *candidates*, but this can create problems when it comes to assessing the rank-size principle in candidate-centric electoral systems.
+
+<SimpleSystemsResultsInteractive />
+
+A simple example of this problem comes from the single-seat district of Aleipata-Itupa I Lalo at [the 2006 Samoan election](https://en.wikipedia.org/wiki/2006_Samoan_general_election). The interactive above shows the result: the Human Rights Protection Party won the most votes, but the Samoan Democratic United Party still won the seat. If we focus on *parties*, this is a clear violation of the rank-size principle: the largest vote-winning party did not win the seat. But, if we click the button on the bottom right and shift our perspective to focus on *candidates*, the rank-size principle is preserved: the largest vote-winning candidate, Paepae Kapeli Sua, also won the seat.
+
+The issue is that, while political scientists might think in terms of *parties*, first-past-the-post is *not* a party-centric system. Rather, it is a candidate-centric one. So, in countries like Samoa which lack a strong party system, parties sometimes field more than one candidate in a district despite it only having one seat.[^canada] And, when it comes to conducting comparative research, the fundamental problem that we have is that we want to compare like with like, but the choices that voters make differ from system to system. This explains why we cannot simply overcome the problem above by shifting our focus to candidates: while it might solve the issue above, it would simply create new ones elsewhere, since some systems---like closed party-lists---do not allow voters to cast ballots for individual candidates.
+
+[^canada]: It is worth noting that this practice is not limited to small island nations like Samoa. It was also relatively common in Canada. For example, the Progressive Conservatives fielded two candidates---Hugh Gourlay and Douglas Caston---[in the district of Rocky Mountain](https://en.wikipedia.org/wiki/Rocky_Mountain_(federal_electoral_district)#Election_results) at the 1968 Canadian election and, despite winning more votes overall, still lost the seat to the Liberal candidate.
+
+Instead, we should focus on the *primary unit of competition*: the highest level at which votes accrue and to which the system allocates seats. In some systems, like party-list proportional representation, this will be the party.[^list] But, in others, like first-past-the-post, it will be the candidate instead. Interestingly, this suggests that we might also reconsider some of the candidate-centric systems that Shugart and Taagepera consider 'complex' like [the single non-transferable vote](https://en.wikipedia.org/wiki/Single_non-transferable_vote).
+
+[^list]: In open-list systems, the voter can vote for an individual candidate, but this merely adjusts their place on the list and does not affect how many seats the party might win. There are exceptions, of course. For instance, in Czechia, candidates can win individual mandates. However, I ignore such systems in this case.
+
+<ToySntvResultsInteractive />
+
+Consider the toy example above: an election with four candidates from three parties all competing for two seats under the single non-transferable vote.[^sntv] When we focus on parties, the results clearly violate the rank-size principle: despite winning a plurality of the vote, the Greens won none of the seats. However, the single non-transferable vote is a candidate-centric system so, when we shift our focus to the candidates, the rank-size principle is restored.
+
+[^sntv]: I looked for a real-world example that I could use to illustrate this point, but they all either abided by the rank-size principle even when the results were aggregated up to the party level or, alternatively, had so many parties that the example would soon become impractical.
+
+I would argue that this shows that the single non-transferable vote *is* a simple electoral system. It's just that we have to focus on the primary unit of competition and not default to thinking in terms of parties. That focussing on parties can also lead systems like first-past-the-post to violate the rank-size principle only strengthens this point. It also makes intuitive sense: the algorithms that underpin different systems do not think in terms of 'parties' or 'candidates', but only in terms of primary units. This is also why I think that Henry R. Droop was wrong[^strong] to say that, under the single non-transferable vote, ['a party commanding a sufficient number of voters to return several representatives, would fail to obtain as many as it was entitled to, through too many of its votes being accumulated upon its most popular candidates'](https://books.google.co.uk/books?id=TZpWkwTrLAcC&ots=dSLlNs4f9J&dq=droop%20political%20and%20social%20effects%20of%20different%20methods%20of%20electing%20representatives&lr&pg=PA4#v=onepage&q&f=false). Under the single non-transferable vote, the *party* is not entitled to anything: it is *candidates* that win or lose the election.
+
+[^strong]: Strong words!

@@ -1,0 +1,551 @@
+---
+import { SIMPLE_SYSTEMS_DISTRICT } from "./simpleSystemsData";
+
+const PARTY_LABELS = {
+  HRPP: "Human Rights Protection Party",
+  SDUP: "Samoan Democratic United Party",
+  SP: "Samoa Party",
+  Independent: "Independent"
+} as const;
+
+function formatNumber(value: number) {
+  return value.toLocaleString("en-GB");
+}
+
+const animatedRows = [
+  {
+    id: "hrpp-main",
+    party: {
+      label: PARTY_LABELS.HRPP,
+      detail: "",
+      votes: 885,
+      seats: 0
+    },
+    candidate: {
+      label: "Tautoloitua Farani Posala",
+      detail: PARTY_LABELS.HRPP,
+      votes: 627,
+      seats: 0
+    }
+  },
+  {
+    id: "sdup",
+    party: {
+      label: PARTY_LABELS.SDUP,
+      detail: "",
+      votes: 731,
+      seats: 1
+    },
+    candidate: {
+      label: "Paepae Kapeli Sua",
+      detail: PARTY_LABELS.SDUP,
+      votes: 731,
+      seats: 1
+    }
+  },
+  {
+    id: "hrpp-secondary",
+    party: null,
+    candidate: {
+      label: "Utuga Faamanatu Faaaliga",
+      detail: PARTY_LABELS.HRPP,
+      votes: 258,
+      seats: 0
+    }
+  },
+  {
+    id: "sp",
+    party: {
+      label: PARTY_LABELS.SP,
+      detail: "",
+      votes: 62,
+      seats: 0
+    },
+    candidate: {
+      label: "Tauiliili Joe Kolose Fruean",
+      detail: PARTY_LABELS.SP,
+      votes: 62,
+      seats: 0
+    }
+  },
+  {
+    id: "independent",
+    party: {
+      label: PARTY_LABELS.Independent,
+      detail: "",
+      votes: 23,
+      seats: 0
+    },
+    candidate: {
+      label: "Letiu Elisapeta Tali Lee",
+      detail: PARTY_LABELS.Independent,
+      votes: 23,
+      seats: 0
+    }
+  }
+];
+---
+
+<div class="not-prose my-10">
+  <section
+    class="interactive-panel overflow-hidden simple-systems-results"
+    data-target-mode="party"
+    data-visible-mode="party"
+    data-phase="party"
+  >
+    <div class="mx-auto max-w-[40rem] p-5 sm:p-6">
+      <p class="eyebrow">
+        {SIMPLE_SYSTEMS_DISTRICT}, Samoa (2006)
+      </p>
+
+      <div class="mt-5 overflow-hidden">
+        <div
+          class="results-grid results-grid-head border-b border-black/8 px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-black/50 sm:text-[0.82rem]"
+        >
+          <span class="results-label-cell min-w-0" aria-live="polite">
+            <span class="results-heading-party">Party</span>
+            <span class="results-heading-candidate">Candidate</span>
+          </span>
+          <span class="results-number-cell">Votes</span>
+          <span class="results-number-cell">Seats</span>
+        </div>
+
+        <div class="results-motion-stage">
+          {
+            animatedRows.map((row) => (
+              <div
+                class="results-grid results-motion-row"
+                data-row={row.id}
+              >
+                <div class="results-label-cell min-w-0">
+                  {row.party && (
+                    <div class="mode-content mode-party">
+                      <p class="text-sm font-semibold leading-5 text-[#111111] sm:text-[0.98rem]">
+                        {row.party.label}
+                      </p>
+                    </div>
+                  )}
+
+                  <div class="mode-content mode-candidate">
+                    <p class="text-sm font-semibold leading-5 text-[#111111] sm:text-[0.98rem]">
+                      {row.candidate.label}
+                    </p>
+                    <p class="text-sm leading-5 text-black/60">{row.candidate.detail}</p>
+                  </div>
+                </div>
+
+                <div class="results-number-cell text-sm font-semibold tabular-nums text-[#111111] sm:text-[0.98rem]">
+                  {row.party && <span class="mode-content mode-party">{formatNumber(row.party.votes)}</span>}
+                  <span class="mode-content mode-candidate">{formatNumber(row.candidate.votes)}</span>
+                </div>
+
+                <div class="results-number-cell text-sm font-semibold tabular-nums text-[#111111] sm:text-[0.98rem]">
+                  {row.party && <span class="mode-content mode-party">{row.party.seats}</span>}
+                  <span class="mode-content mode-candidate">{row.candidate.seats}</span>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="results-controls mt-5">
+        <div
+          class="results-toggle-group inline-flex w-fit rounded-full border border-black/10 bg-black/[0.03] p-1"
+          role="group"
+          aria-label="Choose how to aggregate the constituency result"
+        >
+          <button type="button" class="results-toggle" data-mode-button="party">
+            Party
+          </button>
+          <button type="button" class="results-toggle" data-mode-button="candidate">
+            Candidate
+          </button>
+        </div>
+
+        <div class="results-principle" aria-live="polite">
+          <p class="results-principle-text text-[0.875rem]">
+            <span class="results-principle-label">Rank-Size Principle:</span>
+          </p>
+          <span class="results-principle-indicator" aria-hidden="true">
+            <span class="results-principle-party results-principle-symbol">✗</span>
+            <span class="results-principle-candidate results-principle-symbol">✓</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".simple-systems-results").forEach((root) => {
+    const buttons = root.querySelectorAll<HTMLButtonElement>("[data-mode-button]");
+    const activeTimers: number[] = [];
+    const REORDER_MS = 420;
+    const SPLIT_MS = 380;
+
+    const clearTimers = () => {
+      while (activeTimers.length > 0) {
+        window.clearTimeout(activeTimers.pop());
+      }
+    };
+
+    const queuePhase = (phase: string, delay: number, onComplete?: () => void) => {
+      const timer = window.setTimeout(() => {
+        root.dataset.phase = phase;
+
+        if (onComplete) {
+          onComplete();
+        }
+      }, delay);
+
+      activeTimers.push(timer);
+    };
+
+    const syncButtons = () => {
+      const targetMode = root.dataset.targetMode ?? root.dataset.visibleMode ?? "party";
+
+      buttons.forEach((button) => {
+        const isActive = button.dataset.modeButton === targetMode;
+        button.setAttribute("aria-pressed", isActive ? "true" : "false");
+      });
+    };
+
+    const finishTransition = (mode: string, phase: string) => {
+      root.dataset.animating = "false";
+      root.dataset.phase = phase;
+      root.dataset.visibleMode = mode;
+      syncButtons();
+    };
+
+    const setMode = (mode: string) => {
+      const targetMode = root.dataset.targetMode ?? root.dataset.visibleMode ?? "party";
+
+      if (mode === targetMode || root.dataset.animating === "true") {
+        syncButtons();
+        return;
+      }
+
+      clearTimers();
+      root.dataset.targetMode = mode;
+      root.dataset.animating = "true";
+      syncButtons();
+
+      if (mode === "candidate") {
+        root.dataset.phase = "candidate-reorder";
+        queuePhase("candidate-split", REORDER_MS);
+        queuePhase("candidate", REORDER_MS + SPLIT_MS, () => finishTransition("candidate", "candidate"));
+        return;
+      }
+
+      root.dataset.phase = "candidate-split";
+      queuePhase("candidate-reorder", SPLIT_MS);
+      queuePhase("party", SPLIT_MS + REORDER_MS, () => finishTransition("party", "party"));
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        setMode(button.dataset.modeButton ?? "party");
+      });
+    });
+
+    root.dataset.animating = "false";
+    syncButtons();
+  });
+</script>
+
+<style>
+  .results-grid {
+    --results-columns: minmax(0, 1fr) 6rem 4.25rem;
+    --results-seat-width: 4.25rem;
+    column-gap: 1rem;
+    display: grid;
+    grid-template-columns: var(--results-columns);
+  }
+
+  .results-controls {
+    --results-seat-width: 4.25rem;
+    align-items: center;
+    display: flex;
+    min-height: 3rem;
+    position: relative;
+  }
+
+  .results-label-cell {
+    padding-left: 1rem;
+  }
+
+  .results-grid-head .results-label-cell {
+    padding-left: 1rem;
+  }
+
+  .results-number-cell {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+  }
+
+  .results-toggle {
+    appearance: none;
+    border: 0;
+    border-radius: 9999px;
+    color: #111111;
+    font-size: 0.875rem;
+    font-weight: 600;
+    outline: none;
+    padding: 0.5rem 1.1rem;
+    transition:
+      background-color 220ms ease,
+      color 220ms ease,
+      box-shadow 220ms ease;
+  }
+
+  .results-toggle:hover {
+    color: #f76f5c;
+  }
+
+  .results-toggle:focus {
+    outline: none;
+  }
+
+  .results-toggle:focus-visible {
+    box-shadow: 0 0 0 2px rgba(247, 111, 92, 0.28);
+  }
+
+  .simple-systems-results[data-target-mode="party"] [data-mode-button="party"],
+  .simple-systems-results[data-target-mode="candidate"] [data-mode-button="candidate"] {
+    background: #f76f5c;
+    box-shadow: 0 8px 18px rgba(247, 111, 92, 0.28);
+    color: #ffffff;
+  }
+
+  .results-toggle-group {
+    flex: 0 0 auto;
+  }
+
+  .results-principle {
+    align-items: center;
+    background: rgba(17, 17, 17, 0.03);
+    border: 1px solid rgba(17, 17, 17, 0.1);
+    border-radius: 9999px;
+    display: inline-flex;
+    gap: 0.6rem;
+    padding: 0.5rem 0.8rem 0.5rem 1rem;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .results-heading-candidate,
+  .results-principle-candidate {
+    display: none;
+  }
+
+  .results-principle-label {
+    color: #111111;
+    font-weight: 700;
+  }
+
+  .results-principle-indicator {
+    align-items: center;
+    background: rgba(17, 17, 17, 0.03);
+    border: 1px solid rgba(17, 17, 17, 0.1);
+    border-radius: 9999px;
+    color: #111111;
+    display: inline-flex;
+    flex: 0 0 auto;
+    height: 1.9rem;
+    justify-content: center;
+    width: 1.9rem;
+  }
+
+  .results-principle-symbol {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .simple-systems-results[data-visible-mode="party"] .results-principle-indicator {
+    background: #f76f5c;
+    border-color: #f76f5c;
+    color: #ffffff;
+  }
+
+  .simple-systems-results[data-visible-mode="candidate"] .results-heading-party,
+  .simple-systems-results[data-visible-mode="candidate"] .results-principle-party {
+    display: none;
+  }
+
+  .simple-systems-results[data-visible-mode="candidate"] .results-heading-candidate,
+  .simple-systems-results[data-visible-mode="candidate"] .results-principle-candidate {
+    display: inline;
+  }
+
+  .results-motion-stage {
+    --stage-height: 21rem;
+    --party-row-height: calc(var(--stage-height) / 4);
+    --candidate-row-height: calc(var(--stage-height) / 5);
+    background: #ffffff;
+    height: var(--stage-height);
+    isolation: isolate;
+    position: relative;
+  }
+
+  .results-motion-row {
+    align-items: center;
+    backface-visibility: hidden;
+    background: #ffffff;
+    border: 0;
+    box-shadow: none;
+    inset: 0 0 auto 0;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0.5rem 1rem;
+    position: absolute;
+    transform: translate3d(0, var(--row-y, 0), 0);
+    transition:
+      transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
+      height 520ms cubic-bezier(0.22, 1, 0.36, 1),
+      padding-top 520ms cubic-bezier(0.22, 1, 0.36, 1),
+      padding-bottom 520ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, height;
+    width: 100%;
+  }
+
+  .mode-candidate {
+    display: none;
+  }
+
+  .simple-systems-results[data-phase="candidate"] .mode-party {
+    display: none;
+  }
+
+  .simple-systems-results[data-phase="candidate"] .mode-candidate {
+    display: block;
+  }
+
+  .simple-systems-results[data-phase="candidate-split"] [data-row="hrpp-main"] .mode-party,
+  .simple-systems-results[data-phase="candidate-split"] [data-row="hrpp-secondary"] .mode-party {
+    display: none;
+  }
+
+  .simple-systems-results[data-phase="candidate-split"] [data-row="hrpp-main"] .mode-candidate,
+  .simple-systems-results[data-phase="candidate-split"] [data-row="hrpp-secondary"] .mode-candidate {
+    display: block;
+  }
+
+  .simple-systems-results[data-phase="party"] [data-row="hrpp-main"] {
+    --row-y: calc(var(--party-row-height) * 0);
+    height: var(--party-row-height);
+  }
+
+  .simple-systems-results[data-phase="party"] [data-row="sdup"] {
+    --row-y: calc(var(--party-row-height) * 1);
+    height: var(--party-row-height);
+  }
+
+  .simple-systems-results[data-phase="party"] [data-row="sp"] {
+    --row-y: calc(var(--party-row-height) * 2);
+    height: var(--party-row-height);
+  }
+
+  .simple-systems-results[data-phase="party"] [data-row="independent"] {
+    --row-y: calc(var(--party-row-height) * 3);
+    height: var(--party-row-height);
+  }
+
+  .simple-systems-results[data-phase="party"] [data-row="hrpp-secondary"] {
+    --row-y: calc(var(--party-row-height) * 1.5);
+    height: 0;
+    opacity: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+    visibility: hidden;
+  }
+
+  .simple-systems-results[data-phase="candidate-reorder"] [data-row="sdup"] {
+    --row-y: calc(var(--party-row-height) * 0);
+    height: var(--party-row-height);
+  }
+
+  .simple-systems-results[data-phase="candidate-reorder"] [data-row="hrpp-main"] {
+    --row-y: calc(var(--party-row-height) * 1);
+    height: var(--party-row-height);
+  }
+
+  .simple-systems-results[data-phase="candidate-reorder"] [data-row="hrpp-secondary"] {
+    --row-y: calc(var(--party-row-height) * 1.5);
+    height: 0;
+    opacity: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+    visibility: hidden;
+  }
+
+  .simple-systems-results[data-phase="candidate-reorder"] [data-row="sp"] {
+    --row-y: calc(var(--party-row-height) * 2);
+    height: var(--party-row-height);
+  }
+
+  .simple-systems-results[data-phase="candidate-reorder"] [data-row="independent"] {
+    --row-y: calc(var(--party-row-height) * 3);
+    height: var(--party-row-height);
+  }
+
+  .simple-systems-results[data-phase="candidate-split"] [data-row="sdup"] {
+    --row-y: calc(var(--party-row-height) * 0);
+    height: var(--party-row-height);
+  }
+
+  .simple-systems-results[data-phase="candidate-split"] [data-row="hrpp-main"] {
+    --row-y: calc(var(--party-row-height) * 1);
+    height: calc(var(--party-row-height) / 2);
+  }
+
+  .simple-systems-results[data-phase="candidate-split"] [data-row="hrpp-secondary"] {
+    --row-y: calc(var(--party-row-height) * 1.5);
+    height: calc(var(--party-row-height) / 2);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .simple-systems-results[data-phase="candidate-split"] [data-row="sp"] {
+    --row-y: calc(var(--party-row-height) * 2);
+    height: var(--party-row-height);
+  }
+
+  .simple-systems-results[data-phase="candidate-split"] [data-row="independent"] {
+    --row-y: calc(var(--party-row-height) * 3);
+    height: var(--party-row-height);
+  }
+
+  .simple-systems-results[data-phase="candidate"] [data-row="sdup"] {
+    --row-y: calc(var(--candidate-row-height) * 0);
+    height: var(--candidate-row-height);
+  }
+
+  .simple-systems-results[data-phase="candidate"] [data-row="hrpp-main"] {
+    --row-y: calc(var(--candidate-row-height) * 1);
+    height: var(--candidate-row-height);
+  }
+
+  .simple-systems-results[data-phase="candidate"] [data-row="hrpp-secondary"] {
+    --row-y: calc(var(--candidate-row-height) * 2);
+    height: var(--candidate-row-height);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .simple-systems-results[data-phase="candidate"] [data-row="sp"] {
+    --row-y: calc(var(--candidate-row-height) * 3);
+    height: var(--candidate-row-height);
+  }
+
+  .simple-systems-results[data-phase="candidate"] [data-row="independent"] {
+    --row-y: calc(var(--candidate-row-height) * 4);
+    height: var(--candidate-row-height);
+  }
+</style>

@@ -1,0 +1,232 @@
+---
+const outcomes = [
+  {
+    votes: ">",
+    seats: ">",
+    leftFactor: "+1",
+    rightFactor: "+1",
+    result: "+1",
+    consistent: true,
+    group: "positive",
+    groupEnd: false
+  },
+  {
+    votes: "<",
+    seats: "<",
+    leftFactor: "-1",
+    rightFactor: "-1",
+    result: "+1",
+    consistent: true,
+    group: "positive",
+    groupEnd: true
+  },
+  {
+    votes: ">",
+    seats: "<",
+    leftFactor: "+1",
+    rightFactor: "-1",
+    result: "-1",
+    consistent: false,
+    group: "negative",
+    groupEnd: false
+  },
+  {
+    votes: "<",
+    seats: ">",
+    leftFactor: "-1",
+    rightFactor: "+1",
+    result: "-1",
+    consistent: false,
+    group: "negative",
+    groupEnd: true
+  },
+  {
+    votes: ">",
+    seats: "=",
+    leftFactor: "+1",
+    rightFactor: "0",
+    result: "0",
+    consistent: true,
+    group: "zero",
+    groupEnd: false
+  },
+  {
+    votes: "<",
+    seats: "=",
+    leftFactor: "-1",
+    rightFactor: "0",
+    result: "0",
+    consistent: true,
+    group: "zero",
+    groupEnd: false
+  },
+  {
+    votes: "=",
+    seats: ">",
+    leftFactor: "0",
+    rightFactor: "+1",
+    result: "0",
+    consistent: true,
+    group: "zero",
+    groupEnd: false
+  },
+  {
+    votes: "=",
+    seats: "<",
+    leftFactor: "0",
+    rightFactor: "-1",
+    result: "0",
+    consistent: true,
+    group: "zero",
+    groupEnd: false
+  },
+  {
+    votes: "=",
+    seats: "=",
+    leftFactor: "0",
+    rightFactor: "0",
+    result: "0",
+    consistent: true,
+    group: "zero",
+    groupEnd: true
+  }
+];
+---
+
+<div class="not-prose my-10" data-rank-size-pairwise-table>
+  <section class="interactive-panel overflow-hidden">
+    <div class="px-5 pb-2 pt-5 sm:px-6 sm:pb-2 sm:pt-6">
+      <p class="eyebrow">The Product of Signs</p>
+    </div>
+
+    <div class="overflow-x-auto px-5 pb-5 pt-1 sm:px-6 sm:pb-6 sm:pt-1">
+      <table class="w-full min-w-[38rem] border-collapse">
+        <thead class="border-b border-black/8">
+          <tr class="text-center text-xs font-semibold uppercase tracking-[0.16em] text-black/50 sm:text-[0.82rem]">
+            <th class="px-4 py-3">VOTES</th>
+            <th class="px-4 py-3">SEATS</th>
+            <th class="px-4 py-3 text-center">PRODUCT</th>
+            <th class="px-4 py-3 text-center">RANK-SIZE</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {
+            outcomes.map((outcome) => (
+              <tr
+                class:list={[
+                  "rank-size-table-row text-[#111111] transition duration-200",
+                  outcome.groupEnd ? "border-b border-black/14" : "border-b border-black/6"
+                ]}
+                data-group={outcome.group}
+                data-rank-size-state={outcome.consistent ? "consistent" : "inconsistent"}
+              >
+                <td class="px-4 py-3 text-center text-sm font-semibold whitespace-nowrap sm:text-[0.98rem]">
+                  <span class="text-[#FF4136]">Red</span>
+                  <span class="px-2 text-[#111111]">{outcome.votes}</span>
+                  <span class="text-[#0074D9]">Blue</span>
+                </td>
+                <td class="px-4 py-3 text-center text-sm font-semibold whitespace-nowrap sm:text-[0.98rem]">
+                  <span class="text-[#FF4136]">Red</span>
+                  <span class="px-2 text-[#111111]">{outcome.seats}</span>
+                  <span class="text-[#0074D9]">Blue</span>
+                </td>
+                <td class="px-4 py-3 text-center text-sm font-semibold tabular-nums whitespace-nowrap sm:text-[0.98rem]">
+                  <span class="rank-size-product" aria-label={`${outcome.leftFactor} times ${outcome.rightFactor} equals ${outcome.result}`}>
+                    <span>{outcome.leftFactor}</span>
+                    <span aria-hidden="true">×</span>
+                    <span>{outcome.rightFactor}</span>
+                    <span aria-hidden="true">=</span>
+                    <span>{outcome.result}</span>
+                  </span>
+                </td>
+                <td class="px-4 py-3 text-center text-sm font-medium sm:text-[0.98rem]">
+                  <span
+                    class:list={[
+                      "rank-size-indicator inline-flex h-7 w-7 items-center justify-center rounded-full",
+                      outcome.consistent ? "text-[#111111]" : "text-accent"
+                    ]}
+                    aria-hidden="true"
+                  >
+                    {outcome.consistent ? "✓" : "✗"}
+                  </span>
+                  <span class="sr-only">
+                    {outcome.consistent
+                      ? "Consistent with the rank-size principle"
+                      : "Inconsistent with the rank-size principle"}
+                  </span>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<style>
+  .rank-size-table-row {
+    background: rgba(255, 255, 255, 0);
+  }
+
+  .rank-size-table-row[data-group="positive"] {
+    background: rgba(17, 17, 17, 0.018);
+  }
+
+  .rank-size-table-row[data-group="negative"] {
+    background: rgba(247, 111, 92, 0.04);
+  }
+
+  .rank-size-table-row[data-group="zero"] {
+    background: rgba(17, 17, 17, 0.03);
+  }
+
+  .rank-size-indicator {
+    background: rgba(17, 17, 17, 0.05);
+  }
+
+  .rank-size-product {
+    display: inline-grid;
+    grid-template-columns: 2.5ch 1.5ch 2.5ch 1.5ch 2.5ch;
+    align-items: center;
+    justify-items: center;
+  }
+
+  .rank-size-table-row[data-group="negative"] .rank-size-indicator {
+    background: rgba(247, 111, 92, 0.08);
+  }
+
+  [data-rank-size-pairwise-table]:has(
+      .rank-size-table-row[data-rank-size-state="consistent"]:hover
+    ) .rank-size-table-row[data-rank-size-state="consistent"] {
+    background: rgba(17, 17, 17, 0.065);
+  }
+
+  [data-rank-size-pairwise-table]:has(
+      .rank-size-table-row[data-rank-size-state="inconsistent"]:hover
+    ) .rank-size-table-row[data-rank-size-state="inconsistent"] {
+    background: rgba(247, 111, 92, 0.1);
+  }
+
+  [data-rank-size-pairwise-table]:has(
+      .rank-size-table-row[data-rank-size-state="consistent"]:hover
+    ) .rank-size-table-row[data-rank-size-state="inconsistent"],
+  [data-rank-size-pairwise-table]:has(
+      .rank-size-table-row[data-rank-size-state="inconsistent"]:hover
+    ) .rank-size-table-row[data-rank-size-state="consistent"] {
+    opacity: 0.42;
+  }
+
+  [data-rank-size-pairwise-table]:has(
+      .rank-size-table-row[data-rank-size-state="consistent"]:hover
+    ) .rank-size-table-row[data-rank-size-state="consistent"] .rank-size-indicator {
+    background: rgba(17, 17, 17, 0.09);
+  }
+
+  [data-rank-size-pairwise-table]:has(
+      .rank-size-table-row[data-rank-size-state="inconsistent"]:hover
+    ) .rank-size-table-row[data-rank-size-state="inconsistent"] .rank-size-indicator {
+    background: rgba(247, 111, 92, 0.14);
+  }
+</style>

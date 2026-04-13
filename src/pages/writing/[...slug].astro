@@ -45,58 +45,23 @@ const structuredData = {
     <div class:list={["page-shell gap-8", hasRelatedPosts ? "grid lg:grid-cols-[minmax(0,1fr)_300px]" : ""]}>
       <article class:list={["space-y-8", !hasRelatedPosts && "max-w-4xl"]}>
         <header class="surface surface-strong space-y-5 pt-6 sm:pt-7">
-          {post.data.image ? (
-            <div class="grid gap-5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-center">
-              <div class="hidden h-32 w-32 self-center overflow-hidden rounded-3xl ring-1 ring-ink/10 sm:block">
-                <img
-                  src={post.data.image}
-                  alt={post.data.imageAlt ?? ""}
-                  class="block h-full w-full object-cover"
-                  loading="eager"
-                />
-              </div>
-
-              <div class="min-w-0">
-                <p class="eyebrow">{formatDate(post.data.date)}</p>
-                <h1 class="mt-3 text-3xl font-semibold tracking-tight text-ink sm:text-4xl">{post.data.title}</h1>
-                <p class="mt-4 max-w-2xl text-lg leading-8 text-ink">{post.data.summary}</p>
-                <div class="mt-4 flex flex-wrap items-center gap-4 text-sm text-muted">
-                  <span>{getReadingTime(post.body)}</span>
-                  {post.data.updatedDate && <span>Updated {formatDate(post.data.updatedDate)}</span>}
-                  <CopyLinkButton />
-                </div>
-                <div class="mt-5">
-                  <TagList
-                    items={post.data.tags.map((slug) => ({
-                      slug,
-                      label: getTagLabel(slug, tagLookup),
-                      href: getTagHref(slug)
-                    }))}
-                  />
-                </div>
-              </div>
+          <p class="eyebrow">{formatDate(post.data.date)}</p>
+          <h1 class="headline text-4xl sm:text-5xl">{post.data.title}</h1>
+          <p class="lede">{post.data.summary}</p>
+          <div class="flex flex-wrap items-center gap-4 text-sm text-muted">
+            <div class="flex flex-wrap items-center gap-4">
+              <span>{getReadingTime(post.body)}</span>
+              {post.data.updatedDate && <span>Updated {formatDate(post.data.updatedDate)}</span>}
+              <CopyLinkButton />
             </div>
-          ) : (
-            <>
-              <p class="eyebrow">{formatDate(post.data.date)}</p>
-              <h1 class="headline text-4xl sm:text-5xl">{post.data.title}</h1>
-              <p class="lede">{post.data.summary}</p>
-              <div class="flex flex-wrap items-center gap-4 text-sm text-muted">
-                <div class="flex flex-wrap items-center gap-4">
-                  <span>{getReadingTime(post.body)}</span>
-                  {post.data.updatedDate && <span>Updated {formatDate(post.data.updatedDate)}</span>}
-                  <CopyLinkButton />
-                </div>
-              </div>
-              <TagList
-                items={post.data.tags.map((slug) => ({
-                  slug,
-                  label: getTagLabel(slug, tagLookup),
-                  href: getTagHref(slug)
-                }))}
-              />
-            </>
-          )}
+          </div>
+          <TagList
+            items={post.data.tags.map((slug) => ({
+              slug,
+              label: getTagLabel(slug, tagLookup),
+              href: getTagHref(slug)
+            }))}
+          />
         </header>
 
         <div class="surface pt-7 sm:pt-8">

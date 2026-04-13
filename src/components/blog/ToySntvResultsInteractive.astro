@@ -1,0 +1,547 @@
+---
+const PARTY_LABELS = {
+  Red: { label: "Red", color: "#FF4136" },
+  Blue: { label: "Blue", color: "#0074D9" },
+  Green: { label: "Green", color: "#2ECC40" }
+} as const;
+
+function formatShare(value: number) {
+  return `${value}%`;
+}
+
+const animatedRows = [
+  {
+    id: "green-main",
+    party: {
+      label: PARTY_LABELS.Green.label,
+      color: PARTY_LABELS.Green.color,
+      detail: "",
+      votes: 40,
+      seats: 0
+    },
+    candidate: {
+      label: "Candidate 3",
+      detail: PARTY_LABELS.Green.label,
+      detailColor: PARTY_LABELS.Green.color,
+      votes: 20,
+      seats: 0
+    }
+  },
+  {
+    id: "red",
+    party: {
+      label: PARTY_LABELS.Red.label,
+      color: PARTY_LABELS.Red.color,
+      detail: "",
+      votes: 35,
+      seats: 1
+    },
+    candidate: {
+      label: "Candidate 1",
+      detail: PARTY_LABELS.Red.label,
+      detailColor: PARTY_LABELS.Red.color,
+      votes: 35,
+      seats: 1
+    }
+  },
+  {
+    id: "blue",
+    party: {
+      label: PARTY_LABELS.Blue.label,
+      color: PARTY_LABELS.Blue.color,
+      detail: "",
+      votes: 25,
+      seats: 1
+    },
+    candidate: {
+      label: "Candidate 2",
+      detail: PARTY_LABELS.Blue.label,
+      detailColor: PARTY_LABELS.Blue.color,
+      votes: 25,
+      seats: 1
+    }
+  },
+  {
+    id: "green-secondary",
+    party: null,
+    candidate: {
+      label: "Candidate 4",
+      detail: PARTY_LABELS.Green.label,
+      detailColor: PARTY_LABELS.Green.color,
+      votes: 20,
+      seats: 0
+    }
+  }
+];
+---
+
+<div class="not-prose my-10">
+  <section
+    class="interactive-panel overflow-hidden toy-sntv-results"
+    data-target-mode="party"
+    data-visible-mode="party"
+    data-phase="party"
+  >
+    <div class="mx-auto max-w-[40rem] p-5 sm:p-6">
+      <p class="eyebrow">
+        The Single Non-Transferable Vote
+      </p>
+
+      <div class="mt-5 overflow-hidden">
+        <div
+          class="results-grid results-grid-head border-b border-black/8 px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-black/50 sm:text-[0.82rem]"
+        >
+          <span class="results-label-cell min-w-0" aria-live="polite">
+            <span class="results-heading-party">Party</span>
+            <span class="results-heading-candidate">Candidate</span>
+          </span>
+          <span class="results-number-cell">Votes</span>
+          <span class="results-number-cell">Seats</span>
+        </div>
+
+        <div class="results-motion-stage">
+          {
+            animatedRows.map((row) => (
+              <div class="results-grid results-motion-row" data-row={row.id}>
+                <div class="results-label-cell min-w-0">
+                  {row.party && (
+                    <div class="mode-content mode-party">
+                      <p
+                        class="text-sm font-semibold leading-5 sm:text-[0.98rem]"
+                        style={`color: ${row.party.color};`}
+                      >
+                        {row.party.label}
+                      </p>
+                    </div>
+                  )}
+
+                  <div class="mode-content mode-candidate">
+                    <p class="text-sm font-semibold leading-5 text-[#111111] sm:text-[0.98rem]">
+                      {row.candidate.label}
+                    </p>
+                    <p class="text-sm leading-5" style={`color: ${row.candidate.detailColor};`}>
+                      {row.candidate.detail}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="results-number-cell text-sm font-semibold tabular-nums text-[#111111] sm:text-[0.98rem]">
+                  {row.party && <span class="mode-content mode-party">{formatShare(row.party.votes)}</span>}
+                  <span class="mode-content mode-candidate">{formatShare(row.candidate.votes)}</span>
+                </div>
+
+                <div class="results-number-cell text-sm font-semibold tabular-nums text-[#111111] sm:text-[0.98rem]">
+                  {row.party && <span class="mode-content mode-party">{row.party.seats}</span>}
+                  <span class="mode-content mode-candidate">{row.candidate.seats}</span>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="results-controls mt-5">
+        <div
+          class="results-toggle-group inline-flex w-fit rounded-full border border-black/10 bg-black/[0.03] p-1"
+          role="group"
+          aria-label="Choose how to aggregate the result"
+        >
+          <button type="button" class="results-toggle" data-mode-button="party">
+            Party
+          </button>
+          <button type="button" class="results-toggle" data-mode-button="candidate">
+            Candidate
+          </button>
+        </div>
+
+        <div class="results-principle" aria-live="polite">
+          <p class="results-principle-text text-[0.875rem]">
+            <span class="results-principle-label">Rank-Size Principle:</span>
+          </p>
+          <span class="results-principle-indicator" aria-hidden="true">
+            <span class="results-principle-party results-principle-symbol">✗</span>
+            <span class="results-principle-candidate results-principle-symbol">✓</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".toy-sntv-results").forEach((root) => {
+    const buttons = root.querySelectorAll<HTMLButtonElement>("[data-mode-button]");
+    const activeTimers: number[] = [];
+    const REORDER_MS = 420;
+    const SPLIT_MS = 380;
+
+    const clearTimers = () => {
+      while (activeTimers.length > 0) {
+        window.clearTimeout(activeTimers.pop());
+      }
+    };
+
+    const queuePhase = (phase: string, delay: number, onComplete?: () => void) => {
+      const timer = window.setTimeout(() => {
+        root.dataset.phase = phase;
+
+        if (onComplete) {
+          onComplete();
+        }
+      }, delay);
+
+      activeTimers.push(timer);
+    };
+
+    const syncButtons = () => {
+      const targetMode = root.dataset.targetMode ?? root.dataset.visibleMode ?? "party";
+
+      buttons.forEach((button) => {
+        const isActive = button.dataset.modeButton === targetMode;
+        button.setAttribute("aria-pressed", isActive ? "true" : "false");
+      });
+    };
+
+    const finishTransition = (mode: string, phase: string) => {
+      root.dataset.animating = "false";
+      root.dataset.phase = phase;
+      root.dataset.visibleMode = mode;
+      syncButtons();
+    };
+
+    const setMode = (mode: string) => {
+      const targetMode = root.dataset.targetMode ?? root.dataset.visibleMode ?? "party";
+
+      if (mode === targetMode || root.dataset.animating === "true") {
+        syncButtons();
+        return;
+      }
+
+      clearTimers();
+      root.dataset.targetMode = mode;
+      root.dataset.animating = "true";
+      syncButtons();
+
+      if (mode === "candidate") {
+        root.dataset.phase = "candidate-reorder";
+        queuePhase("candidate-split", REORDER_MS);
+        queuePhase("candidate", REORDER_MS + SPLIT_MS, () => finishTransition("candidate", "candidate"));
+        return;
+      }
+
+      root.dataset.phase = "candidate-split";
+      queuePhase("candidate-reorder", SPLIT_MS);
+      queuePhase("party", SPLIT_MS + REORDER_MS, () => finishTransition("party", "party"));
+    };
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        setMode(button.dataset.modeButton ?? "party");
+      });
+    });
+
+    root.dataset.animating = "false";
+    syncButtons();
+  });
+</script>
+
+<style>
+  .results-grid {
+    --results-columns: minmax(0, 1fr) 6rem 4.25rem;
+    --results-seat-width: 4.25rem;
+    column-gap: 1rem;
+    display: grid;
+    grid-template-columns: var(--results-columns);
+  }
+
+  .results-controls {
+    --results-seat-width: 4.25rem;
+    align-items: center;
+    display: flex;
+    min-height: 3rem;
+    position: relative;
+  }
+
+  .results-label-cell {
+    padding-left: 1rem;
+  }
+
+  .results-grid-head .results-label-cell {
+    padding-left: 1rem;
+  }
+
+  .results-number-cell {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+  }
+
+  .results-toggle {
+    appearance: none;
+    border: 0;
+    border-radius: 9999px;
+    color: #111111;
+    font-size: 0.875rem;
+    font-weight: 600;
+    outline: none;
+    padding: 0.5rem 1.1rem;
+    transition:
+      background-color 220ms ease,
+      color 220ms ease,
+      box-shadow 220ms ease;
+  }
+
+  .results-toggle:hover {
+    color: #f76f5c;
+  }
+
+  .results-toggle:focus {
+    outline: none;
+  }
+
+  .results-toggle:focus-visible {
+    box-shadow: 0 0 0 2px rgba(247, 111, 92, 0.28);
+  }
+
+  .toy-sntv-results[data-target-mode="party"] [data-mode-button="party"],
+  .toy-sntv-results[data-target-mode="candidate"] [data-mode-button="candidate"] {
+    background: #f76f5c;
+    box-shadow: 0 8px 18px rgba(247, 111, 92, 0.28);
+    color: #ffffff;
+  }
+
+  .results-toggle-group {
+    flex: 0 0 auto;
+  }
+
+  .results-principle {
+    align-items: center;
+    background: rgba(17, 17, 17, 0.03);
+    border: 1px solid rgba(17, 17, 17, 0.1);
+    border-radius: 9999px;
+    display: inline-flex;
+    gap: 0.6rem;
+    padding: 0.5rem 0.8rem 0.5rem 1rem;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .results-heading-candidate,
+  .results-principle-candidate {
+    display: none;
+  }
+
+  .results-principle-label {
+    color: #111111;
+    font-weight: 700;
+  }
+
+  .results-principle-indicator {
+    align-items: center;
+    background: rgba(17, 17, 17, 0.03);
+    border: 1px solid rgba(17, 17, 17, 0.1);
+    border-radius: 9999px;
+    color: #111111;
+    display: inline-flex;
+    flex: 0 0 auto;
+    height: 1.9rem;
+    justify-content: center;
+    width: 1.9rem;
+  }
+
+  .results-principle-symbol {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .toy-sntv-results[data-visible-mode="party"] .results-principle-indicator {
+    background: #f76f5c;
+    border-color: #f76f5c;
+    color: #ffffff;
+  }
+
+  .toy-sntv-results[data-visible-mode="candidate"] .results-heading-party,
+  .toy-sntv-results[data-visible-mode="candidate"] .results-principle-party {
+    display: none;
+  }
+
+  .toy-sntv-results[data-visible-mode="candidate"] .results-heading-candidate,
+  .toy-sntv-results[data-visible-mode="candidate"] .results-principle-candidate {
+    display: inline;
+  }
+
+  .results-motion-stage {
+    --stage-height: 18rem;
+    --party-row-height: calc(var(--stage-height) / 3);
+    --candidate-row-height: calc(var(--stage-height) / 4);
+    background: #ffffff;
+    height: var(--stage-height);
+    isolation: isolate;
+    position: relative;
+  }
+
+  .results-motion-row {
+    align-items: center;
+    backface-visibility: hidden;
+    background: #ffffff;
+    border: 0;
+    box-shadow: none;
+    inset: 0 0 auto 0;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0.5rem 1rem;
+    position: absolute;
+    transform: translate3d(0, var(--row-y, 0), 0);
+    transition:
+      transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
+      height 520ms cubic-bezier(0.22, 1, 0.36, 1),
+      padding-top 520ms cubic-bezier(0.22, 1, 0.36, 1),
+      padding-bottom 520ms cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, height;
+    width: 100%;
+  }
+
+  .mode-candidate {
+    display: none;
+  }
+
+  .toy-sntv-results[data-phase="candidate"] .mode-party {
+    display: none;
+  }
+
+  .toy-sntv-results[data-phase="candidate"] .mode-candidate {
+    display: block;
+  }
+
+  .toy-sntv-results[data-phase="candidate-split"] [data-row="green-main"] .mode-party,
+  .toy-sntv-results[data-phase="candidate-split"] [data-row="green-secondary"] .mode-party {
+    display: none;
+  }
+
+  .toy-sntv-results[data-phase="candidate-split"] [data-row="green-main"] .mode-candidate,
+  .toy-sntv-results[data-phase="candidate-split"] [data-row="green-secondary"] .mode-candidate {
+    display: block;
+  }
+
+  .toy-sntv-results[data-phase="party"] [data-row="green-main"] {
+    --row-y: calc(var(--party-row-height) * 0);
+    height: var(--party-row-height);
+  }
+
+  .toy-sntv-results[data-phase="party"] [data-row="red"] {
+    --row-y: calc(var(--party-row-height) * 1);
+    height: var(--party-row-height);
+  }
+
+  .toy-sntv-results[data-phase="party"] [data-row="blue"] {
+    --row-y: calc(var(--party-row-height) * 2);
+    height: var(--party-row-height);
+  }
+
+  .toy-sntv-results[data-phase="party"] [data-row="green-secondary"] {
+    --row-y: calc(var(--party-row-height) * 0.5);
+    height: 0;
+    opacity: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+    visibility: hidden;
+  }
+
+  .toy-sntv-results[data-phase="candidate-reorder"] [data-row="red"] {
+    --row-y: calc(var(--party-row-height) * 0);
+    height: var(--party-row-height);
+  }
+
+  .toy-sntv-results[data-phase="candidate-reorder"] [data-row="blue"] {
+    --row-y: calc(var(--party-row-height) * 1);
+    height: var(--party-row-height);
+  }
+
+  .toy-sntv-results[data-phase="candidate-reorder"] [data-row="green-main"] {
+    --row-y: calc(var(--party-row-height) * 2);
+    height: var(--party-row-height);
+  }
+
+  .toy-sntv-results[data-phase="candidate-reorder"] [data-row="green-secondary"] {
+    --row-y: calc(var(--party-row-height) * 2.5);
+    height: 0;
+    opacity: 0;
+    padding-bottom: 0;
+    padding-top: 0;
+    visibility: hidden;
+  }
+
+  .toy-sntv-results[data-phase="candidate-split"] [data-row="red"] {
+    --row-y: calc(var(--party-row-height) * 0);
+    height: var(--party-row-height);
+  }
+
+  .toy-sntv-results[data-phase="candidate-split"] [data-row="blue"] {
+    --row-y: calc(var(--party-row-height) * 1);
+    height: var(--party-row-height);
+  }
+
+  .toy-sntv-results[data-phase="candidate-split"] [data-row="green-main"] {
+    --row-y: calc(var(--party-row-height) * 2);
+    height: calc(var(--party-row-height) / 2);
+  }
+
+  .toy-sntv-results[data-phase="candidate-split"] [data-row="green-secondary"] {
+    --row-y: calc(var(--party-row-height) * 2.5);
+    height: calc(var(--party-row-height) / 2);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .toy-sntv-results[data-phase="candidate"] [data-row="red"] {
+    --row-y: calc(var(--candidate-row-height) * 0);
+    height: var(--candidate-row-height);
+  }
+
+  .toy-sntv-results[data-phase="candidate"] [data-row="blue"] {
+    --row-y: calc(var(--candidate-row-height) * 1);
+    height: var(--candidate-row-height);
+  }
+
+  .toy-sntv-results[data-phase="candidate"] [data-row="green-main"] {
+    --row-y: calc(var(--candidate-row-height) * 2);
+    height: var(--candidate-row-height);
+  }
+
+  .toy-sntv-results[data-phase="candidate"] [data-row="green-secondary"] {
+    --row-y: calc(var(--candidate-row-height) * 3);
+    height: var(--candidate-row-height);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @media (max-width: 640px) {
+    .results-grid,
+    .results-controls {
+      --results-columns: minmax(0, 1fr) 4.8rem 3.8rem;
+      --results-seat-width: 3.8rem;
+    }
+
+    .results-controls {
+      align-items: stretch;
+      flex-direction: column;
+      gap: 0.75rem;
+      min-height: 0;
+    }
+
+    .results-principle {
+      align-self: flex-start;
+      position: static;
+      transform: none;
+    }
+
+    .results-motion-stage {
+      --stage-height: 20rem;
+    }
+  }
+</style>

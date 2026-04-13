@@ -9,18 +9,12 @@ const [posts, tags] = await Promise.all([getBlogPosts(), getTagEntries()]);
 const tagLookup = buildTagLookup(tags);
 const tagCounts = getTagCounts(posts);
 const curatedTags = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
-const priorityPosts = posts.filter((post) => Boolean(post.data.image)).slice(0, 3);
 ---
 
 <BaseLayout
   title="Writing"
   description="Public-facing writing on polling, elections, campaigns, and political change."
 >
-  <Fragment slot="head">
-    {priorityPosts.map((post) => (
-      <link rel="preload" as="image" href={post.data.image} />
-    ))}
-  </Fragment>
   <section class="page-shell pt-4 pb-14 sm:pt-5 sm:pb-20" data-filter-shell>
     <div class="grid gap-10 lg:grid-cols-[minmax(0,1.45fr)_280px]">
       <div class="min-w-0">
@@ -32,47 +26,23 @@ const priorityPosts = posts.filter((post) => Boolean(post.data.image)).slice(0, 
               data-search={`${post.data.title} ${post.data.summary} ${post.data.tags.join(" ")}`.toLowerCase()}
               data-tags={post.data.tags.join(",")}
             >
-              <div class="grid gap-5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:items-center">
-                {post.data.image && (
-                  <a
-                    href={`/writing/${post.slug}/`}
-                    class="hidden h-32 w-32 self-center overflow-hidden rounded-3xl ring-1 ring-ink/10 sm:block sm:h-32 sm:w-32"
-                    aria-hidden="true"
-                    tabindex="-1"
-                  >
-                    <img
-                      src={post.data.image}
-                      alt={post.data.imageAlt ?? ""}
-                      class="h-full w-full object-cover"
-                      width="1024"
-                      height="1024"
-                      loading={index < 3 ? "eager" : "lazy"}
-                      fetchpriority={index < 2 ? "high" : "auto"}
-                      decoding="async"
-                    />
+              <div class="min-w-0">
+                <p class="eyebrow mt-2">{formatDate(post.data.date)}</p>
+                <h2 class="mt-3 text-3xl font-semibold tracking-tight text-ink">
+                  <a href={`/writing/${post.slug}/`} class="hover:text-accent">
+                    {post.data.title}
                   </a>
-                )}
-
-                <div class="min-w-0">
-                  <p class="eyebrow mt-2">{formatDate(post.data.date)}</p>
-                  <h2 class="mt-3 text-3xl font-semibold tracking-tight text-ink">
-                    <a href={`/writing/${post.slug}/`} class="hover:text-accent">
-                      {post.data.title}
-                    </a>
-                  </h2>
-                  <p class="mt-4 max-w-3xl text-base leading-8 text-ink">{post.data.summary}</p>
-                  <div class="mt-4 flex flex-wrap gap-4 text-sm text-muted">
-                    <span>{getReadingTime(post.body)}</span>
-                  </div>
-                  <div class="mt-5">
-                    <TagList
-                      items={post.data.tags.map((slug) => ({
-                        slug,
-                        label: getTagLabel(slug, tagLookup),
-                        href: getTagHref(slug)
-                      }))}
-                    />
-                  </div>
+                </h2>
+                <p class="mt-4 max-w-3xl text-base leading-8 text-ink">{post.data.summary}</p>
+                <div class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3 text-sm text-muted">
+                  <span class="shrink-0">{getReadingTime(post.body)}</span>
+                  <TagList
+                    items={post.data.tags.map((slug) => ({
+                      slug,
+                      label: getTagLabel(slug, tagLookup),
+                      href: getTagHref(slug)
+                    }))}
+                  />
                 </div>
               </div>
             </article>

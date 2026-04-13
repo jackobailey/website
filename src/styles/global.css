@@ -1,10 +1,10 @@
 @import "katex/dist/katex.min.css";
 
-/* Preload the common Latin subsets and avoid a visible fallback-to-Ubuntu swap on first paint. */
+/* Keep text visible on first paint while the Ubuntu Sans files stream in. */
 @font-face {
   font-family: "Ubuntu Sans";
   font-style: normal;
-  font-display: block;
+  font-display: swap;
   font-weight: 400;
   src:
     url("@fontsource/ubuntu-sans/files/ubuntu-sans-latin-ext-400-normal.woff2") format("woff2"),
@@ -32,7 +32,7 @@
 @font-face {
   font-family: "Ubuntu Sans";
   font-style: normal;
-  font-display: block;
+  font-display: swap;
   font-weight: 400;
   src:
     url("@fontsource/ubuntu-sans/files/ubuntu-sans-latin-400-normal.woff2") format("woff2"),
@@ -62,7 +62,7 @@
 @font-face {
   font-family: "Ubuntu Sans";
   font-style: normal;
-  font-display: block;
+  font-display: swap;
   font-weight: 500;
   src:
     url("@fontsource/ubuntu-sans/files/ubuntu-sans-latin-ext-500-normal.woff2") format("woff2"),
@@ -90,7 +90,7 @@
 @font-face {
   font-family: "Ubuntu Sans";
   font-style: normal;
-  font-display: block;
+  font-display: swap;
   font-weight: 500;
   src:
     url("@fontsource/ubuntu-sans/files/ubuntu-sans-latin-500-normal.woff2") format("woff2"),
@@ -120,7 +120,7 @@
 @font-face {
   font-family: "Ubuntu Sans";
   font-style: normal;
-  font-display: block;
+  font-display: swap;
   font-weight: 700;
   src:
     url("@fontsource/ubuntu-sans/files/ubuntu-sans-latin-ext-700-normal.woff2") format("woff2"),
@@ -148,7 +148,7 @@
 @font-face {
   font-family: "Ubuntu Sans";
   font-style: normal;
-  font-display: block;
+  font-display: swap;
   font-weight: 700;
   src:
     url("@fontsource/ubuntu-sans/files/ubuntu-sans-latin-700-normal.woff2") format("woff2"),
@@ -294,6 +294,73 @@
     border-radius: 1rem;
   }
 
+  .difference-slider {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    cursor: pointer;
+    height: 1.5rem;
+    padding: 0;
+  }
+
+  .difference-slider:focus-visible {
+    outline: 2px solid color-mix(in srgb, var(--slider-color) 28%, white);
+    outline-offset: 6px;
+    border-radius: 9999px;
+  }
+
+  .difference-slider::-webkit-slider-runnable-track {
+    height: 0.5rem;
+    background: linear-gradient(
+      to right,
+      var(--slider-color) 0%,
+      var(--slider-color) var(--slider-position),
+      rgba(17, 17, 17, 0.1) var(--slider-position),
+      rgba(17, 17, 17, 0.1) 100%
+    );
+    border: 0;
+    border-radius: 9999px;
+  }
+
+  .difference-slider::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-top: -0.3125rem;
+    border-radius: 9999px;
+    border: 3px solid #ffffff;
+    background: var(--slider-color);
+    box-shadow:
+      0 0 0 1px rgba(17, 17, 17, 0.08),
+      0 10px 18px rgba(17, 17, 17, 0.14);
+  }
+
+  .difference-slider::-moz-range-track {
+    height: 0.5rem;
+    background: rgba(17, 17, 17, 0.1);
+    border: 0;
+    border-radius: 9999px;
+  }
+
+  .difference-slider::-moz-range-progress {
+    height: 0.5rem;
+    background: var(--slider-color);
+    border: 0;
+    border-radius: 9999px;
+  }
+
+  .difference-slider::-moz-range-thumb {
+    width: 1.125rem;
+    height: 1.125rem;
+    border-radius: 9999px;
+    border: 3px solid #ffffff;
+    background: var(--slider-color);
+    box-shadow:
+      0 0 0 1px rgba(17, 17, 17, 0.08),
+      0 10px 18px rgba(17, 17, 17, 0.14);
+  }
+
   .prose-editorial {
     @apply prose prose-slate max-w-reading prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-accent prose-a:no-underline hover:prose-a:text-ink prose-blockquote:border-l-accent prose-blockquote:text-ink prose-strong:text-ink;
   }
@@ -363,6 +430,16 @@
     background: transparent;
     border-radius: 0;
     padding: 0 0 0 1rem;
+  }
+
+  .prose-editorial :where(section[data-footnotes]) {
+    border-top: 1px solid rgba(17, 17, 17, 0.12);
+    margin-top: 2.5rem;
+    padding-top: 1.25rem;
+  }
+
+  .prose-editorial :where(section[data-footnotes] ol) {
+    margin-top: 0;
   }
 
   .prose-editorial :where(a[data-footnote-ref]) {

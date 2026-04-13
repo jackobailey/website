@@ -8,8 +8,6 @@ const blog = defineCollection({
     date: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()).min(1),
-    image: z.string().optional(),
-    imageAlt: z.string().optional(),
     featured: z.boolean().default(false),
     seoTitle: z.string().optional()
   })
@@ -23,8 +21,6 @@ const notes = defineCollection({
     date: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     tags: z.array(z.string()).min(1),
-    image: z.string().optional(),
-    imageAlt: z.string().optional(),
     featured: z.boolean().default(false),
     seoTitle: z.string().optional()
   })
