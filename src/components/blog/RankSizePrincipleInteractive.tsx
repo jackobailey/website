@@ -11,7 +11,6 @@ const PARTY_PAIRS = [
   [0, 2],
   [1, 2]
 ] as const;
-const COLUMN_TEMPLATE = "40% 20% 40%";
 const SEATS_CONTROL_WIDTH_CLASS = "w-[6rem] sm:w-[6.25rem]";
 
 type Party = (typeof DEFAULT_PARTIES)[number];
@@ -68,11 +67,13 @@ function renderOrder(groups: PartyWithSeats[][]) {
     <span key={group.map((party) => party.id).join("-")}>
       {group.map((party, partyIndex) => (
         <span key={party.id}>
-          {partyIndex > 0 && <span className="px-1 text-[#111111]">=</span>}
+          {partyIndex > 0 && <span className="px-[0.18rem] text-[#111111] sm:px-1">=</span>}
           <span style={{ color: party.color }}>{party.shortLabel}</span>
         </span>
       ))}
-      {groupIndex < groups.length - 1 && <span className="px-1 text-[#111111]">&gt;</span>}
+      {groupIndex < groups.length - 1 && (
+        <span className="px-[0.18rem] text-[#111111] sm:px-1">&gt;</span>
+      )}
     </span>
   ));
 }
@@ -180,33 +181,33 @@ export default function RankSizePrincipleInteractive() {
         </div>
 
         <div className="border-t border-black/8 px-5 py-5 sm:px-6 sm:py-6">
-          <div className="grid gap-y-4 gap-x-0 px-4" style={{ gridTemplateColumns: COLUMN_TEMPLATE }}>
-            <div className="pl-4">
-              <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-black/45">
-                Vote order
+          <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] items-start gap-x-3 px-4 sm:[grid-template-columns:40%_20%_40%] sm:gap-x-0">
+            <div className="min-w-0 space-y-2 sm:pl-4">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-black/45 sm:text-[0.72rem] sm:tracking-[0.16em]">
+                Votes
               </p>
-              <p className="mt-2 text-sm font-semibold text-[#111111] sm:text-[0.98rem]">
+              <p className="whitespace-nowrap text-[0.95rem] font-semibold text-[#111111] sm:text-[0.98rem]">
                 {renderOrder(voteOrder)}
               </p>
             </div>
 
-            <div className="text-center">
-              <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-black/45">
-                Seat order
+            <div className="min-w-0 space-y-2 sm:text-center">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-black/45 sm:text-[0.72rem] sm:tracking-[0.16em]">
+                Seats
               </p>
-              <p className="mt-2 text-sm font-semibold text-[#111111] sm:text-[0.98rem]">
+              <p className="whitespace-nowrap text-[0.95rem] font-semibold text-[#111111] sm:text-[0.98rem]">
                 {renderOrder(seatOrder)}
               </p>
             </div>
 
-            <div className="pr-4">
-              <div className={`ml-auto flex ${SEATS_CONTROL_WIDTH_CLASS} justify-center`}>
-                <p className="w-max whitespace-nowrap text-center text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-black/45">
-                  Violating pairs
+            <div className="sm:pr-4">
+              <div
+                className={`ml-auto flex ${SEATS_CONTROL_WIDTH_CLASS} flex-col items-end gap-2 text-right sm:items-center sm:text-center`}
+              >
+                <p className="whitespace-nowrap text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-black/45 sm:text-[0.72rem] sm:tracking-[0.16em]">
+                  Violations
                 </p>
-              </div>
-              <div className={`ml-auto mt-2 ${SEATS_CONTROL_WIDTH_CLASS} text-center`}>
-                <p className="text-sm font-semibold tabular-nums text-[#111111] sm:text-[0.98rem]">
+                <p className="whitespace-nowrap text-[0.95rem] font-semibold tabular-nums text-[#111111] sm:text-[0.98rem]">
                   {violatingPairs}
                 </p>
               </div>

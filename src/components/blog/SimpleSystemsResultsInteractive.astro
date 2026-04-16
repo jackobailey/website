@@ -450,27 +450,27 @@ const animatedRows = [
   }
 
   .simple-systems-results[data-phase="party"] [data-row="hrpp-main"] {
-    --row-y: calc(var(--party-row-height) * 0);
+    --row-y: calc(var(--party-stage-offset, 0rem) + var(--party-row-height) * 0);
     height: var(--party-row-height);
   }
 
   .simple-systems-results[data-phase="party"] [data-row="sdup"] {
-    --row-y: calc(var(--party-row-height) * 1);
+    --row-y: calc(var(--party-stage-offset, 0rem) + var(--party-row-height) * 1);
     height: var(--party-row-height);
   }
 
   .simple-systems-results[data-phase="party"] [data-row="sp"] {
-    --row-y: calc(var(--party-row-height) * 2);
+    --row-y: calc(var(--party-stage-offset, 0rem) + var(--party-row-height) * 2);
     height: var(--party-row-height);
   }
 
   .simple-systems-results[data-phase="party"] [data-row="independent"] {
-    --row-y: calc(var(--party-row-height) * 3);
+    --row-y: calc(var(--party-stage-offset, 0rem) + var(--party-row-height) * 3);
     height: var(--party-row-height);
   }
 
   .simple-systems-results[data-phase="party"] [data-row="hrpp-secondary"] {
-    --row-y: calc(var(--party-row-height) * 1.5);
+    --row-y: calc(var(--party-stage-offset, 0rem) + var(--party-row-height) * 1.5);
     height: 0;
     opacity: 0;
     padding-bottom: 0;
@@ -479,17 +479,17 @@ const animatedRows = [
   }
 
   .simple-systems-results[data-phase="candidate-reorder"] [data-row="sdup"] {
-    --row-y: calc(var(--party-row-height) * 0);
+    --row-y: calc(var(--party-stage-offset, 0rem) + var(--party-row-height) * 0);
     height: var(--party-row-height);
   }
 
   .simple-systems-results[data-phase="candidate-reorder"] [data-row="hrpp-main"] {
-    --row-y: calc(var(--party-row-height) * 1);
+    --row-y: calc(var(--party-stage-offset, 0rem) + var(--party-row-height) * 1);
     height: var(--party-row-height);
   }
 
   .simple-systems-results[data-phase="candidate-reorder"] [data-row="hrpp-secondary"] {
-    --row-y: calc(var(--party-row-height) * 1.5);
+    --row-y: calc(var(--party-stage-offset, 0rem) + var(--party-row-height) * 1.5);
     height: 0;
     opacity: 0;
     padding-bottom: 0;
@@ -498,39 +498,39 @@ const animatedRows = [
   }
 
   .simple-systems-results[data-phase="candidate-reorder"] [data-row="sp"] {
-    --row-y: calc(var(--party-row-height) * 2);
+    --row-y: calc(var(--party-stage-offset, 0rem) + var(--party-row-height) * 2);
     height: var(--party-row-height);
   }
 
   .simple-systems-results[data-phase="candidate-reorder"] [data-row="independent"] {
-    --row-y: calc(var(--party-row-height) * 3);
+    --row-y: calc(var(--party-stage-offset, 0rem) + var(--party-row-height) * 3);
     height: var(--party-row-height);
   }
 
   .simple-systems-results[data-phase="candidate-split"] [data-row="sdup"] {
-    --row-y: calc(var(--party-row-height) * 0);
+    --row-y: calc(var(--party-stage-offset, 0rem) + var(--party-row-height) * 0);
     height: var(--party-row-height);
   }
 
   .simple-systems-results[data-phase="candidate-split"] [data-row="hrpp-main"] {
-    --row-y: calc(var(--party-row-height) * 1);
+    --row-y: calc(var(--party-stage-offset, 0rem) + var(--party-row-height) * 1);
     height: calc(var(--party-row-height) / 2);
   }
 
   .simple-systems-results[data-phase="candidate-split"] [data-row="hrpp-secondary"] {
-    --row-y: calc(var(--party-row-height) * 1.5);
+    --row-y: calc(var(--party-stage-offset, 0rem) + var(--party-row-height) * 1.5);
     height: calc(var(--party-row-height) / 2);
     opacity: 1;
     visibility: visible;
   }
 
   .simple-systems-results[data-phase="candidate-split"] [data-row="sp"] {
-    --row-y: calc(var(--party-row-height) * 2);
+    --row-y: calc(var(--party-stage-offset, 0rem) + var(--party-row-height) * 2);
     height: var(--party-row-height);
   }
 
   .simple-systems-results[data-phase="candidate-split"] [data-row="independent"] {
-    --row-y: calc(var(--party-row-height) * 3);
+    --row-y: calc(var(--party-stage-offset, 0rem) + var(--party-row-height) * 3);
     height: var(--party-row-height);
   }
 
@@ -559,5 +559,52 @@ const animatedRows = [
   .simple-systems-results[data-phase="candidate"] [data-row="independent"] {
     --row-y: calc(var(--candidate-row-height) * 4);
     height: var(--candidate-row-height);
+  }
+
+  @media (max-width: 640px) {
+    .results-grid,
+    .results-controls {
+      --results-columns: minmax(0, 1fr) 4.25rem 3.2rem;
+      --results-seat-width: 3.2rem;
+    }
+
+    .results-controls {
+      align-items: center;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      gap: 0.75rem;
+      justify-content: space-between;
+      min-height: 0;
+    }
+
+    .results-toggle-group {
+      flex: 0 0 auto;
+      width: max-content;
+      max-width: 100%;
+    }
+
+    .results-label-cell,
+    .results-grid-head .results-label-cell {
+      padding-left: 0.75rem;
+    }
+
+    .results-motion-row {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+
+    .results-principle {
+      flex: 0 0 auto;
+      margin-left: auto;
+      position: static;
+      transform: none;
+    }
+
+    .results-motion-stage {
+      --stage-height: 28rem;
+      --party-row-height: 5.5rem;
+      --candidate-row-height: 5.6rem;
+      --party-stage-offset: 3rem;
+    }
   }
 </style>

@@ -94,19 +94,28 @@ const outcomes = [
 ---
 
 <div class="not-prose my-10" data-rank-size-pairwise-table>
-  <section class="interactive-panel overflow-hidden">
+  <section class="interactive-panel">
     <div class="px-5 pb-2 pt-5 sm:px-6 sm:pb-2 sm:pt-6">
       <p class="eyebrow">The Product of Signs</p>
     </div>
 
-    <div class="overflow-x-auto px-5 pb-5 pt-1 sm:px-6 sm:pb-6 sm:pt-1">
-      <table class="w-full min-w-[38rem] border-collapse">
+    <div class="overflow-x-auto px-4 pb-5 pt-1 sm:px-6 sm:pb-6 sm:pt-1">
+      <table class="w-full table-fixed border-collapse sm:min-w-[38rem]">
+        <colgroup>
+          <col style="width: 28%" />
+          <col style="width: 28%" />
+          <col style="width: 30%" />
+          <col style="width: 14%" />
+        </colgroup>
         <thead class="border-b border-black/8">
-          <tr class="text-center text-xs font-semibold uppercase tracking-[0.16em] text-black/50 sm:text-[0.82rem]">
-            <th class="px-4 py-3">VOTES</th>
-            <th class="px-4 py-3">SEATS</th>
-            <th class="px-4 py-3 text-center">PRODUCT</th>
-            <th class="px-4 py-3 text-center">RANK-SIZE</th>
+          <tr class="text-center text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-black/50 sm:text-[0.82rem] sm:tracking-[0.16em]">
+            <th class="px-2 py-3 sm:px-4">Votes</th>
+            <th class="px-2 py-3 sm:px-4">Seats</th>
+            <th class="px-2 py-3 text-center sm:px-4">Product</th>
+            <th class="px-2 py-3 text-center sm:px-4">
+              <span class="sm:hidden">R-S</span>
+              <span class="hidden sm:inline">Rank-Size</span>
+            </th>
           </tr>
         </thead>
 
@@ -121,17 +130,17 @@ const outcomes = [
                 data-group={outcome.group}
                 data-rank-size-state={outcome.consistent ? "consistent" : "inconsistent"}
               >
-                <td class="px-4 py-3 text-center text-sm font-semibold whitespace-nowrap sm:text-[0.98rem]">
+                <td class="px-2 py-3 text-center text-[0.95rem] font-semibold whitespace-nowrap sm:px-4 sm:text-[0.98rem]">
                   <span class="text-[#FF4136]">Red</span>
-                  <span class="px-2 text-[#111111]">{outcome.votes}</span>
+                  <span class="px-1.5 text-[#111111] sm:px-2">{outcome.votes}</span>
                   <span class="text-[#0074D9]">Blue</span>
                 </td>
-                <td class="px-4 py-3 text-center text-sm font-semibold whitespace-nowrap sm:text-[0.98rem]">
+                <td class="px-2 py-3 text-center text-[0.95rem] font-semibold whitespace-nowrap sm:px-4 sm:text-[0.98rem]">
                   <span class="text-[#FF4136]">Red</span>
-                  <span class="px-2 text-[#111111]">{outcome.seats}</span>
+                  <span class="px-1.5 text-[#111111] sm:px-2">{outcome.seats}</span>
                   <span class="text-[#0074D9]">Blue</span>
                 </td>
-                <td class="px-4 py-3 text-center text-sm font-semibold tabular-nums whitespace-nowrap sm:text-[0.98rem]">
+                <td class="px-2 py-3 text-center text-[0.9rem] font-semibold tabular-nums whitespace-nowrap sm:px-4 sm:text-[0.98rem]">
                   <span class="rank-size-product" aria-label={`${outcome.leftFactor} times ${outcome.rightFactor} equals ${outcome.result}`}>
                     <span>{outcome.leftFactor}</span>
                     <span aria-hidden="true">×</span>
@@ -140,10 +149,10 @@ const outcomes = [
                     <span>{outcome.result}</span>
                   </span>
                 </td>
-                <td class="px-4 py-3 text-center text-sm font-medium sm:text-[0.98rem]">
+                <td class="px-2 py-3 text-center text-sm font-medium sm:px-4 sm:text-[0.98rem]">
                   <span
                     class:list={[
-                      "rank-size-indicator inline-flex h-7 w-7 items-center justify-center rounded-full",
+                      "rank-size-indicator inline-flex h-6 w-6 items-center justify-center rounded-full sm:h-7 sm:w-7",
                       outcome.consistent ? "text-[#111111]" : "text-accent"
                     ]}
                     aria-hidden="true"
@@ -228,5 +237,11 @@ const outcomes = [
       .rank-size-table-row[data-rank-size-state="inconsistent"]:hover
     ) .rank-size-table-row[data-rank-size-state="inconsistent"] .rank-size-indicator {
     background: rgba(247, 111, 92, 0.14);
+  }
+
+  @media (max-width: 640px) {
+    .rank-size-product {
+      grid-template-columns: 2.2ch 1.1ch 2.2ch 1.1ch 2.2ch;
+    }
   }
 </style>
