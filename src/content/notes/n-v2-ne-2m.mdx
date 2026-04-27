@@ -1,0 +1,55 @@
+---
+title: n ≠ 2m
+summary: Hidden assumptions in logical models of district-level effective thresholds.
+date: 2026-04-27
+tags:
+  - elections
+---
+
+As far as I am aware, there are two logical models that predict the district-level effective threshold: the point at which a given party has a 50-50 chance of winning a seat in a district. One is by [Lijphart (1994)](https://academic.oup.com/book/3432) and the other is by [Taagepera (1998)](https://doi.org/10.1016/S0261-3794(97)00053-X).
+
+To derive his model, Lijphart (1994) notes that the effective threshold has two hard bounds. Its lower bound is the threshold of representation, $t_R$. This represents the *lowest* vote share that a party can win while still having the chance to win a seat in the district. In simple electoral systems where some district has $m$ seats and $n$ parties, this bound equals the Hare formula:
+
+$$
+t_R = \frac{1}{mn}
+$$
+
+The upper bound on the effective threshold is the threshold of exclusion, $t_X$. This represents the *highest* vote share a party can win while still having the chance not to win a seat. In simple electoral systems, this equals the Droop quota:
+
+$$
+t_X = \frac{1}{m+1}
+$$
+
+Lijphart models the effective threshold, $t$, by taking the average:
+
+$$
+t = \frac{0.5}{m+1} + \frac{0.5}{mn}
+$$
+
+In general, this literature avoids treating either the actual or effective number of parties as a given, instead favouring models that rely only on institutional variables. The principle here is that these models should be useful for institutional design and that most institutional designers would not know the number of parties in advance. This poses a problem, since the threshold of exclusion, $t_X$, includes the number of parties in its denominator. To get around this, Lijphart assumes that $n = m$, thereby giving his final model as follows:
+
+$$
+t = \frac{0.5}{m+1} + \frac{0.5}{2m}
+$$
+
+In the endnotes to his book, Lijphart notes that, in private correspondence, Taagepera wrote to him explaining that one can rewrite this equation as:
+
+$$
+t = \frac{0.25 \left( 3 + \frac{1}{m} \right)}{m+1}
+$$
+
+Omitting the $\frac{1}{m}$ in the numerator, on the basis that it contributes only where $m$ is small, gives Taagepera's (1998) logical model:
+
+$$
+t = \frac{0.75}{m+1}
+$$
+
+Though I like this general approach, I am not convinced by these models, primarily because I do not think that it is tenable to assume that $n = m$.
+
+## Hidden Assumptions About n
+
+On the face of it, assuming that $n = m$ might seem reasonable enough. With $m$ seats up for grabs, we would probably not expect fewer than $m$ parties to contest the district, since doing so would mean giving up on a free seat. Likewise, we might not expect many more than $m$ parties, since running where there are already $m$ parties might use up valuable resources that could be better deployed in some other district while also posing a coordination challenge for voters. For similar reasons, [Cox (1997)](https://www.cambridge.org/core/books/making-votes-count/42CD9425E1410457FFC5079EC851F32B) assumes $n = m + 1$.
+
+The issue is that, if we assume that $n = m$, we have also made the equivalent but implicit assumption that $n = 2$. The reason is that if $n = m$, then $nm = 2m$, which implies that $n = 2$. This is a problem for two reasons. First, very few countries, other than the US or some small island nations, have strict two-party systems, especially where average magnitudes are large. Second, this assumption is not compatible with the idea that we should avoid treating the number of parties as a given.
+
+Clearly, we either need to find some alternative way to estimate $n$ that does not sneak in hidden assumptions, or simply relax this principle entirely and treat the number of parties as a given.
