@@ -6,11 +6,11 @@ const DEFAULT_SHARES = [34, 33, 33] as const;
 const PARTIES = ["Party 1", "Party 2", "Party 3"] as const;
 const SHARE_STEP = 0.1;
 const CHART_WIDTH = 640;
-const CHART_HEIGHT = 540;
+const CHART_HEIGHT = 510;
 const VERTICES = [
-  { x: 320, y: 54 },
-  { x: 86, y: 460 },
-  { x: 554, y: 460 }
+  { x: 320, y: 42 },
+  { x: 46, y: 456 },
+  { x: 594, y: 456 }
 ] as const;
 const GRID_TICKS = [20, 40, 60, 80] as const;
 
@@ -327,7 +327,7 @@ export default function BarycentresInteractive() {
             </div>
           </div>
 
-          <div className="flex items-center p-4 sm:p-6">
+          <div className="flex items-center p-2 sm:p-4">
             <svg
               viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`}
               className="block h-auto w-full cursor-crosshair select-none touch-none"
