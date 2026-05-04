@@ -166,12 +166,41 @@ function roundToTotal(values: number[], total: number) {
   return floors;
 }
 
-function rebalanceShares(currentShares: number[], changedIndex: number, nextShare: number) {
-  const clampedShare = Math.min(100, Math.max(0, nextShare));
-  const remainingShare = 100 - clampedShare;
-  const otherIndexes = currentShares
-    .map((_share, index) => index)
-    .filter((index) => index !== changedIndex);
+function getLockedTotal(currentShares: number[], lockedParties: boolean[]) {
+  return currentShares.reduce((total, share, index) => {
+    return lockedParties[index] ? total + share : total;
+  }, 0);
+}
+
+function getUnlockedIndexes(lockedParties: boolean[]) {
+  return lockedParties
+    .map((locked, index) => ({ index, locked }))
+    .filter(({ locked }) => !locked)
+    .map(({ index }) => index);
+}
+
+function rebalanceShares(
+  currentShares: number[],
+  lockedParties: boolean[],
+  changedIndex: number,
+  nextShare: number
+) {
+  if (lockedParties[changedIndex]) {
+    return currentShares;
+  }
+
+  const unlockedIndexes = getUnlockedIndexes(lockedParties);
+  const lockedTotal = getLockedTotal(currentShares, lockedParties);
+  const availableShare = clamp(100 - lockedTotal, 0, 100);
+
+  if (unlockedIndexes.length === 0) {
+    return currentShares;
+  }
+
+  const otherIndexes = unlockedIndexes.filter((index) => index !== changedIndex);
+  const clampedShare =
+    otherIndexes.length === 0 ? availableShare : clamp(nextShare, 0, availableShare);
+  const remainingShare = availableShare - clampedShare;
   const otherTotal = otherIndexes.reduce((sum, index) => sum + currentShares[index], 0);
   const rawOtherShares =
     otherTotal === 0
@@ -182,6 +211,49 @@ function rebalanceShares(currentShares: number[], changedIndex: number, nextShar
   nextShares[changedIndex] = clampedShare;
   otherIndexes.forEach((partyIndex, shareIndex) => {
     nextShares[partyIndex] = rawOtherShares[shareIndex];
+  });
+
+  return nextShares;
+}
+
+function applyLockedShareTarget(
+  currentShares: number[],
+  lockedParties: boolean[],
+  targetShares: number[]
+) {
+  const unlockedIndexes = getUnlockedIndexes(lockedParties);
+
+  if (unlockedIndexes.length === 0) {
+    return currentShares;
+  }
+
+  const lockedTotal = getLockedTotal(currentShares, lockedParties);
+  const availableShare = clamp(100 - lockedTotal, 0, 100);
+  const targetUnlockedTotal = unlockedIndexes.reduce(
+    (sum, index) => sum + Math.max(0, targetShares[index] ?? 0),
+    0
+  );
+  const currentUnlockedTotal = unlockedIndexes.reduce(
+    (sum, index) => sum + Math.max(0, currentShares[index] ?? 0),
+    0
+  );
+  const sourceTotal =
+    targetUnlockedTotal > 0
+      ? targetUnlockedTotal
+      : currentUnlockedTotal > 0
+        ? currentUnlockedTotal
+        : unlockedIndexes.length;
+  const nextShares = [...currentShares];
+
+  unlockedIndexes.forEach((index) => {
+    const sourceShare =
+      targetUnlockedTotal > 0
+        ? Math.max(0, targetShares[index] ?? 0)
+        : currentUnlockedTotal > 0
+          ? Math.max(0, currentShares[index] ?? 0)
+          : 1;
+
+    nextShares[index] = (sourceShare / sourceTotal) * availableShare;
   });
 
   return nextShares;
@@ -499,6 +571,28 @@ function disposeObject3D(object: import("three").Object3D) {
 
 function formatShare(share: number) {
   return `${Math.round(share)}%`;
+}
+
+function LockIcon({ locked }: { locked: boolean }) {
+  return (
+    <svg
+      aria-hidden="true"
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      viewBox="0 0 24 24"
+    >
+      <rect height="11" rx="2" ry="2" width="18" x="3" y="11" />
+      {locked ? (
+        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+      ) : (
+        <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+      )}
+    </svg>
+  );
 }
 
 function getSharesFromSurfaceWeights(weights: BarycentricWeights) {
@@ -827,12 +921,18 @@ export default function BarycentresInteractive() {
   const controlId = useId();
   const activePointerIdRef = useRef<number | null>(null);
   const [shares, setShares] = useState<number[]>(() => [...DEFAULT_SHARES]);
+  const [lockedParties, setLockedParties] = useState<boolean[]>(() => PARTIES.map(() => false));
   const [viewMode, setViewMode] = useState<ViewMode>("flat");
   const displayShares = roundToTotal(shares, 100);
   const effectiveParties = getEffectiveParties(shares);
   const point = getBarycentricPoint(shares);
   const controlIds = PARTIES.map((party) => `${controlId}-${party.toLowerCase().replace(" ", "-")}`);
-  const viewModeId = `${controlId}-view-mode`;
+
+  function updateSharesWithLocks(targetShares: number[]) {
+    setShares((currentShares) =>
+      applyLockedShareTarget(currentShares, lockedParties, targetShares)
+    );
+  }
 
   function updateSharesFromPlot(chart: SVGSVGElement, clientX: number, clientY: number) {
     const svgPoint = getSvgPoint(chart, clientX, clientY);
@@ -843,7 +943,7 @@ export default function BarycentresInteractive() {
       VERTICES[2]
     );
 
-    setShares(result.weights.map((weight) => weight * 100));
+    updateSharesWithLocks(result.weights.map((weight) => weight * 100));
   }
 
   function handlePlotPointerDown(event: PointerEvent<SVGSVGElement>) {
@@ -872,6 +972,14 @@ export default function BarycentresInteractive() {
     }
   }
 
+  function togglePartyLock(index: number) {
+    setLockedParties((currentLockedParties) =>
+      currentLockedParties.map((locked, partyIndex) =>
+        partyIndex === index ? !locked : locked
+      )
+    );
+  }
+
   return (
     <div className="not-prose my-10 w-full max-w-none sm:-mx-6 sm:w-[calc(100%+3rem)] lg:-mx-10 lg:w-[calc(100%+5rem)]">
       <section className="interactive-panel overflow-hidden">
@@ -881,13 +989,10 @@ export default function BarycentresInteractive() {
 
             <div className="mt-6 space-y-5">
               <div className="border-b border-black/10 pb-5">
-                <p id={viewModeId} className="text-sm font-semibold text-[#111111]">
-                  View
-                </p>
                 <div
-                  className="mt-3 grid grid-cols-2 rounded-full border border-black/10 bg-black/[0.035] p-1"
+                  className="grid grid-cols-2 rounded-full border border-black/10 bg-black/[0.035] p-1"
                   role="group"
-                  aria-labelledby={viewModeId}
+                  aria-label="View"
                 >
                   {VIEW_MODES.map((mode) => {
                     const isSelected = viewMode === mode.id;
@@ -912,43 +1017,72 @@ export default function BarycentresInteractive() {
               </div>
 
               <div className="space-y-5">
-                {shares.map((share, index) => (
-                  <div key={PARTIES[index]} className="space-y-2">
-                    <div className="flex items-center justify-between gap-4">
-                      <label
-                        htmlFor={controlIds[index]}
-                        className="block text-sm font-semibold text-[#111111]"
-                      >
-                        {PARTIES[index]}
-                      </label>
-                      <span className="text-sm font-semibold tabular-nums text-[#111111]">
-                        {formatShare(displayShares[index])}
-                      </span>
+                {shares.map((share, index) => {
+                  const isLocked = lockedParties[index];
+                  const lockLabel = isLocked ? `Unlock ${PARTIES[index]}` : `Lock ${PARTIES[index]}`;
+
+                  return (
+                    <div key={PARTIES[index]} className="space-y-2">
+                      <div className="flex items-center justify-between gap-4">
+                        <label
+                          htmlFor={controlIds[index]}
+                          className="block text-sm font-semibold text-[#111111]"
+                        >
+                          {PARTIES[index]}
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-semibold tabular-nums text-[#111111]">
+                            {formatShare(displayShares[index])}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => togglePartyLock(index)}
+                            className={`grid h-7 w-7 place-items-center rounded-full border transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2 ${
+                              isLocked
+                                ? "border-[#F76F5C]/40 bg-[#F76F5C]/10 text-[#F76F5C]"
+                                : "border-black/10 bg-black/[0.025] text-black/50 hover:text-[#111111]"
+                            }`}
+                            aria-label={lockLabel}
+                            aria-pressed={isLocked}
+                            title={lockLabel}
+                          >
+                            <LockIcon locked={isLocked} />
+                          </button>
+                        </div>
+                      </div>
+                      <input
+                        id={controlIds[index]}
+                        type="range"
+                        min="0"
+                        max="100"
+                        step={SHARE_STEP}
+                        value={share}
+                        disabled={isLocked}
+                        onChange={(event) =>
+                          setShares((currentShares) =>
+                            rebalanceShares(
+                              currentShares,
+                              lockedParties,
+                              index,
+                              Number(event.target.value)
+                            )
+                          )
+                        }
+                        className={`difference-slider w-full ${isLocked ? "opacity-50" : ""}`}
+                        style={
+                          {
+                            "--slider-color": ACCENT,
+                            "--slider-position": `${share}%`
+                          } as CSSProperties
+                        }
+                        aria-label={PARTIES[index]}
+                        aria-valuetext={`${formatShare(displayShares[index])}${
+                          isLocked ? ", locked" : ""
+                        }`}
+                      />
                     </div>
-                    <input
-                      id={controlIds[index]}
-                      type="range"
-                      min="0"
-                      max="100"
-                      step={SHARE_STEP}
-                      value={share}
-                      onChange={(event) =>
-                        setShares((currentShares) =>
-                          rebalanceShares(currentShares, index, Number(event.target.value))
-                        )
-                      }
-                      className="difference-slider w-full"
-                      style={
-                        {
-                          "--slider-color": ACCENT,
-                          "--slider-position": `${share}%`
-                        } as CSSProperties
-                      }
-                      aria-label={PARTIES[index]}
-                      aria-valuetext={formatShare(displayShares[index])}
-                    />
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               <div className="border-t border-black/10 pt-5">
@@ -1081,7 +1215,7 @@ export default function BarycentresInteractive() {
             ) : (
               <BarycentresSurfaceView
                 displayShares={displayShares}
-                onSharesChange={setShares}
+                onSharesChange={updateSharesWithLocks}
                 shares={shares}
               />
             )}
