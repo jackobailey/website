@@ -24,6 +24,26 @@ const VERTICES = [
   { x: 594, y: 456 }
 ] as const;
 const GRID_TICKS = [20, 40, 60, 80] as const;
+const FLAT_HEATMAP_RESOLUTION = 38;
+const HEATMAP_OPACITY = 0.52;
+const SURFACE_PLAIN_OPACITY = 0.82;
+const MAGMA_COLOUR_RANGE = {
+  start: 0.2,
+  end: 0.7
+} as const;
+const MAGMA_STOPS = [
+  { amount: 0, colour: [0, 0, 4] },
+  { amount: 0.1, colour: [20, 14, 54] },
+  { amount: 0.2, colour: [59, 15, 112] },
+  { amount: 0.3, colour: [100, 26, 128] },
+  { amount: 0.4, colour: [140, 41, 129] },
+  { amount: 0.5, colour: [181, 54, 122] },
+  { amount: 0.6, colour: [222, 73, 104] },
+  { amount: 0.7, colour: [246, 110, 91] },
+  { amount: 0.8, colour: [254, 159, 109] },
+  { amount: 0.9, colour: [254, 207, 146] },
+  { amount: 1, colour: [252, 253, 191] }
+] as const;
 const SURFACE_RESOLUTION = 42;
 const SURFACE_HEIGHT_SCALE = 0.42;
 const SURFACE_VERTICES = [
@@ -49,6 +69,12 @@ type Point = {
   y: number;
 };
 
+type FlatHeatmapCell = {
+  colour: string;
+  id: string;
+  points: string;
+};
+
 type SurfacePoint = {
   x: number;
   y: number;
@@ -62,6 +88,7 @@ type SurfaceBasePoint = {
 
 type BarycentricWeights = [number, number, number];
 type ViewMode = (typeof VIEW_MODES)[number]["id"];
+type ColourMode = "plain" | "effective";
 type ThreeModule = typeof import("three");
 
 type SurfaceOrbit = {
@@ -82,7 +109,7 @@ type SurfaceRuntime = {
   renderer: import("three").WebGLRenderer;
   scene: import("three").Scene;
   stem: import("three").Line;
-  surface: import("three").Mesh;
+  surface: import("three").Mesh<import("three").BufferGeometry, import("three").MeshLambertMaterial>;
   pointer: import("three").Vector2;
   render: () => void;
   resizeObserver: ResizeObserver;
@@ -130,13 +157,120 @@ function scale(point: Point, factor: number) {
 }
 
 function getBarycentricPoint(shares: number[]) {
-  return shares.reduce(
+  return getBarycentricPointFromWeights(shares.map((share) => share / 100));
+}
+
+function getBarycentricPointFromWeights(weights: number[]) {
+  return weights.reduce(
     (point, share, index) => ({
-      x: point.x + (share / 100) * VERTICES[index].x,
-      y: point.y + (share / 100) * VERTICES[index].y
+      x: point.x + share * VERTICES[index].x,
+      y: point.y + share * VERTICES[index].y
     }),
     { x: 0, y: 0 }
   );
+}
+
+function formatPointForSvg(point: Point) {
+  return `${point.x.toFixed(2)},${point.y.toFixed(2)}`;
+}
+
+function formatHeatmapPoints(weights: BarycentricWeights[]) {
+  return weights
+    .map((weightSet) => formatPointForSvg(getBarycentricPointFromWeights(weightSet)))
+    .join(" ");
+}
+
+function getAverageWeights(weightSets: BarycentricWeights[]): BarycentricWeights {
+  return [0, 1, 2].map((index) => {
+    return (
+      weightSets.reduce((sum, weights) => sum + weights[index], 0) / weightSets.length
+    );
+  }) as BarycentricWeights;
+}
+
+function getMagmaColour(amount: number) {
+  const clampedAmount = clamp(amount, 0, 1);
+  const nextStopIndex = MAGMA_STOPS.findIndex((stop) => stop.amount >= clampedAmount);
+
+  if (nextStopIndex <= 0) {
+    return rgbToHex(MAGMA_STOPS[0].colour);
+  }
+
+  const nextStop = MAGMA_STOPS[nextStopIndex];
+  const previousStop = MAGMA_STOPS[nextStopIndex - 1];
+  const stopAmount =
+    (clampedAmount - previousStop.amount) / (nextStop.amount - previousStop.amount);
+
+  return rgbToHex(
+    previousStop.colour.map((channel, index) => {
+      return channel + (nextStop.colour[index] - channel) * stopAmount;
+    })
+  );
+}
+
+function rgbToHex(channels: readonly number[]) {
+  return `#${channels
+    .map((channel) => Math.round(channel).toString(16).padStart(2, "0"))
+    .join("")}`;
+}
+
+function getEffectivePartyColour(weights: BarycentricWeights) {
+  const effectiveParties = getEffectivePartiesFromWeights(weights);
+  const normalisedParties = clamp((effectiveParties - 1) / 2, 0, 1);
+  const magmaAmount =
+    MAGMA_COLOUR_RANGE.start +
+    normalisedParties * (MAGMA_COLOUR_RANGE.end - MAGMA_COLOUR_RANGE.start);
+
+  return getMagmaColour(magmaAmount);
+}
+
+function getFlatHeatmapCells() {
+  const cells: FlatHeatmapCell[] = [];
+
+  for (let party1 = 0; party1 < FLAT_HEATMAP_RESOLUTION; party1 += 1) {
+    for (let party2 = 0; party2 < FLAT_HEATMAP_RESOLUTION - party1; party2 += 1) {
+      const party3 = FLAT_HEATMAP_RESOLUTION - party1 - party2;
+      const first: BarycentricWeights = [
+        party1 / FLAT_HEATMAP_RESOLUTION,
+        party2 / FLAT_HEATMAP_RESOLUTION,
+        party3 / FLAT_HEATMAP_RESOLUTION
+      ];
+      const second: BarycentricWeights = [
+        (party1 + 1) / FLAT_HEATMAP_RESOLUTION,
+        party2 / FLAT_HEATMAP_RESOLUTION,
+        (party3 - 1) / FLAT_HEATMAP_RESOLUTION
+      ];
+      const third: BarycentricWeights = [
+        party1 / FLAT_HEATMAP_RESOLUTION,
+        (party2 + 1) / FLAT_HEATMAP_RESOLUTION,
+        (party3 - 1) / FLAT_HEATMAP_RESOLUTION
+      ];
+      const firstCellWeights = [first, second, third];
+
+      cells.push({
+        colour: getEffectivePartyColour(getAverageWeights(firstCellWeights)),
+        id: `${party1}-${party2}-a`,
+        points: formatHeatmapPoints(firstCellWeights)
+      });
+
+      if (party1 + party2 < FLAT_HEATMAP_RESOLUTION - 1) {
+        const fourth: BarycentricWeights = [
+          (party1 + 1) / FLAT_HEATMAP_RESOLUTION,
+          (party2 + 1) / FLAT_HEATMAP_RESOLUTION,
+          (party3 - 2) / FLAT_HEATMAP_RESOLUTION
+        ];
+        const secondCellWeights = [second, fourth, third];
+
+        cells.push({
+          colour: getEffectivePartyColour(getAverageWeights(secondCellWeights)),
+          id: `${party1}-${party2}-b`,
+          points: formatHeatmapPoints(secondCellWeights)
+        });
+      }
+    }
+  }
+
+  return cells;
 }
 
 function getEffectiveParties(shares: number[]) {
@@ -392,8 +526,9 @@ function getSurfaceWeightsFromBasePoint(point: SurfaceBasePoint): BarycentricWei
   return [party1, party2, party3];
 }
 
-function createSurfaceMesh(THREE: ThreeModule) {
+function createSurfaceMesh(THREE: ThreeModule, isColourCoded: boolean) {
   const positions: number[] = [];
+  const colours: number[] = [];
   const indices: number[] = [];
   const vertexLookup = new Map<string, number>();
 
@@ -407,9 +542,11 @@ function createSurfaceMesh(THREE: ThreeModule) {
       ];
       const point = getSurfacePoint(weights);
       const vertexIndex = positions.length / 3;
+      const colour = new THREE.Color(getEffectivePartyColour(weights));
 
       vertexLookup.set(`${party1}:${party2}`, vertexIndex);
       positions.push(point.x, point.y, point.z);
+      colours.push(colour.r, colour.g, colour.b);
     }
   }
 
@@ -437,16 +574,19 @@ function createSurfaceMesh(THREE: ThreeModule) {
 
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute("color", new THREE.Float32BufferAttribute(colours, 3));
   geometry.setIndex(indices);
   geometry.computeVertexNormals();
 
   return new THREE.Mesh(
     geometry,
     new THREE.MeshLambertMaterial({
-      color: 0xf2f2f1,
-      opacity: 0.82,
+      color: isColourCoded ? 0xffffff : 0xf2f2f1,
+      depthWrite: !isColourCoded,
+      opacity: isColourCoded ? HEATMAP_OPACITY : SURFACE_PLAIN_OPACITY,
       side: THREE.DoubleSide,
-      transparent: true
+      transparent: true,
+      vertexColors: isColourCoded
     })
   );
 }
@@ -455,11 +595,15 @@ function createSurfaceGrid(THREE: ThreeModule) {
   const group = new THREE.Group();
   const gridMaterial = new THREE.LineBasicMaterial({
     color: 0x111111,
+    depthTest: false,
+    depthWrite: false,
     opacity: 0.11,
     transparent: true
   });
   const outlineMaterial = new THREE.LineBasicMaterial({
     color: 0x111111,
+    depthTest: false,
+    depthWrite: false,
     opacity: 0.34,
     transparent: true
   });
@@ -480,11 +624,13 @@ function createSurfaceGrid(THREE: ThreeModule) {
 
         const point = getSurfacePoint(weights);
 
-        return new THREE.Vector3(point.x, point.y + 0.004, point.z);
+        return new THREE.Vector3(point.x, point.y + 0.012, point.z);
       });
       const geometry = new THREE.BufferGeometry().setFromPoints(points);
+      const line = new THREE.Line(geometry, gridMaterial);
 
-      group.add(new THREE.Line(geometry, gridMaterial));
+      line.renderOrder = 2;
+      group.add(line);
     }
   }
 
@@ -499,11 +645,18 @@ function createSurfaceGrid(THREE: ThreeModule) {
 
       const point = getSurfacePoint(weights);
 
-      return new THREE.Vector3(point.x, point.y + 0.008, point.z);
+      return new THREE.Vector3(point.x, point.y + 0.016, point.z);
     });
+    const outline = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(points),
+      outlineMaterial
+    );
 
-    group.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), outlineMaterial));
+    outline.renderOrder = 2;
+    group.add(outline);
   }
+
+  group.renderOrder = 2;
 
   return group;
 }
@@ -549,6 +702,15 @@ function updateSurfaceMarker(runtime: SurfaceRuntime, shares: number[]) {
     new THREE.Vector3(basePoint.x, 0, basePoint.z),
     new THREE.Vector3(surfacePoint.x, surfacePoint.y + 0.045, surfacePoint.z)
   ]);
+  runtime.render();
+}
+
+function updateSurfaceColourMode(runtime: SurfaceRuntime, isColourCoded: boolean) {
+  runtime.surface.material.color.set(isColourCoded ? 0xffffff : 0xf2f2f1);
+  runtime.surface.material.depthWrite = !isColourCoded;
+  runtime.surface.material.opacity = isColourCoded ? HEATMAP_OPACITY : SURFACE_PLAIN_OPACITY;
+  runtime.surface.material.vertexColors = isColourCoded;
+  runtime.surface.material.needsUpdate = true;
   runtime.render();
 }
 
@@ -606,6 +768,8 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
 }
 
+const FLAT_HEATMAP_CELLS = getFlatHeatmapCells();
+
 function updateSurfaceCamera(runtime: SurfaceRuntime) {
   const { camera, cameraTarget, orbit } = runtime;
   const sinPhi = Math.sin(orbit.phi);
@@ -620,10 +784,12 @@ function updateSurfaceCamera(runtime: SurfaceRuntime) {
 
 function BarycentresSurfaceView({
   displayShares,
+  isColourCoded,
   onSharesChange,
   shares
 }: {
   displayShares: number[];
+  isColourCoded: boolean;
   onSharesChange: (shares: number[]) => void;
   shares: number[];
 }) {
@@ -640,6 +806,12 @@ function BarycentresSurfaceView({
       updateSurfaceMarker(runtimeRef.current, shares);
     }
   }, [shares]);
+
+  useEffect(() => {
+    if (runtimeRef.current) {
+      updateSurfaceColourMode(runtimeRef.current, isColourCoded);
+    }
+  }, [isColourCoded]);
 
   useEffect(() => {
     let cancelled = false;
@@ -683,8 +855,9 @@ function BarycentresSurfaceView({
       fillLight.position.set(-2.8, 2.4, -2);
       scene.add(fillLight);
 
-      const surface = createSurfaceMesh(THREE);
+      const surface = createSurfaceMesh(THREE, isColourCoded);
       const grid = createSurfaceGrid(THREE);
+      surface.renderOrder = 1;
       scene.add(surface);
       scene.add(grid);
 
@@ -696,6 +869,7 @@ function BarycentresSurfaceView({
           shininess: 36
         })
       );
+      marker.renderOrder = 4;
       scene.add(marker);
 
       const stem = new THREE.Line(
@@ -706,6 +880,7 @@ function BarycentresSurfaceView({
           transparent: true
         })
       );
+      stem.renderOrder = 3;
       scene.add(stem);
 
       const labelMaterials: import("three").SpriteMaterial[] = [];
@@ -721,6 +896,7 @@ function BarycentresSurfaceView({
           vertexPoint.y + 0.12,
           vertexPoint.z
         );
+        sprite.renderOrder = 5;
         scene.add(sprite);
         labelMaterials.push(material);
         labelTextures.push(texture);
@@ -908,7 +1084,9 @@ function BarycentresSurfaceView({
       }`}
       style={{ touchAction: "none" }}
       role="img"
-      aria-label={`3D ternary surface showing Party 1 at ${displayShares[0]} percent, Party 2 at ${displayShares[1]} percent, Party 3 at ${displayShares[2]} percent, and height as the effective number of parties`}
+      aria-label={`3D ternary surface${
+        isColourCoded ? " colour-coded by effective parties" : ""
+      } showing Party 1 at ${displayShares[0]} percent, Party 2 at ${displayShares[1]} percent, Party 3 at ${displayShares[2]} percent, and height as the effective number of parties`}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerUp={stopPointer}
@@ -923,10 +1101,12 @@ export default function BarycentresInteractive() {
   const [shares, setShares] = useState<number[]>(() => [...DEFAULT_SHARES]);
   const [lockedParties, setLockedParties] = useState<boolean[]>(() => PARTIES.map(() => false));
   const [viewMode, setViewMode] = useState<ViewMode>("flat");
+  const [colourMode, setColourMode] = useState<ColourMode>("plain");
   const displayShares = roundToTotal(shares, 100);
   const effectiveParties = getEffectiveParties(shares);
   const point = getBarycentricPoint(shares);
   const controlIds = PARTIES.map((party) => `${controlId}-${party.toLowerCase().replace(" ", "-")}`);
+  const isColourCoded = colourMode === "effective";
 
   function updateSharesWithLocks(targetShares: number[]) {
     setShares((currentShares) =>
@@ -1014,6 +1194,34 @@ export default function BarycentresInteractive() {
                     );
                   })}
                 </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setColourMode((currentMode) =>
+                      currentMode === "effective" ? "plain" : "effective"
+                    )
+                  }
+                  className="mt-3 flex w-full items-center justify-between gap-3 rounded-full border border-black/10 bg-black/[0.025] px-3 py-2 text-left transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F76F5C] focus-visible:ring-offset-2"
+                  role="switch"
+                  aria-checked={isColourCoded}
+                  aria-label="Colour plot by effective parties"
+                >
+                  <span className="text-xs font-semibold uppercase tracking-[0.14em] text-black/60">
+                    Colour by N<sub>2</sub>
+                  </span>
+                  <span
+                    className={`relative h-5 w-9 rounded-full transition-colors duration-150 ${
+                      isColourCoded ? "bg-[#F76F5C]" : "bg-black/15"
+                    }`}
+                    aria-hidden="true"
+                  >
+                    <span
+                      className={`absolute left-0.5 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-white shadow-sm transition-transform duration-150 ${
+                        isColourCoded ? "translate-x-4" : "translate-x-0"
+                      }`}
+                    />
+                  </span>
+                </button>
               </div>
 
               <div className="space-y-5">
@@ -1115,16 +1323,32 @@ export default function BarycentresInteractive() {
                 className="block h-auto w-full cursor-crosshair select-none touch-none"
                 style={{ touchAction: "none" }}
                 role="img"
-                aria-label={`Ternary plot showing Party 1 at ${displayShares[0]} percent, Party 2 at ${displayShares[1]} percent, and Party 3 at ${displayShares[2]} percent`}
+                aria-label={`Ternary plot${
+                  isColourCoded ? " colour-coded by effective parties" : ""
+                } showing Party 1 at ${displayShares[0]} percent, Party 2 at ${displayShares[1]} percent, and Party 3 at ${displayShares[2]} percent`}
                 onPointerDown={handlePlotPointerDown}
                 onPointerMove={handlePlotPointerMove}
                 onPointerUp={stopPlotPointer}
                 onPointerCancel={stopPlotPointer}
               >
-                <polygon
-                  points={VERTICES.map((vertex) => `${vertex.x},${vertex.y}`).join(" ")}
-                  fill="rgba(17,17,17,0.025)"
-                />
+                {isColourCoded ? (
+                  <g aria-hidden="true" opacity={HEATMAP_OPACITY}>
+                    {FLAT_HEATMAP_CELLS.map((cell) => (
+                      <polygon
+                        key={cell.id}
+                        points={cell.points}
+                        fill={cell.colour}
+                        stroke={cell.colour}
+                        strokeWidth="0.7"
+                      />
+                    ))}
+                  </g>
+                ) : (
+                  <polygon
+                    points={VERTICES.map((vertex) => `${vertex.x},${vertex.y}`).join(" ")}
+                    fill="rgba(17,17,17,0.025)"
+                  />
+                )}
 
                 {GRID_TICKS.map((tick) =>
                   PARTIES.map((_party, index) => {
@@ -1137,7 +1361,11 @@ export default function BarycentresInteractive() {
                         y1={line.start.y}
                         x2={line.end.x}
                         y2={line.end.y}
-                        stroke="rgba(17,17,17,0.09)"
+                        stroke={
+                          isColourCoded
+                            ? "rgba(255,255,255,0.2)"
+                            : "rgba(17,17,17,0.09)"
+                        }
                         strokeWidth="1.5"
                       />
                     );
@@ -1158,8 +1386,8 @@ export default function BarycentresInteractive() {
                     cx={vertex.x}
                     cy={vertex.y}
                     r="4.5"
-                    fill={INK}
-                    opacity="0.42"
+                    fill={isColourCoded ? "#FFFFFF" : INK}
+                    opacity={isColourCoded ? "0.72" : "0.42"}
                   />
                 ))}
 
@@ -1168,7 +1396,23 @@ export default function BarycentresInteractive() {
                   fill="transparent"
                 />
 
-                <circle cx={point.x} cy={point.y} r="22" fill={ACCENT} opacity="0.18" />
+                <circle
+                  cx={point.x}
+                  cy={point.y}
+                  r="22"
+                  fill={isColourCoded ? "#FFFFFF" : ACCENT}
+                  opacity={isColourCoded ? "0.2" : "0.18"}
+                />
+                {isColourCoded ? (
+                  <circle
+                    cx={point.x}
+                    cy={point.y}
+                    r="14"
+                    fill="none"
+                    stroke="rgba(17,17,17,0.24)"
+                    strokeWidth="2"
+                  />
+                ) : null}
                 <circle
                   cx={point.x}
                   cy={point.y}
@@ -1215,6 +1459,7 @@ export default function BarycentresInteractive() {
             ) : (
               <BarycentresSurfaceView
                 displayShares={displayShares}
+                isColourCoded={isColourCoded}
                 onSharesChange={updateSharesWithLocks}
                 shares={shares}
               />
