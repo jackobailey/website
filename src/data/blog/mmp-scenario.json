@@ -4,8 +4,8 @@
     "defaultDistrictSeats": 316,
     "electionYear": 2024,
     "geography": "Great Britain",
-    "districtSource": "/Users/jackbailey/Downloads/hoc_elections.csv, 2024 winners, Northern Ireland excluded",
-    "listVoteSource": "/Users/jackbailey/Desktop/list_votes.csv",
+    "districtSource": "/Users/jackbailey/Downloads/hoc_elections.csv, 2024 winners, Northern Ireland excluded; Speaker counted as Labour",
+    "listVoteSource": "/Users/jackbailey/Downloads/hoc_elections.csv, 2024 constituency votes aggregated by region and normalised across listed parties; unlisted parties omitted",
     "populationSource": "ONS mid-2024 population estimates for UK countries and English regions",
     "constituencyRegionSource": "ONS Westminster Parliamentary Constituencies July 2024 boundaries and ONS Regions December 2024 boundaries",
     "regionalSeatApportionment": "Largest remainder by mid-2024 regional population",
@@ -87,11 +87,14 @@
         "Conservative": 1
       },
       "listVotes": {
-        "Labour": 0.2679749749957586,
-        "Conservative": 0.14780060865920058,
-        "Reform UK": 0.21806876219802188,
-        "Liberal Democrat": 0.1639131960286723,
-        "Green": 0.20224245811834654
+        "Labour": 0.466289866028151,
+        "Conservative": 0.20754593181916897,
+        "Reform UK": 0.20411831515405793,
+        "Liberal Democrat": 0.06042456609552044,
+        "Green": 0.06162132090310168,
+        "SNP": 0.0,
+        "Plaid Cymru": 0.0,
+        "Independent": 0
       }
     },
     {
@@ -106,11 +109,14 @@
         "Independent": 1
       },
       "listVotes": {
-        "Labour": 0.24394371341150176,
-        "Conservative": 0.15685643471964156,
-        "Reform UK": 0.20530339465496406,
-        "Liberal Democrat": 0.13805330968915894,
-        "Green": 0.25584314752473364
+        "Labour": 0.46709656697426777,
+        "Conservative": 0.19940504377927942,
+        "Reform UK": 0.17573307473429772,
+        "Liberal Democrat": 0.08326985028982584,
+        "Green": 0.07449546422232929,
+        "SNP": 0.0,
+        "Plaid Cymru": 0.0,
+        "Independent": 0
       }
     },
     {
@@ -125,11 +131,14 @@
         "Independent": 1
       },
       "listVotes": {
-        "Labour": 0.25009087807258173,
-        "Conservative": 0.1530123530705406,
-        "Reform UK": 0.20347305475716915,
-        "Liberal Democrat": 0.1444047789894311,
-        "Green": 0.2490189351102775
+        "Labour": 0.429871928740384,
+        "Conservative": 0.23982876477176135,
+        "Reform UK": 0.17599818157279745,
+        "Liberal Democrat": 0.07497507949699651,
+        "Green": 0.07932604541806068,
+        "SNP": 0.0,
+        "Plaid Cymru": 0.0,
+        "Independent": 0
       }
     },
     {
@@ -144,11 +153,14 @@
         "Independent": 1
       },
       "listVotes": {
-        "Labour": 0.19859280038464303,
-        "Conservative": 0.20507261771037263,
-        "Reform UK": 0.22068925393673422,
-        "Liberal Democrat": 0.15151331910249347,
-        "Green": 0.22413200886575674
+        "Labour": 0.3669292749217798,
+        "Conservative": 0.30502736672383585,
+        "Reform UK": 0.196418252531355,
+        "Liberal Democrat": 0.0666601107910524,
+        "Green": 0.06496499503197693,
+        "SNP": 0.0,
+        "Plaid Cymru": 0.0,
+        "Independent": 0
       }
     },
     {
@@ -164,11 +176,14 @@
         "Independent": 1
       },
       "listVotes": {
-        "Labour": 0.20735163179625787,
-        "Conservative": 0.17387943217767574,
-        "Reform UK": 0.21327596777220176,
-        "Liberal Democrat": 0.1517799669557378,
-        "Green": 0.25371300129812685
+        "Labour": 0.35740612612237677,
+        "Conservative": 0.290182736293044,
+        "Reform UK": 0.1904346966591408,
+        "Liberal Democrat": 0.09298646731798335,
+        "Green": 0.06898997360745511,
+        "SNP": 0.0,
+        "Plaid Cymru": 0.0,
+        "Independent": 0
       }
     },
     {
@@ -184,12 +199,14 @@
         "Green": 1
       },
       "listVotes": {
-        "Labour": 0.17658548371120308,
-        "Conservative": 0.20506269349763268,
-        "Reform UK": 0.21216720447576487,
-        "Liberal Democrat": 0.1467712440537558,
-        "Green": 0.2591982069974079,
-        "Plaid Cymru": 0.00021516726423560504
+        "Labour": 0.30120131159747854,
+        "Conservative": 0.31366610543647705,
+        "Reform UK": 0.1790249746833114,
+        "Liberal Democrat": 0.13551851139674886,
+        "Green": 0.07058909688598416,
+        "SNP": 0.0,
+        "Plaid Cymru": 0.0,
+        "Independent": 0
       }
     },
     {
@@ -204,11 +221,14 @@
         "Independent": 1
       },
       "listVotes": {
-        "Labour": 0.24783665108691635,
-        "Conservative": 0.1353675037058034,
-        "Reform UK": 0.1544951093494102,
-        "Liberal Democrat": 0.17532163166859469,
-        "Green": 0.28697910418927536
+        "Labour": 0.46064038512365973,
+        "Conservative": 0.22027892655654252,
+        "Reform UK": 0.09307165828635149,
+        "Liberal Democrat": 0.11814025811670878,
+        "Green": 0.10786877191673745,
+        "SNP": 0.0,
+        "Plaid Cymru": 0.0,
+        "Independent": 0
       }
     },
     {
@@ -223,11 +243,14 @@
         "Green": 1
       },
       "listVotes": {
-        "Labour": 0.185005234640507,
-        "Conservative": 0.21581614804815874,
-        "Reform UK": 0.21283504865045186,
-        "Liberal Democrat": 0.16061411438767303,
-        "Green": 0.22572945427320937
+        "Labour": 0.25063180326791556,
+        "Conservative": 0.3127930773888594,
+        "Reform UK": 0.14299618383315887,
+        "Liberal Democrat": 0.22324857656507432,
+        "Green": 0.0703303589449918,
+        "SNP": 0.0,
+        "Plaid Cymru": 0.0,
+        "Independent": 0
       }
     },
     {
@@ -242,11 +265,14 @@
         "Green": 1
       },
       "listVotes": {
-        "Labour": 0.18282123659651403,
-        "Conservative": 0.1844576765861613,
-        "Reform UK": 0.2131509780436657,
-        "Liberal Democrat": 0.18214303533050236,
-        "Green": 0.23742707344315653
+        "Labour": 0.24841815891288646,
+        "Conservative": 0.28614706742523655,
+        "Reform UK": 0.13994281225177033,
+        "Liberal Democrat": 0.2501812839235851,
+        "Green": 0.07531067748652162,
+        "SNP": 0.0,
+        "Plaid Cymru": 0.0,
+        "Independent": 0
       }
     },
     {
@@ -260,12 +286,14 @@
         "Plaid Cymru": 4
       },
       "listVotes": {
-        "Labour": 0.20523809041466473,
-        "Conservative": 0.14269011290815048,
-        "Reform UK": 0.20130638641449705,
-        "Liberal Democrat": 0.11238742452498977,
-        "Green": 0.1662777009916603,
-        "Plaid Cymru": 0.1721002847460376
+        "Labour": 0.37712338587871536,
+        "Conservative": 0.1856112837875984,
+        "Reform UK": 0.17247558275414315,
+        "Liberal Democrat": 0.06644104865970994,
+        "Green": 0.04768758299234131,
+        "SNP": 0.0,
+        "Plaid Cymru": 0.15066111592749185,
+        "Independent": 0
       }
     },
     {
@@ -280,12 +308,14 @@
         "SNP": 9
       },
       "listVotes": {
-        "Labour": 0.20886670550918462,
-        "Conservative": 0.11400333274341574,
-        "Reform UK": 0.16252189983079146,
-        "Liberal Democrat": 0.16001241291654733,
-        "Green": 0.16111597965085522,
-        "SNP": 0.1934796693492057
+        "Labour": 0.3581067816894511,
+        "Conservative": 0.12919633560343874,
+        "Reform UK": 0.0706123147298468,
+        "Liberal Democrat": 0.09846100556940188,
+        "Green": 0.03896143202862174,
+        "SNP": 0.3046621303792397,
+        "Plaid Cymru": 0.0,
+        "Independent": 0
       }
     }
   ]
