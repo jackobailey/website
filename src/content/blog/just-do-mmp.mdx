@@ -1,0 +1,24 @@
+---
+title: Just Use MMP
+summary: Mixed-Member Proportional Representation is the UK's path of least resistance.
+date: 2026-05-09
+tags:
+  - elections
+featured: false
+---
+
+import MmpSeatSimulator from "@/components/blog/MmpSeatSimulator";
+
+One word describes the outcome of England's latest local elections: fragmented. In some places, things were so bad that candidates won a seat on barely one-fifth of the vote. For instance, [in one ward in Birmingham](https://www.birmingham.gov.uk/info/50385/election_2026_-_results_by_ward/3260/tyseley_and_hay_mills_ward_candidates_2026), the winning candidate won on just 20.5% of the vote. This continued an ongoing trend in British politics, with the 2024 General Election having also been [the most fragmented in the nation's history](https://www.tandfonline.com/doi/full/10.1080/01402382.2024.2430915#abstract).
+
+Bluntly, the UK's first-past-the-post electoral system is not built for this. And even if the electoral realities force the parties to coalesce into coherent blocs, effectively reconstituting a two-party system, [as Robert Shrimsley has suggested](https://www.ft.com/content/e2db027f-79c2-4043-ad26-4648a76d286b?syn-25a6b1a6=1), the problem will still not go away. Fragmentation is not some errant phenomenon: it's an outcome of our ongoing [dealignment](https://en.wikipedia.org/wiki/Dealignment). Voters' partisan attachments are weaker than ever before; hence, they are more prone to switch from party to party. So, even if two new large party blocs did emerge, there's nothing to stop new parties from emerging again. In essence, voters want choices, and that will not go away.
+
+My view is that the UK should scrap first-past-the-post and adopt proportional representation. Personally, [I would prefer closed list proportional representation](https://bsky.app/profile/jack-bailey.co.uk/post/3mgp5crp3322u) like we used to use for our elections to the European Parliament. But I don't think that will happen, since it's too far removed from the system that we already have (and that our parliamentarians are used to). So, I think the UK should just go for [Mixed-Member Proportional Representation](https://en.wikipedia.org/wiki/Mixed-member_proportional_representation) since we can implement it by simply extending what we've already got.
+
+Under MMP, voters vote twice: once for the *candidate* they want to represent them in their district and once for the *party* they want to represent them in their region or nation. The system then allocates members in districts using first-past-the-post, then tops them up with members from the party lists to make the result more proportional. The reason I think that MMP is the strategically most sensible route to PR is that it is achievable simply by tacking a list system onto what we already have.
+
+The one downside is that it would mean dividing existing seats into district and list members. That means that some MPs who represent inner cities might see the already massive populations that they represent double overnight. But this is not insurmountable. [As I said on Bluesky earlier today](https://bsky.app/profile/jack-bailey.co.uk/post/3mlfxtmpmks2f), the new settlement would also require that we better fund MPs' offices, which is not much of a price to pay for better politics.
+
+So what would this look like in practice? If we assume that the constituency level results would have been the same in 2024 under PR and use BES data on voters' favourite parties aggregated to the region-level as a stand in for our list tier, we can get a rough idea of what the result might have looked like under MMP. Note that saying that you like a party is not the same as saying that you would vote for them in a PR election, which perhaps explains why the Greens came out on top in 2024. The interactive below presents the results, along with [my normalised version of the Gallager index of disproportionality](https://preprints.apsanet.org/engage/apsa/article-details/699f66c44770e67d927e7782). By adjusting the slider, you can see the impact that altering the balance between district and list MPs has on the result.
+
+<MmpSeatSimulator client:load />

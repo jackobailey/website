@@ -1,0 +1,292 @@
+{
+  "metadata": {
+    "totalSeats": 632,
+    "defaultDistrictSeats": 316,
+    "electionYear": 2024,
+    "geography": "Great Britain",
+    "districtSource": "/Users/jackbailey/Downloads/hoc_elections.csv, 2024 winners, Northern Ireland excluded",
+    "listVoteSource": "/Users/jackbailey/Desktop/list_votes.csv",
+    "populationSource": "ONS mid-2024 population estimates for UK countries and English regions",
+    "constituencyRegionSource": "ONS Westminster Parliamentary Constituencies July 2024 boundaries and ONS Regions December 2024 boundaries",
+    "regionalSeatApportionment": "Largest remainder by mid-2024 regional population",
+    "topUpMethod": "Sainte-Lague highest averages for fixed regional list seats, starting from scaled district seats; no overhang compensation"
+  },
+  "parties": [
+    {
+      "id": "Labour",
+      "label": "Labour",
+      "shortLabel": "Lab",
+      "color": "#F76F5C",
+      "hasListVotes": true
+    },
+    {
+      "id": "Conservative",
+      "label": "Conservative",
+      "shortLabel": "Con",
+      "color": "#1d4ed8",
+      "hasListVotes": true
+    },
+    {
+      "id": "Reform UK",
+      "label": "Reform UK",
+      "shortLabel": "Ref",
+      "color": "#00A7B5",
+      "hasListVotes": true
+    },
+    {
+      "id": "Liberal Democrat",
+      "label": "Liberal Democrat",
+      "shortLabel": "LD",
+      "color": "#f59e0b",
+      "hasListVotes": true
+    },
+    {
+      "id": "Green",
+      "label": "Green",
+      "shortLabel": "Grn",
+      "color": "#16a34a",
+      "hasListVotes": true
+    },
+    {
+      "id": "SNP",
+      "label": "SNP",
+      "shortLabel": "SNP",
+      "color": "#eab308",
+      "hasListVotes": true
+    },
+    {
+      "id": "Plaid Cymru",
+      "label": "Plaid Cymru",
+      "shortLabel": "PC",
+      "color": "#008142",
+      "hasListVotes": true
+    },
+    {
+      "id": "Independent",
+      "label": "Independent",
+      "shortLabel": "Ind",
+      "color": "#737373",
+      "hasListVotes": true
+    },
+    {
+      "id": "Other",
+      "label": "Other",
+      "shortLabel": "Oth",
+      "color": "#9ca3af",
+      "hasListVotes": false
+    }
+  ],
+  "regions": [
+    {
+      "name": "North East",
+      "population": 2760678,
+      "totalSeats": 26,
+      "actualDistrictSeats2024": 27,
+      "districtSeats2024": {
+        "Labour": 26,
+        "Conservative": 1
+      },
+      "listVotes": {
+        "Labour": 0.2679749749957586,
+        "Conservative": 0.14780060865920058,
+        "Reform UK": 0.21806876219802188,
+        "Liberal Democrat": 0.1639131960286723,
+        "Green": 0.20224245811834654
+      }
+    },
+    {
+      "name": "North West",
+      "population": 7737414,
+      "totalSeats": 73,
+      "actualDistrictSeats2024": 73,
+      "districtSeats2024": {
+        "Labour": 66,
+        "Conservative": 3,
+        "Liberal Democrat": 3,
+        "Independent": 1
+      },
+      "listVotes": {
+        "Labour": 0.24394371341150176,
+        "Conservative": 0.15685643471964156,
+        "Reform UK": 0.20530339465496406,
+        "Liberal Democrat": 0.13805330968915894,
+        "Green": 0.25584314752473364
+      }
+    },
+    {
+      "name": "Yorkshire and the Humber",
+      "population": 5672962,
+      "totalSeats": 53,
+      "actualDistrictSeats2024": 54,
+      "districtSeats2024": {
+        "Labour": 43,
+        "Conservative": 9,
+        "Liberal Democrat": 1,
+        "Independent": 1
+      },
+      "listVotes": {
+        "Labour": 0.25009087807258173,
+        "Conservative": 0.1530123530705406,
+        "Reform UK": 0.20347305475716915,
+        "Liberal Democrat": 0.1444047789894311,
+        "Green": 0.2490189351102775
+      }
+    },
+    {
+      "name": "East Midlands",
+      "population": 5063164,
+      "totalSeats": 48,
+      "actualDistrictSeats2024": 47,
+      "districtSeats2024": {
+        "Labour": 29,
+        "Conservative": 15,
+        "Reform UK": 2,
+        "Independent": 1
+      },
+      "listVotes": {
+        "Labour": 0.19859280038464303,
+        "Conservative": 0.20507261771037263,
+        "Reform UK": 0.22068925393673422,
+        "Liberal Democrat": 0.15151331910249347,
+        "Green": 0.22413200886575674
+      }
+    },
+    {
+      "name": "West Midlands",
+      "population": 6187204,
+      "totalSeats": 58,
+      "actualDistrictSeats2024": 57,
+      "districtSeats2024": {
+        "Labour": 38,
+        "Conservative": 15,
+        "Liberal Democrat": 2,
+        "Green": 1,
+        "Independent": 1
+      },
+      "listVotes": {
+        "Labour": 0.20735163179625787,
+        "Conservative": 0.17387943217767574,
+        "Reform UK": 0.21327596777220176,
+        "Liberal Democrat": 0.1517799669557378,
+        "Green": 0.25371300129812685
+      }
+    },
+    {
+      "name": "East",
+      "population": 6576306,
+      "totalSeats": 62,
+      "actualDistrictSeats2024": 61,
+      "districtSeats2024": {
+        "Labour": 27,
+        "Conservative": 23,
+        "Reform UK": 3,
+        "Liberal Democrat": 7,
+        "Green": 1
+      },
+      "listVotes": {
+        "Labour": 0.17658548371120308,
+        "Conservative": 0.20506269349763268,
+        "Reform UK": 0.21216720447576487,
+        "Liberal Democrat": 0.1467712440537558,
+        "Green": 0.2591982069974079,
+        "Plaid Cymru": 0.00021516726423560504
+      }
+    },
+    {
+      "name": "London",
+      "population": 9089736,
+      "totalSeats": 85,
+      "actualDistrictSeats2024": 75,
+      "districtSeats2024": {
+        "Labour": 59,
+        "Conservative": 9,
+        "Liberal Democrat": 6,
+        "Independent": 1
+      },
+      "listVotes": {
+        "Labour": 0.24783665108691635,
+        "Conservative": 0.1353675037058034,
+        "Reform UK": 0.1544951093494102,
+        "Liberal Democrat": 0.17532163166859469,
+        "Green": 0.28697910418927536
+      }
+    },
+    {
+      "name": "South East",
+      "population": 9642942,
+      "totalSeats": 90,
+      "actualDistrictSeats2024": 91,
+      "districtSeats2024": {
+        "Labour": 36,
+        "Conservative": 30,
+        "Liberal Democrat": 24,
+        "Green": 1
+      },
+      "listVotes": {
+        "Labour": 0.185005234640507,
+        "Conservative": 0.21581614804815874,
+        "Reform UK": 0.21283504865045186,
+        "Liberal Democrat": 0.16061411438767303,
+        "Green": 0.22572945427320937
+      }
+    },
+    {
+      "name": "South West",
+      "population": 5889695,
+      "totalSeats": 55,
+      "actualDistrictSeats2024": 58,
+      "districtSeats2024": {
+        "Labour": 24,
+        "Conservative": 11,
+        "Liberal Democrat": 22,
+        "Green": 1
+      },
+      "listVotes": {
+        "Labour": 0.18282123659651403,
+        "Conservative": 0.1844576765861613,
+        "Reform UK": 0.2131509780436657,
+        "Liberal Democrat": 0.18214303533050236,
+        "Green": 0.23742707344315653
+      }
+    },
+    {
+      "name": "Wales",
+      "population": 3186581,
+      "totalSeats": 30,
+      "actualDistrictSeats2024": 32,
+      "districtSeats2024": {
+        "Labour": 27,
+        "Liberal Democrat": 1,
+        "Plaid Cymru": 4
+      },
+      "listVotes": {
+        "Labour": 0.20523809041466473,
+        "Conservative": 0.14269011290815048,
+        "Reform UK": 0.20130638641449705,
+        "Liberal Democrat": 0.11238742452498977,
+        "Green": 0.1662777009916603,
+        "Plaid Cymru": 0.1721002847460376
+      }
+    },
+    {
+      "name": "Scotland",
+      "population": 5546900,
+      "totalSeats": 52,
+      "actualDistrictSeats2024": 57,
+      "districtSeats2024": {
+        "Labour": 37,
+        "Conservative": 5,
+        "Liberal Democrat": 6,
+        "SNP": 9
+      },
+      "listVotes": {
+        "Labour": 0.20886670550918462,
+        "Conservative": 0.11400333274341574,
+        "Reform UK": 0.16252189983079146,
+        "Liberal Democrat": 0.16001241291654733,
+        "Green": 0.16111597965085522,
+        "SNP": 0.1934796693492057
+      }
+    }
+  ]
+}
