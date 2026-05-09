@@ -346,6 +346,11 @@ export default function MmpSeatSimulator() {
               </tbody>
             </table>
           </div>
+          <p className="mt-4 text-xs leading-5 text-black/45">
+            Note: District results may not replicate the 2024 election exactly, as this simulation
+            is based on regional top-ups and reallocates seats within regions using the largest
+            remainder method.
+          </p>
         </div>
       </section>
     </div>
