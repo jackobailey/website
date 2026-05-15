@@ -26,27 +26,6 @@ const notes = defineCollection({
   })
 });
 
-const polls = defineCollection({
-  type: "content",
-  schema: z.object({
-    title: z.string(),
-    summary: z.string(),
-    date: z.coerce.date(),
-    lastUpdated: z.coerce.date(),
-    takeaway: z.string(),
-    methodology: z.string().optional(),
-    featured: z.boolean().default(false),
-    links: z
-      .array(
-        z.object({
-          label: z.string(),
-          url: z.string().url()
-        })
-      )
-      .default([])
-  })
-});
-
 const tags = defineCollection({
   type: "content",
   schema: z.object({
@@ -61,6 +40,5 @@ const tags = defineCollection({
 export const collections = {
   blog,
   notes,
-  polls,
   tags
 };

@@ -1,10 +1,9 @@
 # Jack Bailey Website
 
-Astro site for [jack-bailey.co.uk](https://jack-bailey.co.uk/) with three main sections:
+Astro site for [jack-bailey.co.uk](https://jack-bailey.co.uk/) with two main sections:
 
 - `Writing`: MDX posts in `src/content/blog/`
 - `Notebook`: shorter notes in `src/content/notes/`
-- `Polls`: written updates plus a React chart backed by JSON in `src/data/polls/`
 
 ## Development
 
@@ -23,7 +22,7 @@ npm run build
 ## Project Structure
 
 - `src/site.config.ts`: site-wide metadata used in layouts and structured data
-- `src/content/`: blog posts, notes, polls, and curated tags
+- `src/content/`: blog posts, notes, and curated tags
 - `src/components/`: Astro layout/UI components and React chart islands
 - `src/pages/`: Astro routes
 - `public/`: static assets

@@ -10,11 +10,6 @@ export async function getNotesEntries() {
   return notes.sort((left, right) => right.data.date.valueOf() - left.data.date.valueOf());
 }
 
-export async function getPollEntries() {
-  const entries = await getCollection("polls");
-  return entries.sort((left, right) => right.data.date.valueOf() - left.data.date.valueOf());
-}
-
 export async function getTagEntries() {
   const entries = await getCollection("tags");
   return entries.sort((left, right) => left.data.name.localeCompare(right.data.name));
