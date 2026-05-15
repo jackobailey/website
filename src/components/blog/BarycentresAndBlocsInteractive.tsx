@@ -20,6 +20,7 @@ const POSITION_MAX = 5;
 const POSITION_STEP = 0.01;
 const EFFECTIVE_PARTIES_MIN = 1;
 const EFFECTIVE_PARTIES_MAX = 3;
+const EFFECTIVE_BLOCS_MAX = 3;
 const EFFECTIVE_QUANTITY_STEP = 0.01;
 const EFFECTIVE_CONTOUR_SAMPLES = 720;
 const BLOCS_CONTOUR_RESOLUTION = 96;
@@ -1123,10 +1124,11 @@ export default function BarycentresAndBlocsInteractive() {
     0,
     100
   );
-  const effectiveBlocsSliderPosition =
-    maximumEffectiveBlocs <= 1 + 0.000001
-      ? 0
-      : clamp(((effectiveBlocs - 1) / (maximumEffectiveBlocs - 1)) * 100, 0, 100);
+  const effectiveBlocsSliderPosition = clamp(
+    ((effectiveBlocs - 1) / (EFFECTIVE_BLOCS_MAX - 1)) * 100,
+    0,
+    100
+  );
 
   function updateSharesWithConstraints(targetShares: number[]) {
     setShares((currentShares) => {
@@ -1384,7 +1386,7 @@ export default function BarycentresAndBlocsInteractive() {
                         id={effectiveBlocsControlId}
                         type="range"
                         min="1"
-                        max={maximumEffectiveBlocs}
+                        max={EFFECTIVE_BLOCS_MAX}
                         step={EFFECTIVE_QUANTITY_STEP}
                         value={effectiveBlocs}
                         disabled={maximumEffectiveBlocs <= 1 + 0.000001}
