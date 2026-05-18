@@ -24,7 +24,6 @@ const EFFECTIVE_BLOCS_MAX = 3;
 const EFFECTIVE_QUANTITY_STEP = 0.01;
 const SIMILARITY_LAMBDA = 0.2242922;
 const SIMILARITY_K = 1.307394;
-const ACTIVE_SHARE_EPSILON = 0.000001;
 const EFFECTIVE_CONTOUR_SAMPLES = 720;
 const BLOCS_CONTOUR_RESOLUTION = 96;
 const CHART_WIDTH = 640;
@@ -468,64 +467,6 @@ function getBlocsContourPath(effectiveBlocs: number, positions: number[]) {
   }
 
   return pathSegments.join(" ");
-}
-
-function getActivePartyIndexes(shares: number[]) {
-  return shares
-    .map((share, index) => ({ index, share }))
-    .filter(({ share }) => share > ACTIVE_SHARE_EPSILON)
-    .map(({ index }) => index);
-}
-
-function getTwoPartyBlocsContour(
-  activePartyIndexes: number[],
-  effectiveBlocs: number,
-  positions: number[]
-) {
-  if (activePartyIndexes.length !== 2) {
-    return { path: "", points: [] as Point[] };
-  }
-
-  const [firstIndex, secondIndex] = activePartyIndexes;
-  const similarity = getSimilarityMatrix(positions)[firstIndex][secondIndex];
-
-  if (Math.abs(1 - similarity) < 0.000001) {
-    return Math.abs(effectiveBlocs - 1) < 0.000001
-      ? {
-          path: `M ${VERTICES[firstIndex].x.toFixed(2)} ${VERTICES[firstIndex].y.toFixed(
-            2
-          )} L ${VERTICES[secondIndex].x.toFixed(2)} ${VERTICES[secondIndex].y.toFixed(2)}`,
-          points: [] as Point[]
-        }
-      : { path: "", points: [] as Point[] };
-  }
-
-  const product = (1 - 1 / effectiveBlocs) / (2 * (1 - similarity));
-  const discriminant = 1 - 4 * product;
-
-  if (discriminant < -0.000001) {
-    return { path: "", points: [] as Point[] };
-  }
-
-  const root = Math.sqrt(Math.max(0, discriminant));
-  const firstWeight = (1 + root) / 2;
-  const secondWeight = (1 - root) / 2;
-  const solutions =
-    Math.abs(firstWeight - secondWeight) < 0.000001
-      ? [firstWeight]
-      : [firstWeight, secondWeight];
-
-  return {
-    path: "",
-    points: solutions.map((weight) => {
-      const weights = [0, 0, 0] as BarycentricWeights;
-
-      weights[firstIndex] = weight;
-      weights[secondIndex] = 1 - weight;
-
-      return getBarycentricPointFromWeights(weights);
-    })
-  };
 }
 
 function getBlocsContourIntersections(
@@ -1163,7 +1104,6 @@ export default function BarycentresAndBlocsInteractive() {
   const effectiveParties = getEffectiveParties(shares);
   const effectiveBlocs = getEffectiveBlocs(shares, positions);
   const maximumEffectiveBlocs = getMaximumEffectiveBlocs(positions);
-  const activePartyIndexes = useMemo(() => getActivePartyIndexes(shares), [shares]);
   const point = getBarycentricPoint(shares);
   const shareControlIds = PARTIES.map(
     (party) => `${controlId}-${party.toLowerCase().replace(" ", "-")}-share`
@@ -1180,20 +1120,10 @@ export default function BarycentresAndBlocsInteractive() {
     () => getEffectivePartiesContourPath(effectiveParties),
     [effectiveParties]
   );
-  const currentBlocsContour = useMemo(() => {
-    if (activePartyIndexes.length === 2) {
-      return getTwoPartyBlocsContour(activePartyIndexes, effectiveBlocs, positions);
-    }
-
-    if (activePartyIndexes.length < 2) {
-      return { path: "", points: [] as Point[] };
-    }
-
-    return {
-      path: getBlocsContourPath(effectiveBlocs, positions),
-      points: [] as Point[]
-    };
-  }, [activePartyIndexes, effectiveBlocs, positions]);
+  const currentBlocsContourPath = useMemo(
+    () => getBlocsContourPath(effectiveBlocs, positions),
+    [effectiveBlocs, positions]
+  );
   const effectivePartiesSliderPosition = clamp(
     ((effectiveParties - EFFECTIVE_PARTIES_MIN) /
       (EFFECTIVE_PARTIES_MAX - EFFECTIVE_PARTIES_MIN)) *
@@ -1276,7 +1206,15 @@ export default function BarycentresAndBlocsInteractive() {
   }
 
   function toggleContourLock() {
-    setAreContoursLocked((currentLockedState) => !currentLockedState);
+    setAreContoursLocked((currentLockedState) => {
+      const nextLockedState = !currentLockedState;
+
+      if (nextLockedState) {
+        setLockedShareParties(PARTIES.map(() => false));
+      }
+
+      return nextLockedState;
+    });
   }
 
   function handleShareChange(index: number, nextShare: number) {
@@ -1577,9 +1515,9 @@ export default function BarycentresAndBlocsInteractive() {
                 />
               ) : null}
 
-              {currentBlocsContour.path ? (
+              {currentBlocsContourPath ? (
                 <path
-                  d={currentBlocsContour.path}
+                  d={currentBlocsContourPath}
                   fill="none"
                   stroke={BLOCS_COLOUR}
                   strokeWidth="3"
@@ -1588,20 +1526,6 @@ export default function BarycentresAndBlocsInteractive() {
                   pointerEvents="none"
                 />
               ) : null}
-
-              {currentBlocsContour.points.map((blocsPoint, index) => (
-                <circle
-                  key={`effective-blocs-point-${index}`}
-                  cx={blocsPoint.x}
-                  cy={blocsPoint.y}
-                  r="6"
-                  fill={BLOCS_COLOUR}
-                  stroke="#FFFFFF"
-                  strokeWidth="3"
-                  opacity="0.88"
-                  pointerEvents="none"
-                />
-              ))}
 
               <g transform="translate(438 78)" pointerEvents="none" aria-hidden="true">
                 <rect
