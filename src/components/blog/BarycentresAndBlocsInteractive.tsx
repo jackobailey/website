@@ -22,6 +22,9 @@ const EFFECTIVE_PARTIES_MIN = 1;
 const EFFECTIVE_PARTIES_MAX = 3;
 const EFFECTIVE_BLOCS_MAX = 3;
 const EFFECTIVE_QUANTITY_STEP = 0.01;
+const SIMILARITY_LAMBDA = 0.2242922;
+const SIMILARITY_K = 1.307394;
+const ACTIVE_SHARE_EPSILON = 0.000001;
 const EFFECTIVE_CONTOUR_SAMPLES = 720;
 const BLOCS_CONTOUR_RESOLUTION = 96;
 const CHART_WIDTH = 640;
@@ -116,9 +119,26 @@ function getEffectivePartiesFromWeights(weights: number[]) {
   return 1 / concentration;
 }
 
+function getNormalisedPosition(position: number) {
+  return (position - POSITION_MIN) / (POSITION_MAX - POSITION_MIN);
+}
+
+function getSimilarity(distance: number) {
+  const raw = Math.exp(-Math.pow(distance / SIMILARITY_LAMBDA, SIMILARITY_K));
+  const rawAtMaximumDistance = Math.exp(
+    -Math.pow(1 / SIMILARITY_LAMBDA, SIMILARITY_K)
+  );
+
+  return clamp((raw - rawAtMaximumDistance) / (1 - rawAtMaximumDistance), 0, 1);
+}
+
 function getSimilarityMatrix(positions: number[]) {
-  return positions.map((position) =>
-    positions.map((otherPosition) => Math.exp(-Math.abs(position - otherPosition)))
+  const normalisedPositions = positions.map(getNormalisedPosition);
+
+  return normalisedPositions.map((position) =>
+    normalisedPositions.map((otherPosition) =>
+      getSimilarity(Math.abs(position - otherPosition))
+    )
   );
 }
 
@@ -450,6 +470,64 @@ function getBlocsContourPath(effectiveBlocs: number, positions: number[]) {
   return pathSegments.join(" ");
 }
 
+function getActivePartyIndexes(shares: number[]) {
+  return shares
+    .map((share, index) => ({ index, share }))
+    .filter(({ share }) => share > ACTIVE_SHARE_EPSILON)
+    .map(({ index }) => index);
+}
+
+function getTwoPartyBlocsContour(
+  activePartyIndexes: number[],
+  effectiveBlocs: number,
+  positions: number[]
+) {
+  if (activePartyIndexes.length !== 2) {
+    return { path: "", points: [] as Point[] };
+  }
+
+  const [firstIndex, secondIndex] = activePartyIndexes;
+  const similarity = getSimilarityMatrix(positions)[firstIndex][secondIndex];
+
+  if (Math.abs(1 - similarity) < 0.000001) {
+    return Math.abs(effectiveBlocs - 1) < 0.000001
+      ? {
+          path: `M ${VERTICES[firstIndex].x.toFixed(2)} ${VERTICES[firstIndex].y.toFixed(
+            2
+          )} L ${VERTICES[secondIndex].x.toFixed(2)} ${VERTICES[secondIndex].y.toFixed(2)}`,
+          points: [] as Point[]
+        }
+      : { path: "", points: [] as Point[] };
+  }
+
+  const product = (1 - 1 / effectiveBlocs) / (2 * (1 - similarity));
+  const discriminant = 1 - 4 * product;
+
+  if (discriminant < -0.000001) {
+    return { path: "", points: [] as Point[] };
+  }
+
+  const root = Math.sqrt(Math.max(0, discriminant));
+  const firstWeight = (1 + root) / 2;
+  const secondWeight = (1 - root) / 2;
+  const solutions =
+    Math.abs(firstWeight - secondWeight) < 0.000001
+      ? [firstWeight]
+      : [firstWeight, secondWeight];
+
+  return {
+    path: "",
+    points: solutions.map((weight) => {
+      const weights = [0, 0, 0] as BarycentricWeights;
+
+      weights[firstIndex] = weight;
+      weights[secondIndex] = 1 - weight;
+
+      return getBarycentricPointFromWeights(weights);
+    })
+  };
+}
+
 function getBlocsContourIntersections(
   weights: BarycentricWeights[],
   effectiveBlocs: number,
@@ -745,21 +823,6 @@ function getSharesAtEffectiveBlocsNearTarget(
   return weights.map((weight) => weight * 100);
 }
 
-function roundToTotal(values: number[], total: number) {
-  const floors = values.map((value) => Math.floor(value));
-  let remainder = total - floors.reduce((sum, value) => sum + value, 0);
-  const order = values
-    .map((value, index) => ({ index, fraction: value - floors[index] }))
-    .sort((left, right) => right.fraction - left.fraction);
-
-  for (let index = 0; index < order.length && remainder > 0; index += 1) {
-    floors[order[index].index] += 1;
-    remainder -= 1;
-  }
-
-  return floors;
-}
-
 function getLockedTotal(currentShares: number[], lockedParties: boolean[]) {
   return currentShares.reduce((total, share, index) => {
     return lockedParties[index] ? total + share : total;
@@ -952,7 +1015,15 @@ function getClosestPointOnTriangle(point: Point, a: Point, b: Point, c: Point) {
 }
 
 function formatShare(share: number) {
-  return `${Math.round(share)}%`;
+  if (share > 0 && share < 0.05) {
+    return "<0.1%";
+  }
+
+  const roundedShare = Math.round(share * 10) / 10;
+
+  return Number.isInteger(roundedShare)
+    ? `${roundedShare.toFixed(0)}%`
+    : `${roundedShare.toFixed(1)}%`;
 }
 
 function formatPosition(position: number) {
@@ -1093,10 +1164,10 @@ export default function BarycentresAndBlocsInteractive() {
     PARTIES.map(() => false)
   );
   const [areContoursLocked, setAreContoursLocked] = useState(false);
-  const displayShares = roundToTotal(shares, 100);
   const effectiveParties = getEffectiveParties(shares);
   const effectiveBlocs = getEffectiveBlocs(shares, positions);
   const maximumEffectiveBlocs = getMaximumEffectiveBlocs(positions);
+  const activePartyIndexes = useMemo(() => getActivePartyIndexes(shares), [shares]);
   const point = getBarycentricPoint(shares);
   const shareControlIds = PARTIES.map(
     (party) => `${controlId}-${party.toLowerCase().replace(" ", "-")}-share`
@@ -1113,10 +1184,20 @@ export default function BarycentresAndBlocsInteractive() {
     () => getEffectivePartiesContourPath(effectiveParties),
     [effectiveParties]
   );
-  const currentBlocsContourPath = useMemo(
-    () => getBlocsContourPath(effectiveBlocs, positions),
-    [effectiveBlocs, positions]
-  );
+  const currentBlocsContour = useMemo(() => {
+    if (activePartyIndexes.length === 2) {
+      return getTwoPartyBlocsContour(activePartyIndexes, effectiveBlocs, positions);
+    }
+
+    if (activePartyIndexes.length < 2) {
+      return { path: "", points: [] as Point[] };
+    }
+
+    return {
+      path: getBlocsContourPath(effectiveBlocs, positions),
+      points: [] as Point[]
+    };
+  }, [activePartyIndexes, effectiveBlocs, positions]);
   const effectivePartiesSliderPosition = clamp(
     ((effectiveParties - EFFECTIVE_PARTIES_MIN) /
       (EFFECTIVE_PARTIES_MAX - EFFECTIVE_PARTIES_MIN)) *
@@ -1268,11 +1349,11 @@ export default function BarycentresAndBlocsInteractive() {
                           value={share}
                           number={index + 1}
                           colour={PARTY_POSITION_COLOURS[index]}
-                          formattedValue={formatShare(displayShares[index])}
+                          formattedValue={formatShare(share)}
                           isLocked={isShareLocked}
                           lockLabel={shareLockLabel}
                           ariaLabel={`${PARTIES[index]} vote share`}
-                          ariaValueText={`${formatShare(displayShares[index])}${
+                          ariaValueText={`${formatShare(share)}${
                             isShareLocked ? ", locked" : ""
                           }`}
                           onChange={(nextShare) => handleShareChange(index, nextShare)}
@@ -1428,7 +1509,11 @@ export default function BarycentresAndBlocsInteractive() {
               className="block h-auto w-full cursor-crosshair select-none touch-none"
               style={{ touchAction: "none" }}
               role="img"
-              aria-label={`Ternary plot showing Party 1 at ${displayShares[0]} percent, Party 2 at ${displayShares[1]} percent, Party 3 at ${displayShares[2]} percent, N2 at ${effectiveParties.toFixed(
+              aria-label={`Ternary plot showing Party 1 at ${formatShare(
+                shares[0]
+              )}, Party 2 at ${formatShare(shares[1])}, Party 3 at ${formatShare(
+                shares[2]
+              )}, N2 at ${effectiveParties.toFixed(
                 2
               )}, and B2 at ${effectiveBlocs.toFixed(2)}`}
               onPointerDown={handlePlotPointerDown}
@@ -1496,9 +1581,9 @@ export default function BarycentresAndBlocsInteractive() {
                 />
               ) : null}
 
-              {currentBlocsContourPath ? (
+              {currentBlocsContour.path ? (
                 <path
-                  d={currentBlocsContourPath}
+                  d={currentBlocsContour.path}
                   fill="none"
                   stroke={BLOCS_COLOUR}
                   strokeWidth="3"
@@ -1507,6 +1592,20 @@ export default function BarycentresAndBlocsInteractive() {
                   pointerEvents="none"
                 />
               ) : null}
+
+              {currentBlocsContour.points.map((blocsPoint, index) => (
+                <circle
+                  key={`effective-blocs-point-${index}`}
+                  cx={blocsPoint.x}
+                  cy={blocsPoint.y}
+                  r="6"
+                  fill={BLOCS_COLOUR}
+                  stroke="#FFFFFF"
+                  strokeWidth="3"
+                  opacity="0.88"
+                  pointerEvents="none"
+                />
+              ))}
 
               <g transform="translate(438 78)" pointerEvents="none" aria-hidden="true">
                 <rect
