@@ -1015,15 +1015,11 @@ function getClosestPointOnTriangle(point: Point, a: Point, b: Point, c: Point) {
 }
 
 function formatShare(share: number) {
-  if (share > 0 && share < 0.05) {
-    return "<0.1%";
+  if (share > 0 && share < 1) {
+    return "<1%";
   }
 
-  const roundedShare = Math.round(share * 10) / 10;
-
-  return Number.isInteger(roundedShare)
-    ? `${roundedShare.toFixed(0)}%`
-    : `${roundedShare.toFixed(1)}%`;
+  return `${Math.round(share)}%`;
 }
 
 function formatPosition(position: number) {
