@@ -1,0 +1,48 @@
+---
+title: The Tax Curve
+summary: A thought experiment for replacing tax bands with a continuous income tax curve.
+date: 2026-05-19
+tags:
+  - miscellaneous
+featured: false
+---
+
+import GrowthCurveTaxInteractive from "@/components/blog/GrowthCurveTaxInteractive";
+
+I will preface this post by making one thing clear: I am not an economist, so what I am about to write could be utter folly. That said, I am a quantitative researcher, I know my fair share of mathematics and statistics, and I think I'm pretty good at coming up with creative solutions to complex problems. So, with that out of the way, I'm going to spell out some problems with the income tax system and then propose a possible&nbsp;solution.
+
+## The Current System
+
+The income tax system in England, Wales, and Northern Ireland looks simple enough:
+
+| Band | Taxable income | Tax rate |
+| --- | --- | --- |
+| Personal Allowance | Up to £12,570 | 0% |
+| Basic rate | £12,571 to £50,270 | 20% |
+| Higher rate | £50,271 to £125,140 | 40% |
+| Additional rate | over £125,140 | 45% |
+
+There are several bands, and you pay a given rate on any money that you make within each band. Your first £12,570 is tax-free (the "Personal Allowance"), then every pound you make from £12,571 to £50,270 is taxed at 20% (the "Basic Rate"), from £50,271 to £125,140 at 40% (the "Higher Rate"), and over £125,140 at 45% (the "Additional&nbsp;Rate").
+
+However, looks can be deceiving. One problem is that the system creates 'cliff-edges'. For instance, if you make more than £100,000, you lose your personal allowance and end up with an effective marginal tax rate of 60%. This then falls back to 45% once you make more than £125,140. Clearly, people on this much money are doing pretty well. But it's worth recognising both that, due to recent inflation, a £100,000 salary today is the equivalent of £76,600 pre-pandemic and that this 'tax trap' is [incentivising people to avoid taking on new roles](https://www.ft.com/content/c10e4f2f-5564-42a4-8aa7-66c78ca1c61e), which, ultimately, is bad for the economy. More generally, people struggle to understand how these tax bands work and often assume that *all* of their income will be taxed at a given rate once they enter a new&nbsp;band.
+
+Another problem is that, confusingly, income tax isn't the only tax that people pay on their income. There is also National Insurance ([which the Institute for Fiscal Studies recommends merging into the income tax system](https://ifs.org.uk/taxlab/taxlab-key-questions/should-income-tax-and-national-insurance-be-merged)) and student loan repayments, which are a sort of graduate tax on those who attended&nbsp;university.
+
+In other words, the banding structure creates disincentives, is difficult for some people to understand, and the system as a whole does not reflect all taxes on income. Honestly, I do not understand why we tax incomes in this way. Perhaps it's because it's how we've always done it. Perhaps the idea of overhauling everything is too much for some to bear. I&nbsp;don't&nbsp;know.
+
+In my view, a better system would:
+
+1. **Merge National Insurance and university funding into income tax.** As the IFS say, the original link between National Insurance and benefits is "vanishingly weak". Likewise, people hate the student loan system, and it lets richer students avoid borrowing while some high earners repay quickly and avoid decades of interest.
+2. **Be continuous, not banded.** A lot of people simply do not understand what tax rate they pay. That is not good. Ideally, we want people to have a clear understanding of the contribution that they make and the benefits that they receive from our society. Likewise, the bands create 'cliff-edges' and 'tax traps' that act as disincentives to earning higher&nbsp;salaries.
+
+## What Might This System Look Like?
+
+The [logistic function](https://en.wikipedia.org/wiki/Logistic_function) is the workhorse behind a ton of statistical models. A fancier version of it, [the Softmax function](https://en.wikipedia.org/wiki/Softmax_function), even enables modern large language models. I won't overwhelm you with maths (which you can find [on Wikipedia](https://en.wikipedia.org/wiki/Generalised_logistic_function)), but all you need to know is that it is an S-shaped curve that starts at some floor, increases until it reaches a midpoint, then tails off again as it approaches some upper ceiling. To me, this seems like an ideal function around which to build an income tax&nbsp;system.
+
+<GrowthCurveTaxInteractive client:load />
+
+The interactive above lets you play with the various parameters. I've also included a few default scenarios so that you can get an idea for how flexible such a system might be. For instance, if you click the ["Negative Income Tax"](https://en.wikipedia.org/wiki/Negative_income_tax) scenario, you'll see that by setting the function's floor to some negative value, we could reverse the direction in which tax is paid for those on lower incomes, effectively merging some aspects of the benefits system into our system of income taxes. Likewise, if you click the ["Flat Tax"](https://en.wikipedia.org/wiki/Flat_tax) scenario, you'll see that a flat tax on incomes is actually a specific case of the logistic curve where the floor and ceiling are the&nbsp;same.
+
+There are a few things that I like about this system. First, since it is continuous, it is much easier to report a given person's effective tax rate: you just find their income along the bottom, then read off the corresponding tax rate. Second, it gives governments more room for manoeuvre. Rather than having to increase the rate for specific tax bands, they can raise or lower taxes by adjusting the floor, the ceiling, the function's midpoint, or how progressive the system is. Of course, choosing those parameters would not be a purely technical exercise: each choice would imply a particular distribution of tax burdens and a particular amount of revenue&nbsp;raised.
+
+As I keep saying, I am not an economist. So perhaps there's something that I am missing that makes the system flawed. But perhaps it is just that our politics are stuck in a state of inertia: it's much easier, and much less risky, to fiddle with an existing system than to dream of something new. So, if nothing else, hopefully this is an interesting thought experiment that gets other people&nbsp;thinking.

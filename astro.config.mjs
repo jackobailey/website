@@ -7,7 +7,7 @@ import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 
 export default defineConfig({
-  site: "https://example.com",
+  site: "https://jack-bailey.co.uk",
   integrations: [
     mdx(),
     react(),

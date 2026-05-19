@@ -1,61 +1,12 @@
 ---
-import BaseLayout from "@/layouts/BaseLayout.astro";
-import PageIntro from "@/components/ui/PageIntro.astro";
-import TagList from "@/components/ui/TagList.astro";
-import { getBlogPosts, getTagEntries } from "@/lib/content";
-import { formatDate, getReadingTime } from "@/lib/format";
-import { buildTagLookup, getTagCounts, getTagHref, getTagLabel } from "@/lib/tags";
+import CombinedTagPage from "@/components/tags/CombinedTagPage.astro";
+import { getCombinedTagStaticPaths } from "@/lib/taggedContent";
 
 export async function getStaticPaths() {
-  const [posts, tags] = await Promise.all([getBlogPosts(), getTagEntries()]);
-  const tagCounts = getTagCounts(posts);
-
-  return tags
-    .filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0)
-    .map((tag) => ({
-      params: { tag: tag.slug },
-      props: {
-        tag,
-        posts: posts.filter((post) => post.data.tags.includes(tag.slug))
-      }
-    }));
+  return getCombinedTagStaticPaths();
 }
 
-const { tag, posts } = Astro.props;
-const tagLookup = buildTagLookup(await getTagEntries());
+const { entries, tag } = Astro.props;
 ---
 
-<BaseLayout
-  title={tag.data.seoTitle ?? `${tag.data.name} posts`}
-  description={tag.data.seoDescription ?? tag.data.description}
->
-  <PageIntro eyebrow="Tag" title={tag.data.name} description={tag.data.description} />
-
-  <section class="page-shell pb-14 sm:pb-20">
-    <div class="grid gap-8 md:grid-cols-2">
-      {posts.map((post) => (
-        <article class="surface surface-strong pt-6">
-          <div class="min-w-0">
-            <p class="eyebrow mt-2">{formatDate(post.data.date)}</p>
-            <h2 class="mt-3 text-2xl font-semibold tracking-tight text-ink">
-              <a href={`/writing/${post.slug}/`} class="hover:text-accent">
-                {post.data.title}
-              </a>
-            </h2>
-            <p class="mt-3 text-base leading-8 text-ink">{post.data.summary}</p>
-            <div class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3 text-sm text-muted">
-              <span class="shrink-0">{getReadingTime(post.body)}</span>
-              <TagList
-                items={post.data.tags.map((slug) => ({
-                  slug,
-                  label: getTagLabel(slug, tagLookup),
-                  href: getTagHref(slug)
-                }))}
-              />
-            </div>
-          </div>
-        </article>
-      ))}
-    </div>
-  </section>
-</BaseLayout>
+<CombinedTagPage entries={entries} tag={tag} />

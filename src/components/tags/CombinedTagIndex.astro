@@ -1,0 +1,61 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageIntro from "@/components/ui/PageIntro.astro";
+import { getTagEntries } from "@/lib/content";
+import { getTagHref } from "@/lib/tags";
+import { getCombinedTagCounts, getTaggedContentEntries } from "@/lib/taggedContent";
+
+const [entries, tags] = await Promise.all([getTaggedContentEntries(), getTagEntries()]);
+const tagCounts = getCombinedTagCounts(entries);
+const tagsWithEntries = tags.filter((tag) => (tagCounts.total.get(tag.slug) ?? 0) > 0);
+
+function formatCount(count: number, singular: string, plural: string) {
+  return `${count} ${count === 1 ? singular : plural}`;
+}
+
+function formatBreakdown(slug: string) {
+  const writingCount = tagCounts.writing.get(slug) ?? 0;
+  const noteCount = tagCounts.notes.get(slug) ?? 0;
+  const parts = [];
+
+  if (writingCount > 0) {
+    parts.push(formatCount(writingCount, "post", "posts"));
+  }
+
+  if (noteCount > 0) {
+    parts.push(formatCount(noteCount, "notebook entry", "notebook entries"));
+  }
+
+  return parts.join(" · ");
+}
+---
+
+<BaseLayout
+  title="Tag Index"
+  description="Curated topic pages for browsing writing and notebook entries."
+>
+  <PageIntro
+    eyebrow="Tags"
+    title="Browse by topic"
+    description="These topic pages group writing and notebook entries together so recurring themes can be followed across the site."
+  />
+
+  <section class="page-shell pb-14 sm:pb-20">
+    <div class="grid gap-8 md:grid-cols-2">
+      {tagsWithEntries.map((tag) => (
+        <article class="surface surface-strong pt-6">
+          <p class="text-sm font-semibold text-ink">
+            {formatCount(tagCounts.total.get(tag.slug) ?? 0, "entry", "entries")}
+          </p>
+          <p class="mt-1 text-sm leading-6 text-muted">{formatBreakdown(tag.slug)}</p>
+          <h2 class="mt-3 text-2xl font-semibold tracking-tight text-ink">
+            <a href={getTagHref(tag.slug)} class="hover:text-accent">
+              {tag.data.name}
+            </a>
+          </h2>
+          <p class="mt-3 text-base leading-8 text-ink">{tag.data.description}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

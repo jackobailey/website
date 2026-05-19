@@ -40,7 +40,7 @@ const curatedTags = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
                     items={note.data.tags.map((slug) => ({
                       slug,
                       label: getTagLabel(slug, tagLookup),
-                      href: getTagHref(slug, "/notes/tags")
+                      href: getTagHref(slug)
                     }))}
                   />
                 </div>
@@ -93,7 +93,7 @@ const curatedTags = tags.filter((tag) => (tagCounts.get(tag.slug) ?? 0) > 0);
             <p class="text-ink">
               <span data-results-count>{notes.length}</span> notebook entries
             </p>
-            <a href="/notes/tags/" class="text-ink hover:text-accent">
+            <a href="/tags/" class="text-ink hover:text-accent">
               Full tag index
             </a>
           </div>

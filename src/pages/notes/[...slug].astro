@@ -59,7 +59,7 @@ const structuredData = {
             items={note.data.tags.map((slug) => ({
               slug,
               label: getTagLabel(slug, tagLookup),
-              href: getTagHref(slug, "/notes/tags")
+              href: getTagHref(slug)
             }))}
           />
         </header>

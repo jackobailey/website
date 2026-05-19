@@ -31,4 +31,4 @@ npm run build
 
 - Build output is generated into `dist/`.
 - Local caches, Playwright screenshots, and other generated files are ignored via `.gitignore`.
-- `astro.config.mjs` still uses `https://example.com`; update it before deploying.
+- `astro.config.mjs` sets the canonical production URL for sitemap and metadata output.

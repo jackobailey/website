@@ -1,7 +1,7 @@
 import type { CollectionEntry } from "astro:content";
 import { sentenceCaseFromSlug } from "@/lib/format";
 
-export function getTagHref(slug: string, basePath = "/writing/tags") {
+export function getTagHref(slug: string, basePath = "/tags") {
   return `${basePath}/${slug}/`;
 }
 
