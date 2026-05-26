@@ -1,0 +1,25 @@
+---
+title: More Barycentres
+summary: A sandbox for vote shares, seat shares, effective parties, and disproportionality.
+date: 2026-05-25
+tags:
+  - effective-parties
+  - elections
+  - disproportionality
+---
+
+import EffectivePartiesGallagherInteractive from "@/components/blog/EffectivePartiesGallagherInteractive";
+
+Here is a small companion to the [barycentres interactive](/notes/barycentres/). It keeps the three-party vote triangle, drops effective blocs, and adds seat shares so that we can compare effective parties with the Gallagher index:
+
+$$
+N_2 = \frac{1}{\sum_i v_i^2}
+$$
+
+$$
+\text{LSq} = \sqrt{\frac{1}{2}\sum_i (v_i - s_i)^2}
+$$
+
+The orange point is the vote-share distribution. The purple point is the seat-share distribution. The dashed orange contour shows every vote distribution with the same effective number of parties as the current vote split. The purple contour shows every vote distribution with the same Gallagher index relative to the current seat split.
+
+<EffectivePartiesGallagherInteractive client:load />
