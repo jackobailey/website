@@ -7,7 +7,7 @@ const PADDING = {
   left: 64
 };
 const TICKS = [0, 25, 50, 75, 100];
-const ORANGE = "#F76F5C";
+const ACCENT = "#CB1B12";
 
 function getX(share: number) {
   const axisWidth = CHART_WIDTH - PADDING.left - PADDING.right;
@@ -95,7 +95,7 @@ export default function OnePartyElectionInteractive() {
                 cx={pointX}
                 cy={axisY}
                 r="13"
-                fill={ORANGE}
+                fill={ACCENT}
                 stroke="#FFFFFF"
                 strokeWidth="4"
               />

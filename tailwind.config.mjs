@@ -9,8 +9,8 @@ export default {
         canvas: "#FFFFFF",
         ink: "#111111",
         muted: "#111111",
-        accent: "#F76F5C",
-        accentSoft: "rgb(247 111 92 / 0.14)",
+        accent: "#CB1B12",
+        accentSoft: "rgb(203 27 18 / 0.14)",
         line: "rgba(17, 17, 17, 0.12)"
       },
       fontFamily: {

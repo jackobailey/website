@@ -239,7 +239,7 @@
 
   .pill {
     @apply inline-flex items-center gap-2 rounded-full px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-white;
-    background: #f76f5c;
+    background: #cb1b12;
   }
 
   .nav-link {
@@ -252,11 +252,11 @@
 
   .button-primary {
     @apply inline-flex items-center justify-center gap-2 pb-1 text-base font-medium text-ink;
-    border-bottom: 2px solid #f76f5c;
+    border-bottom: 2px solid #cb1b12;
   }
 
   .button-primary:hover {
-    color: #f76f5c;
+    color: #cb1b12;
   }
 
   .button-secondary {
@@ -267,13 +267,13 @@
   .button-secondary:hover,
   .pill:hover,
   .filter-pill:hover {
-    color: #f76f5c;
-    border-color: #f76f5c;
+    color: #cb1b12;
+    border-color: #cb1b12;
   }
 
   .pill:hover {
     color: #ffffff;
-    background: #e56553;
+    background: #b71810;
   }
 
   .card-grid {
@@ -380,7 +380,7 @@
   }
 
   .glass-input:focus {
-    border-color: #f76f5c;
+    border-color: #cb1b12;
     box-shadow: none;
   }
 
@@ -403,8 +403,8 @@
   }
 
   .meta-link:hover {
-    color: #f76f5c;
-    border-color: #f76f5c;
+    color: #cb1b12;
+    border-color: #cb1b12;
   }
 
   .meta-inline-link {
@@ -413,8 +413,8 @@
   }
 
   .meta-inline-link:hover {
-    color: #f76f5c;
-    border-color: #f76f5c;
+    color: #cb1b12;
+    border-color: #cb1b12;
   }
 
   .editorial-sidebar {
@@ -498,7 +498,7 @@
   }
 
   .footnote-preview a {
-    color: #f76f5c;
+    color: #cb1b12;
     text-decoration: none;
   }
 

@@ -7,7 +7,7 @@ import {
   type PointerEvent as ReactPointerEvent
 } from "react";
 
-const ACCENT = "#F76F5C";
+const ACCENT = "#CB1B12";
 const GRADUATE_COLOUR = "#3B0F70";
 const MAX_INCOME = 250_000;
 const SLOPE_SCALE = 50_000;
@@ -669,7 +669,7 @@ export default function GrowthCurveTaxInteractive() {
               {RATE_READOUT_INCOMES.map((readout) => (
                 <p
                   key={`non-graduate-${readout.label}`}
-                  className="text-center text-sm font-semibold tabular-nums text-[#F76F5C] sm:text-base"
+                  className="text-center text-sm font-semibold tabular-nums text-[#CB1B12] sm:text-base"
                 >
                   {formatPercent(calculateNonGraduateTaxRate(parameters, readout.income), 1)}
                 </p>
@@ -697,10 +697,10 @@ export default function GrowthCurveTaxInteractive() {
                     key={scenario.id}
                     type="button"
                     onClick={() => applyScenario(scenario)}
-                    className={`w-full rounded-full px-3 py-2 text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-white transition focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2 sm:w-auto ${
+                    className={`w-full rounded-full px-3 py-2 text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-white transition focus:outline-none focus:ring-2 focus:ring-[#CB1B12] focus:ring-offset-2 sm:w-auto ${
                       isActive
-                        ? "bg-[#E56553] shadow-[inset_0_0_0_2px_rgba(17,17,17,0.18)]"
-                        : "bg-[#F76F5C] hover:bg-[#E56553]"
+                        ? "bg-[#B71810] shadow-[inset_0_0_0_2px_rgba(17,17,17,0.18)]"
+                        : "bg-[#CB1B12] hover:bg-[#B71810]"
                     }`}
                   >
                     {scenario.label}
@@ -710,7 +710,7 @@ export default function GrowthCurveTaxInteractive() {
               <button
                 type="button"
                 onClick={resetParameters}
-                className="w-full rounded-full border border-black/15 bg-white px-3 py-2 text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-[#111111] transition hover:border-[#F76F5C] hover:text-[#F76F5C] focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2 sm:w-auto"
+                className="w-full rounded-full border border-black/15 bg-white px-3 py-2 text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-[#111111] transition hover:border-[#CB1B12] hover:text-[#CB1B12] focus:outline-none focus:ring-2 focus:ring-[#CB1B12] focus:ring-offset-2 sm:w-auto"
               >
                 Reset
               </button>

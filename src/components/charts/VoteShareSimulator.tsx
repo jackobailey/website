@@ -20,7 +20,7 @@ export default function VoteShareSimulator({
   const labour = labourBase + swing;
   const conservative = conservativeBase - swing;
   const parties = [
-    { label: "Labour", value: labour, color: "#F76F5C" },
+    { label: "Labour", value: labour, color: "#CB1B12" },
     { label: "Conservative", value: conservative, color: "#1d4ed8" },
     { label: "Reform UK", value: reformBase, color: "#9333ea" },
     { label: "Liberal Democrats", value: libDemBase, color: "#f59e0b" },
@@ -45,7 +45,7 @@ export default function VoteShareSimulator({
           step="0.5"
           value={swing}
           onChange={(event) => setSwing(Number(event.target.value))}
-          className="w-full accent-[#F76F5C]"
+          className="w-full accent-[#CB1B12]"
         />
         <p className="text-sm leading-6 text-[#111111]">
           This is a simple explainer. It is not a forecast. It shows how a modest swing can change the headline even when other parties are stable.

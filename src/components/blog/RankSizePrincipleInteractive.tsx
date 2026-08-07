@@ -150,7 +150,7 @@ export default function RankSizePrincipleInteractive() {
                           type="button"
                           onClick={() => updateSeatCount(index, -1)}
                           disabled={party.currentSeats === 0}
-                          className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#F76F5C] text-sm font-semibold text-white transition hover:bg-[#E56553] disabled:cursor-not-allowed disabled:bg-black/10 disabled:text-white/70 disabled:hover:bg-black/10"
+                          className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#CB1B12] text-sm font-semibold text-white transition hover:bg-[#B71810] disabled:cursor-not-allowed disabled:bg-black/10 disabled:text-white/70 disabled:hover:bg-black/10"
                           aria-label={`Decrease seats for ${party.label}`}
                         >
                           -
@@ -166,7 +166,7 @@ export default function RankSizePrincipleInteractive() {
                         <button
                           type="button"
                           onClick={() => updateSeatCount(index, 1)}
-                          className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#F76F5C] text-sm font-semibold text-white transition hover:bg-[#E56553]"
+                          className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#CB1B12] text-sm font-semibold text-white transition hover:bg-[#B71810]"
                           aria-label={`Increase seats for ${party.label}`}
                         >
                           +

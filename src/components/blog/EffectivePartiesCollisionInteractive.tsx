@@ -6,13 +6,13 @@ const PARTICLE_RADIUS = 6;
 const PARTICLE_COUNT = 200;
 const SHARE_STEPS = 100;
 const PARTICLES_PER_STEP = PARTICLE_COUNT / SHARE_STEPS;
-const DEFAULT_ORANGE_STEPS = SHARE_STEPS / 2;
+const DEFAULT_RED_STEPS = SHARE_STEPS / 2;
 const MAX_DT_MS = 32;
 const MIN_SPEED = 96;
 const MAX_SPEED = 152;
 const PURPLE = "#3B0F70";
-const ORANGE = "#F76F5C";
-const PARTY_COLORS = [PURPLE, ORANGE] as const;
+const RED = "#CB1B12";
+const PARTY_COLORS = [PURPLE, RED] as const;
 
 type Particle = {
   id: number;
@@ -95,14 +95,14 @@ function createParticle(
 
 function createParticles(
   seed: number,
-  orangeCount: number,
+  redCount: number,
   boxWidth: number,
   boxHeight: number
 ) {
   const rng = createRng(seed);
   const particles: Particle[] = [];
   const colors: Particle["color"][] = Array.from({ length: PARTICLE_COUNT }, (_, index) =>
-    index < orangeCount ? ORANGE : PURPLE
+    index < redCount ? RED : PURPLE
   );
 
   for (let index = colors.length - 1; index > 0; index -= 1) {
@@ -136,11 +136,11 @@ function formatCount(count: number) {
   return count.toLocaleString("en-GB");
 }
 
-function getExpectedEffectiveParties(orangeCount: number) {
-  const orangeShare = orangeCount / PARTICLE_COUNT;
-  const purpleShare = 1 - orangeShare;
+function getExpectedEffectiveParties(redCount: number) {
+  const redShare = redCount / PARTICLE_COUNT;
+  const purpleShare = 1 - redShare;
 
-  return 1 / (orangeShare * orangeShare + purpleShare * purpleShare);
+  return 1 / (redShare * redShare + purpleShare * purpleShare);
 }
 
 export default function EffectivePartiesCollisionInteractive() {
@@ -148,20 +148,20 @@ export default function EffectivePartiesCollisionInteractive() {
   const lastFrameTimeRef = useRef<number | null>(null);
   const restartSeedRef = useRef(2);
   const simulationBoxRef = useRef<HTMLDivElement | null>(null);
-  const [orangeSteps, setOrangeSteps] = useState(DEFAULT_ORANGE_STEPS);
-  const orangeCount = orangeSteps * PARTICLES_PER_STEP;
+  const [redSteps, setRedSteps] = useState(DEFAULT_RED_STEPS);
+  const redCount = redSteps * PARTICLES_PER_STEP;
   const [boxSize, setBoxSize] = useState({ width: BOX_WIDTH, height: BOX_HEIGHT });
   const particlesRef = useRef<Particle[]>(
-    createParticles(1, orangeCount, BOX_WIDTH, BOX_HEIGHT)
+    createParticles(1, redCount, BOX_WIDTH, BOX_HEIGHT)
   );
   const activeCollisionPairsRef = useRef<Set<string>>(new Set());
   const statsRef = useRef<CollisionStats>({ total: 0, sameColor: 0 });
   const [particles, setParticles] = useState<Particle[]>(() => particlesRef.current);
   const [stats, setStats] = useState<CollisionStats>(statsRef.current);
   const [simulationState, setSimulationState] = useState<SimulationState>("idle");
-  const purpleCount = PARTICLE_COUNT - orangeCount;
+  const purpleCount = PARTICLE_COUNT - redCount;
   const purplePercentage = ((purpleCount / PARTICLE_COUNT) * 100).toFixed(0);
-  const orangePercentage = ((orangeCount / PARTICLE_COUNT) * 100).toFixed(0);
+  const redPercentage = ((redCount / PARTICLE_COUNT) * 100).toFixed(0);
 
   useEffect(() => {
     return () => {
@@ -204,7 +204,7 @@ export default function EffectivePartiesCollisionInteractive() {
 
   useEffect(() => {
     resetSimulation(simulationState === "running" ? "running" : "idle");
-  }, [orangeCount, boxSize.height, boxSize.width]);
+  }, [redCount, boxSize.height, boxSize.width]);
 
   function step(timestamp: number) {
     const previousTimestamp = lastFrameTimeRef.current ?? timestamp;
@@ -308,7 +308,7 @@ export default function EffectivePartiesCollisionInteractive() {
 
     const initialParticles = createParticles(
       restartSeedRef.current,
-      orangeCount,
+      redCount,
       boxSize.width,
       boxSize.height
     );
@@ -367,7 +367,7 @@ export default function EffectivePartiesCollisionInteractive() {
     resetSimulation(simulationState === "running" ? "running" : "idle");
   }
 
-  const expectedN2 = getExpectedEffectiveParties(orangeCount);
+  const expectedN2 = getExpectedEffectiveParties(redCount);
   const observedN2 = formatEffectiveParties(stats);
   const playPauseLabel = simulationState === "running" ? "Pause" : "Play";
 
@@ -381,15 +381,15 @@ export default function EffectivePartiesCollisionInteractive() {
             <div className="mt-6 space-y-6">
               <div className="space-y-3 border-b border-black/10 pb-6">
                 <input
-                  id="orange-share"
+                  id="red-share"
                   type="range"
                   min="0"
                   max={SHARE_STEPS}
                   step="1"
-                  value={orangeSteps}
-                  onChange={(event) => setOrangeSteps(Number(event.target.value))}
-                  aria-label="Orange share"
-                  className="w-full accent-[#F76F5C]"
+                  value={redSteps}
+                  onChange={(event) => setRedSteps(Number(event.target.value))}
+                  aria-label="Red share"
+                  className="w-full accent-[#CB1B12]"
                 />
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -404,11 +404,11 @@ export default function EffectivePartiesCollisionInteractive() {
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold tabular-nums text-[#111111]">
-                      {orangePercentage}%
+                      {redPercentage}%
                     </span>
                     <span
                       className="block h-6 w-6 rounded-full"
-                      style={{ backgroundColor: ORANGE }}
+                      style={{ backgroundColor: RED }}
                       aria-hidden="true"
                     />
                   </div>
@@ -443,7 +443,7 @@ export default function EffectivePartiesCollisionInteractive() {
                 <button
                   type="button"
                   onClick={handlePlayPauseClick}
-                  className="inline-flex w-full items-center justify-center rounded-full bg-[#F76F5C] px-5 py-3 text-sm font-semibold tracking-[0.08em] text-white transition-colors duration-150 hover:bg-[#e56553] focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2"
+                  className="inline-flex w-full items-center justify-center rounded-full bg-[#CB1B12] px-5 py-3 text-sm font-semibold tracking-[0.08em] text-white transition-colors duration-150 hover:bg-[#b71810] focus:outline-none focus:ring-2 focus:ring-[#CB1B12] focus:ring-offset-2"
                 >
                   {playPauseLabel}
                 </button>
@@ -451,7 +451,7 @@ export default function EffectivePartiesCollisionInteractive() {
                 <button
                   type="button"
                   onClick={handleRestartClick}
-                  className="inline-flex w-full items-center justify-center rounded-full border border-black/15 px-5 py-3 text-sm font-semibold tracking-[0.08em] text-[#111111] transition-colors duration-150 hover:border-[#F76F5C] hover:text-[#F76F5C] focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2"
+                  className="inline-flex w-full items-center justify-center rounded-full border border-black/15 px-5 py-3 text-sm font-semibold tracking-[0.08em] text-[#111111] transition-colors duration-150 hover:border-[#CB1B12] hover:text-[#CB1B12] focus:outline-none focus:ring-2 focus:ring-[#CB1B12] focus:ring-offset-2"
                 >
                   Restart
                 </button>
