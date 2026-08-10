@@ -13,19 +13,6 @@ const blog = defineCollection({
   })
 });
 
-const notes = defineCollection({
-  type: "content",
-  schema: z.object({
-    title: z.string(),
-    summary: z.string(),
-    date: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
-    tags: z.array(z.string()).min(1),
-    featured: z.boolean().default(false),
-    seoTitle: z.string().optional()
-  })
-});
-
 const tags = defineCollection({
   type: "content",
   schema: z.object({
@@ -39,6 +26,5 @@ const tags = defineCollection({
 
 export const collections = {
   blog,
-  notes,
   tags
 };

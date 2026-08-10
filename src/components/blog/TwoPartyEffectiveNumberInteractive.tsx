@@ -102,7 +102,7 @@ export default function TwoPartyEffectiveNumberInteractive() {
                   step="1"
                   value={party1Share}
                   onChange={(event) => setParty1Share(Number(event.target.value))}
-                  className="w-full accent-[#CB1B12]"
+                  className="w-full accent-[#F76F5C]"
                 />
               </div>
             </div>
@@ -178,7 +178,7 @@ export default function TwoPartyEffectiveNumberInteractive() {
               <path
                 d={curvePath}
                 fill="none"
-                stroke="#CB1B12"
+                stroke="#F76F5C"
                 strokeWidth="4"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -201,7 +201,7 @@ export default function TwoPartyEffectiveNumberInteractive() {
                 strokeDasharray="4 5"
               />
 
-              <circle cx={pointX} cy={pointY} r="13" fill="#CB1B12" stroke="#FFFFFF" strokeWidth="4" />
+              <circle cx={pointX} cy={pointY} r="13" fill="#F76F5C" stroke="#FFFFFF" strokeWidth="4" />
 
               <g transform={`translate(${calloutX}, ${calloutY})`}>
                 <rect width={calloutWidth} height={calloutHeight} rx="14" fill="rgba(255,255,255,0.82)" />

@@ -266,7 +266,7 @@ export default function MmpSeatSimulator() {
                 value={result.listSeats}
                 onInput={updateSeatBalance}
                 onChange={updateSeatBalance}
-                className="w-full accent-[#CB1B12]"
+                className="w-full accent-[#F76F5C]"
                 aria-label="Adjust district and list seat allocation"
               />
             </div>

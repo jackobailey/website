@@ -84,7 +84,7 @@ export default function EffectivePartyInteractive() {
                   step="1"
                   value={n0}
                   onChange={(event) => setN0(Number(event.target.value))}
-                  className="w-full accent-[#CB1B12]"
+                  className="w-full accent-[#F76F5C]"
                 />
               </div>
 
@@ -108,7 +108,7 @@ export default function EffectivePartyInteractive() {
                   step="0.01"
                   value={theta}
                   onChange={(event) => setTheta(Number(event.target.value))}
-                  className="w-full accent-[#CB1B12]"
+                  className="w-full accent-[#F76F5C]"
                 />
               </div>
 
@@ -122,7 +122,7 @@ export default function EffectivePartyInteractive() {
                   </div>
                   <div className="h-3 rounded-full bg-black/8">
                     <div
-                      className="h-3 rounded-full bg-[#CB1B12]"
+                      className="h-3 rounded-full bg-[#F76F5C]"
                       style={{ width: `${relativeWidth}%` }}
                     />
                   </div>

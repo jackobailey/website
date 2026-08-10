@@ -15,29 +15,18 @@ function formatCount(count: number, singular: string, plural: string) {
 
 function formatBreakdown(slug: string) {
   const writingCount = tagCounts.writing.get(slug) ?? 0;
-  const noteCount = tagCounts.notes.get(slug) ?? 0;
-  const parts = [];
-
-  if (writingCount > 0) {
-    parts.push(formatCount(writingCount, "post", "posts"));
-  }
-
-  if (noteCount > 0) {
-    parts.push(formatCount(noteCount, "notebook entry", "notebook entries"));
-  }
-
-  return parts.join(" · ");
+  return formatCount(writingCount, "post", "posts");
 }
 ---
 
 <BaseLayout
   title="Tag Index"
-  description="Curated topic pages for browsing writing and notebook entries."
+  description="Curated topic pages for browsing writing."
 >
   <PageIntro
     eyebrow="Tags"
     title="Browse by topic"
-    description="These topic pages group writing and notebook entries together so recurring themes can be followed across the site."
+    description="These topic pages group related writing so recurring themes can be followed across the site."
   />
 
   <section class="page-shell pb-14 sm:pb-20">

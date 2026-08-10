@@ -11,7 +11,7 @@ const MAX_DT_MS = 32;
 const MIN_SPEED = 96;
 const MAX_SPEED = 152;
 const PURPLE = "#3B0F70";
-const RED = "#CB1B12";
+const RED = "#F76F5C";
 const PARTY_COLORS = [PURPLE, RED] as const;
 
 type Particle = {
@@ -372,7 +372,7 @@ export default function EffectivePartiesCollisionInteractive() {
   const playPauseLabel = simulationState === "running" ? "Pause" : "Play";
 
   return (
-    <div className="not-prose my-10 w-full max-w-none sm:-mx-6 sm:w-[calc(100%+3rem)] lg:-mx-12 lg:w-[calc(100%+6rem)]">
+    <div className="not-prose my-10 w-full max-w-full">
       <section className="interactive-panel overflow-hidden">
         <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:items-stretch">
           <div className="border-b border-black/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
@@ -389,7 +389,7 @@ export default function EffectivePartiesCollisionInteractive() {
                   value={redSteps}
                   onChange={(event) => setRedSteps(Number(event.target.value))}
                   aria-label="Red share"
-                  className="w-full accent-[#CB1B12]"
+                  className="w-full accent-[#F76F5C]"
                 />
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -443,7 +443,7 @@ export default function EffectivePartiesCollisionInteractive() {
                 <button
                   type="button"
                   onClick={handlePlayPauseClick}
-                  className="inline-flex w-full items-center justify-center rounded-full bg-[#CB1B12] px-5 py-3 text-sm font-semibold tracking-[0.08em] text-white transition-colors duration-150 hover:bg-[#b71810] focus:outline-none focus:ring-2 focus:ring-[#CB1B12] focus:ring-offset-2"
+                  className="inline-flex w-full items-center justify-center rounded-full bg-[#F76F5C] px-5 py-3 text-sm font-semibold tracking-[0.08em] text-white transition-colors duration-150 hover:bg-[#e56553] focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2"
                 >
                   {playPauseLabel}
                 </button>
@@ -451,7 +451,7 @@ export default function EffectivePartiesCollisionInteractive() {
                 <button
                   type="button"
                   onClick={handleRestartClick}
-                  className="inline-flex w-full items-center justify-center rounded-full border border-black/15 px-5 py-3 text-sm font-semibold tracking-[0.08em] text-[#111111] transition-colors duration-150 hover:border-[#CB1B12] hover:text-[#CB1B12] focus:outline-none focus:ring-2 focus:ring-[#CB1B12] focus:ring-offset-2"
+                  className="inline-flex w-full items-center justify-center rounded-full border border-black/15 px-5 py-3 text-sm font-semibold tracking-[0.08em] text-[#111111] transition-colors duration-150 hover:border-[#F76F5C] hover:text-[#F76F5C] focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2"
                 >
                   Restart
                 </button>

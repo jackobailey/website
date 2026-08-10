@@ -1,11 +1,11 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import CopyLinkButton from "@/components/ui/CopyLinkButton.astro";
-import TagList from "@/components/ui/TagList.astro";
 import { siteConfig } from "@/site.config";
-import { getBlogPosts, getTagEntries, getRelatedPosts } from "@/lib/content";
+import { getBlogPosts, getRelatedPosts } from "@/lib/content";
 import { formatDate, getReadingTime } from "@/lib/format";
-import { buildTagLookup, getTagHref, getTagLabel } from "@/lib/tags";
+import { getWritingArtwork } from "@/lib/writingArtwork";
 
 export async function getStaticPaths() {
   const posts = await getBlogPosts();
@@ -17,10 +17,10 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
-const [allPosts, tagEntries] = await Promise.all([getBlogPosts(), getTagEntries()]);
-const tagLookup = buildTagLookup(tagEntries);
+const allPosts = await getBlogPosts();
 const relatedPosts = getRelatedPosts(post, allPosts);
 const hasRelatedPosts = relatedPosts.length > 0;
+const artwork = getWritingArtwork(post.slug);
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -44,25 +44,29 @@ const structuredData = {
   <section class="section-space">
     <div class:list={["page-shell gap-8", hasRelatedPosts ? "grid lg:grid-cols-[minmax(0,1fr)_300px]" : ""]}>
       <article class:list={["space-y-8", !hasRelatedPosts && "max-w-4xl"]}>
-        <header class="surface surface-strong space-y-5 pt-6 sm:pt-7">
-          <p class="eyebrow">{formatDate(post.data.date)}</p>
-          <h1 class="headline text-4xl sm:text-5xl">{post.data.title}</h1>
-          <p class="lede">{post.data.summary}</p>
-          <div class="flex flex-wrap items-center gap-4 text-sm text-muted">
-            <div class="flex flex-wrap items-center gap-4">
-              <span>{getReadingTime(post.body)}</span>
-              {post.data.updatedDate && <span>Updated {formatDate(post.data.updatedDate)}</span>}
-              <CopyLinkButton />
-            </div>
-          </div>
-          <TagList
-            items={post.data.tags.map((slug) => ({
-              slug,
-              label: getTagLabel(slug, tagLookup),
-              href: getTagHref(slug)
-            }))}
+        <header class="writing-hero">
+          <Image
+            src={artwork.image}
+            alt=""
+            class="writing-hero__image"
+            style={`object-position: ${artwork.objectPosition};`}
+            widths={[768, 1024, 1536]}
+            sizes="(min-width: 1024px) 760px, 100vw"
+            loading="eager"
           />
+          <div class="writing-hero__copy">
+            <p class="writing-hero__meta">
+              {formatDate(post.data.date)} · {getReadingTime(post.body)}
+            </p>
+            <h1 class="writing-hero__title">{post.data.title}</h1>
+            <p class="writing-hero__summary">{post.data.summary}</p>
+          </div>
         </header>
+
+        <div class="flex flex-wrap items-center justify-end gap-4 text-sm text-muted">
+          {post.data.updatedDate && <span>Updated {formatDate(post.data.updatedDate)}</span>}
+          <CopyLinkButton />
+        </div>
 
         <div class="surface pt-7 sm:pt-8">
           <div class="prose-editorial">

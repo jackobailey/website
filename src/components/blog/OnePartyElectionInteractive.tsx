@@ -7,7 +7,7 @@ const PADDING = {
   left: 64
 };
 const TICKS = [0, 25, 50, 75, 100];
-const ACCENT = "#CB1B12";
+const ACCENT = "#F76F5C";
 
 function getX(share: number) {
   const axisWidth = CHART_WIDTH - PADDING.left - PADDING.right;

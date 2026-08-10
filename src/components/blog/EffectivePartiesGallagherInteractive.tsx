@@ -7,7 +7,7 @@ import {
   type PointerEvent
 } from "react";
 
-const ACCENT = "#CB1B12";
+const ACCENT = "#F76F5C";
 const GALLAGHER_COLOUR = "#3B0F70";
 const SEAT_COLOUR = GALLAGHER_COLOUR;
 const INK = "#111111";
@@ -518,7 +518,7 @@ function PartySlider({
           />
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 z-10 grid h-7 w-7 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white text-xs font-bold leading-none text-white shadow-[0_0_0_1px_rgba(17,17,17,0.08),0_8px_18px_rgba(17,17,17,0.18)] transition-shadow duration-150 peer-focus-visible:ring-2 peer-focus-visible:ring-[#CB1B12] peer-focus-visible:ring-offset-2"
+            className="pointer-events-none absolute top-1/2 z-10 grid h-7 w-7 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white text-xs font-bold leading-none text-white shadow-[0_0_0_1px_rgba(17,17,17,0.08),0_8px_18px_rgba(17,17,17,0.18)] transition-shadow duration-150 peer-focus-visible:ring-2 peer-focus-visible:ring-[#F76F5C] peer-focus-visible:ring-offset-2"
             style={{
               backgroundColor: isLocked
                 ? `color-mix(in srgb, ${colour} 60%, white)`
@@ -536,9 +536,9 @@ function PartySlider({
       <button
         type="button"
         onClick={onToggleLock}
-        className={`grid h-7 w-7 place-items-center rounded-full border transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-[#CB1B12] focus:ring-offset-2 ${
+        className={`grid h-7 w-7 place-items-center rounded-full border transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2 ${
           isLocked
-            ? "border-[#CB1B12]/40 bg-[#CB1B12]/10 text-[#CB1B12]"
+            ? "border-[#F76F5C]/40 bg-[#F76F5C]/10 text-[#F76F5C]"
             : "border-black/10 bg-black/[0.025] text-black/50 hover:text-[#111111]"
         }`}
         aria-label={lockLabel}
@@ -711,7 +711,7 @@ export default function EffectivePartiesGallagherInteractive() {
   }
 
   return (
-    <div className="not-prose my-10 w-full max-w-none sm:-mx-6 sm:w-[calc(100%+3rem)] lg:-mx-10 lg:w-[calc(100%+5rem)]">
+    <div className="not-prose my-10 w-full max-w-full">
       <section className="interactive-panel overflow-hidden">
         <div className="grid lg:grid-cols-[minmax(300px,0.95fr)_minmax(0,1.05fr)]">
           <div className="border-b border-black/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">

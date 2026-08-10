@@ -1,0 +1,42 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { formatDate, getReadingTime } from "@/lib/format";
+import { getWritingArtwork } from "@/lib/writingArtwork";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  eager?: boolean;
+  position?: number;
+}
+
+const { post, eager = false, position } = Astro.props;
+const artwork = getWritingArtwork(post.slug);
+---
+
+<article
+  class:list={[
+    "writing-card",
+    artwork.homeClass,
+    position && `writing-card--position-${position}`
+  ]}
+>
+  <a href={`/writing/${post.slug}/`} class="writing-card__link">
+    <Image
+      src={artwork.image}
+      alt=""
+      class="writing-card__image"
+      style={`object-position: ${artwork.objectPosition};`}
+      widths={[480, 768, 1024, 1536]}
+      sizes="(min-width: 1024px) 58vw, (min-width: 640px) 50vw, 100vw"
+      loading={eager ? "eager" : "lazy"}
+    />
+    <div class="writing-card__copy">
+      <p class="writing-card__meta">
+        {formatDate(post.data.date)} · {getReadingTime(post.body)}
+      </p>
+      <h2 class="writing-card__title">{post.data.title}</h2>
+      <p class="writing-card__summary">{post.data.summary}</p>
+    </div>
+  </a>
+</article>

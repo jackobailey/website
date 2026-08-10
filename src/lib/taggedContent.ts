@@ -1,57 +1,38 @@
 import type { CollectionEntry } from "astro:content";
-import { getBlogPosts, getNotesEntries, getTagEntries } from "@/lib/content";
+import { getBlogPosts, getTagEntries } from "@/lib/content";
 
-export type TaggedContentEntry =
-  | {
-      collection: "writing";
-      collectionLabel: "Writing";
-      entry: CollectionEntry<"blog">;
-      href: string;
-    }
-  | {
-      collection: "notes";
-      collectionLabel: "Notebook";
-      entry: CollectionEntry<"notes">;
-      href: string;
-    };
+export type TaggedContentEntry = {
+  collection: "writing";
+  collectionLabel: "Writing";
+  entry: CollectionEntry<"blog">;
+  href: string;
+};
 
 export function getCombinedTagCounts(entries: TaggedContentEntry[]) {
   const total = new Map<string, number>();
   const writing = new Map<string, number>();
-  const notes = new Map<string, number>();
 
   for (const item of entries) {
     for (const tag of item.entry.data.tags) {
       total.set(tag, (total.get(tag) ?? 0) + 1);
-
-      const collectionCounts = item.collection === "writing" ? writing : notes;
-      collectionCounts.set(tag, (collectionCounts.get(tag) ?? 0) + 1);
+      writing.set(tag, (writing.get(tag) ?? 0) + 1);
     }
   }
 
   return {
-    notes,
     total,
     writing
   };
 }
 
 export async function getTaggedContentEntries() {
-  const [posts, notes] = await Promise.all([getBlogPosts(), getNotesEntries()]);
-  const entries: TaggedContentEntry[] = [
-    ...posts.map((entry) => ({
-      collection: "writing" as const,
-      collectionLabel: "Writing" as const,
-      entry,
-      href: `/writing/${entry.slug}/`
-    })),
-    ...notes.map((entry) => ({
-      collection: "notes" as const,
-      collectionLabel: "Notebook" as const,
-      entry,
-      href: `/notes/${entry.slug}/`
-    }))
-  ];
+  const posts = await getBlogPosts();
+  const entries: TaggedContentEntry[] = posts.map((entry) => ({
+    collection: "writing",
+    collectionLabel: "Writing",
+    entry,
+    href: `/writing/${entry.slug}/`
+  }));
 
   return entries.sort(
     (left, right) => right.entry.data.date.valueOf() - left.entry.data.date.valueOf()

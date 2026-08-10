@@ -1,100 +1,43 @@
 ---
+import WritingCard from "@/components/writing/WritingCard.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getBlogPosts } from "@/lib/content";
 import { siteConfig } from "@/site.config";
 
-const structuredData = [
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: siteConfig.name,
-    jobTitle: siteConfig.role,
-    description: siteConfig.description,
-    email: siteConfig.email,
-    homeLocation: siteConfig.location,
-    sameAs: Object.values(siteConfig.social)
-  },
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: siteConfig.name,
-    url: Astro.site?.toString() ?? "https://example.com",
-    description: siteConfig.description
-  }
-];
+const posts = await getBlogPosts();
+
+function getCopyWeight(post: (typeof posts)[number]) {
+  return post.data.title.length * 1.6 + post.data.summary.length;
+}
+
+const fiveCardCandidates = posts.slice(0, 5);
+const compactFiveCardCandidates = fiveCardCandidates.slice(2);
+const canUseFiveCards =
+  fiveCardCandidates.length === 5 &&
+  compactFiveCardCandidates.every((post) => getCopyWeight(post) <= 126) &&
+  fiveCardCandidates.reduce((total, post) => total + getCopyWeight(post), 0) <= 560;
+const homepagePosts = posts.slice(0, canUseFiveCards ? 5 : 4);
+const homepageCardCount = homepagePosts.length;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.name,
+  url: Astro.site?.toString() ?? "https://example.com",
+  description: siteConfig.description
+};
 ---
 
 <BaseLayout structuredData={structuredData}>
-  <section class="pt-5 pb-12 sm:pt-6 sm:pb-16">
-    <div class="page-shell lg:grid lg:grid-cols-[420px_minmax(0,1fr)] lg:items-start lg:gap-8">
-      <aside class="hidden lg:block lg:pt-6">
-        <img
-          src="/images/jack-bailey.jpeg"
-          alt={`Portrait of ${siteConfig.name}`}
-          class="block w-full object-contain"
-          loading="eager"
-        />
-      </aside>
-
-      <div class="surface surface-strong lg:pl-10 lg:pt-6">
-        <div class="max-w-[46rem] space-y-8">
-          <h1 class="headline">Hi, I&apos;m {siteConfig.name}.</h1>
-          <div class="space-y-4">
-            <p class="text-lg leading-8 text-ink">
-              I&apos;m a political scientist at the{" "}
-              <a
-                href="https://www.humanities.manchester.ac.uk/politics/"
-                class="text-accent underline decoration-accent/40 underline-offset-4 transition hover:decoration-accent"
-              >
-                University of Manchester
-              </a>{" "}
-              and a Co-Director of the{" "}
-              <a
-                href="https://www.britishelectionstudy.com/"
-                class="text-accent underline decoration-accent/40 underline-offset-4 transition hover:decoration-accent"
-              >British Election Study</a>{","} Britain&apos;s longest-running social survey.
-            </p>
-            <p class="text-lg leading-8 text-ink">
-              I study elections: how people vote, how electoral systems shape the results, and how
-              we measure what happens. My current research uses{" "}
-              <a
-                href="https://en.wikipedia.org/wiki/Information_theory"
-                class="text-accent underline decoration-accent/40 underline-offset-4 transition hover:decoration-accent"
-              >
-                information theory
-              </a>{" "}
-              &mdash; the mathematics of information, uncertainty, and communication &mdash; to
-              rethink core ideas in political science.
-            </p>
-            <p class="text-lg leading-8 text-ink">
-              On this site, you&apos;ll find my{" "}
-              <a
-                href="/writing/"
-                class="text-accent underline decoration-accent/40 underline-offset-4 transition hover:decoration-accent"
-              >
-                public writing
-              </a>{" "}
-              and an{" "}
-              <a
-                href="/notes/"
-                class="text-accent underline decoration-accent/40 underline-offset-4 transition hover:decoration-accent"
-              >
-                open notebook
-              </a>{" "}
-              where I share ideas in progress, new questions, and work that is still taking
-              shape.
-            </p>
-            <p class="text-lg leading-8 text-ink">
-              I&apos;m also available for media, commentary, and collaboration. If you need
-              someone to talk politics, explain political science to a general audience, or you
-              want to chat about working together, please{" "}
-              <a
-                href={`mailto:${siteConfig.email}`}
-                class="text-accent underline decoration-accent/40 underline-offset-4 transition hover:decoration-accent"
-              >get in touch</a>{"."}
-            </p>
-          </div>
-        </div>
-      </div>
+  <section class="page-shell py-6 sm:py-8">
+    <h1 class="sr-only">Featured writing by {siteConfig.name}</h1>
+    <div
+      class:list={["home-writing-grid", `home-writing-grid--${homepageCardCount}`]}
+      data-home-card-count={homepageCardCount}
+    >
+      {homepagePosts.map((post, index) => (
+        <WritingCard post={post} position={index + 1} eager={index < 2} />
+      ))}
     </div>
   </section>
 </BaseLayout>
