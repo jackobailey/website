@@ -1,0 +1,28 @@
+---
+import WardExplorer from '@/components/ward2024/WardExplorer';
+import ubuntuRegular from '@fontsource/ubuntu-sans/files/ubuntu-sans-latin-400-normal.woff2?url';
+import ubuntuBold from '@fontsource/ubuntu-sans/files/ubuntu-sans-latin-700-normal.woff2?url';
+const title = 'UK General Election 2024: Ward by Ward';
+const description = 'Explore Jack Bailey’s 2024 general election estimates for 7,993 wards in Great Britain. Select a ward to see party vote shares and 95% uncertainty intervals.';
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#edf1f2" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href="https://jack-bailey.co.uk/ward2024" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://jack-bailey.co.uk/ward2024" />
+    <link rel="preload" href={ubuntuRegular} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={ubuntuBold} as="font" type="font/woff2" crossorigin="anonymous" />
+  </head>
+  <body>
+    <WardExplorer client:load />
+    <noscript><p style="padding: 24px; font: 18px sans-serif">Enable JavaScript to explore the map, or <a href="https://github.com/jackobailey/ward_mrp">download the ward estimates and read the method on GitHub</a>.</p></noscript>
+  </body>
+</html>

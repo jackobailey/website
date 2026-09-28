@@ -1,0 +1,14 @@
+{
+  "source": "https://raw.githubusercontent.com/jackobailey/ward_mrp/c80f29de2e8c352f14c93fcd127a9b87dc39d8b3/_output/ward_ge2024_results.csv",
+  "download": "https://github.com/jackobailey/ward_mrp/releases/download/v1.0.0/ward_ge2024_results.csv",
+  "revision": "c80f29de2e8c352f14c93fcd127a9b87dc39d8b3",
+  "csvSha256": "74c6bd3d0b8934b38a287cb9ee9a2a1d8a3c958767e25cb34b0cafd5e2c73973",
+  "shapefileSha256": "67b24f03dce957d283ab7600289e45f238b444ec9e500441690e7de7b5ae171e",
+  "wardCount": 7993,
+  "rowCount": 47376,
+  "boundarySource": "https://www.arcgis.com/home/item.html?id=a2c204fedefe4120ac93f062c647bdcb",
+  "boundaryDescription": "ONS December 2022 UK BFC; dissolved/rekeyed to 2022 census wards, excluding Northern Ireland",
+  "simplification": "Douglas-Peucker 35 metres in EPSG:27700; keep-shapes; WGS84 quantization 1000000; clean with no gap fill and 0.00002 degree snapping; final validity checked",
+  "sharePrecision": "6 decimal places (proportions); leaders and exact ties identified before rounding",
+  "attribution": "Contains OS data \u00a9 Crown copyright and database right 2022. Contains National Statistics data \u00a9 Crown copyright and database right 2022."
+}
