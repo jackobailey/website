@@ -1,9 +1,12 @@
 ---
 import WardExplorer from '@/components/ward2024/WardExplorer';
+import { getImage } from 'astro:assets';
+import wardSticker from '@/assets/ward2024/ward-mrp-hex.png';
 import ubuntuRegular from '@fontsource/ubuntu-sans/files/ubuntu-sans-latin-400-normal.woff2?url';
 import ubuntuBold from '@fontsource/ubuntu-sans/files/ubuntu-sans-latin-700-normal.woff2?url';
 const title = 'UK General Election 2024: Ward by Ward';
 const description = 'Explore Jack Bailey’s 2024 general election estimates for 7,993 wards in Great Britain. Select a ward to see party vote shares and 95% uncertainty intervals.';
+const sticker = await getImage({ src: wardSticker, width: 264, format: 'webp' });
 ---
 <!doctype html>
 <html lang="en-GB">
@@ -22,7 +25,7 @@ const description = 'Explore Jack Bailey’s 2024 general election estimates for
     <link rel="preload" href={ubuntuBold} as="font" type="font/woff2" crossorigin="anonymous" />
   </head>
   <body>
-    <WardExplorer client:load />
+    <WardExplorer stickerSrc={sticker.src} client:load />
     <noscript><p style="padding: 24px; font: 18px sans-serif">Enable JavaScript to explore the map, or <a href="https://github.com/jackobailey/ward_mrp">download the ward estimates and read the method on GitHub</a>.</p></noscript>
   </body>
 </html>

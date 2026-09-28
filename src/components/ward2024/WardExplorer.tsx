@@ -10,7 +10,7 @@ async function readJson<T>(url: string, signal: AbortSignal): Promise<T> {
   return response.json();
 }
 
-export default function WardExplorer() {
+export default function WardExplorer({ stickerSrc }: { stickerSrc: string }) {
   const [data, setData] = useState<{ estimates: Estimates; topology: WardTopology } | null>(null);
   const [selection, setSelection] = useState<Selection>({ id: DEFAULT_WARD, focus: false, sequence: 0 });
   const [error, setError] = useState(false);
@@ -58,7 +58,9 @@ export default function WardExplorer() {
     <a className="skip-link" href="#ward-details" onClick={event => { event.preventDefault(); document.getElementById('ward-details')?.focus(); }}>Skip to ward estimates</a>
     <header className="explorer-header">
       <div><h1>UK General Election 2024: Ward by Ward</h1><p>Explore MRP estimates of the general election in 7,993 wards across Great Britain</p></div>
-      <button className="text-button about-button" onClick={openMethod}>About the estimates</button>
+      <a className="ward-project-link" href="https://github.com/jackobailey/ward_mrp" target="_blank" rel="noreferrer" aria-label="Ward MRP 2024 on GitHub">
+        <img src={stickerSrc} width="264" height="264" alt="Ward MRP 2024 hex sticker" />
+      </a>
     </header>
     {notice && <p className="ward-notice" role="status">{notice}</p>}
     {data && ward ? <main className="explorer-main">
