@@ -51,11 +51,23 @@ h1, h2, h3, p { margin: 0; }
 .map-controls svg { width: 23px; height: 23px; stroke: currentColor; stroke-width: 1.8; fill: none; }
 .map-controls button:hover { background: #f5f8fa; }
 .reset-view { padding: 8px 11px; font-size: 13px; min-height: 35px; }
-.map-legend { position: absolute; z-index: 800; bottom: 27px; left: 22px; background: #ffffffed; border: 1px solid #e5e9ec; border-radius: 6px; padding: 13px 14px; max-width: 385px; pointer-events: none; }
-.map-legend h2 { font-size: 12px; font-weight: 600; line-height: 1.25; margin-bottom: 9px; }
-.map-legend ul { display: grid; grid-template-columns: repeat(4, auto); gap: 10px 12px; list-style: none; margin: 0; padding: 0; }
-.map-legend li { display: flex; align-items: center; gap: 6px; color: #4a5d6c; font-size: 11px; white-space: nowrap; }
-.map-legend li span { width: 13px; height: 13px; border-radius: 1px; flex: none; }
+.map-legend { position: absolute; z-index: 800; bottom: 27px; left: 22px; right: 22px; background: #ffffffed; border: 1px solid #e5e9ec; border-radius: 6px; padding: 13px 14px; max-width: 410px; }
+.legend-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 6px 12px; margin-bottom: 6px; }
+.map-legend h2 { font-size: 12px; font-weight: 600; line-height: 1.25; }
+.legend-reset { font-size: 11px; min-height: 24px; }
+.map-legend ul { display: grid; grid-template-columns: repeat(4, auto); gap: 2px 4px; list-style: none; margin: 0; padding: 0; }
+.map-legend li { color: #4a5d6c; font-size: 11px; white-space: nowrap; }
+.legend-party { display: flex; align-items: center; gap: 5px; width: 100%; min-height: 28px; padding: 4px 3px; color: inherit; background: transparent; border: 1px solid transparent; border-radius: 3px; font-size: inherit; text-align: left; }
+.legend-party:hover { background: #edf1f2; }
+.legend-party[aria-pressed='true'] { color: #172d3b; border-color: #8397a4; background: #eaf0f3; }
+.legend-swatch { width: 12px; height: 12px; border-radius: 1px; flex: none; }
+.legend-tie { display: flex; align-items: center; gap: 5px; padding: 4px; }
+.legend-hint { margin-top: 8px; font-size: 11px; color: var(--muted); }
+.vote-share-scale { margin-top: 10px; }
+.vote-share-gradient { height: 10px; border: 1px solid #c5cfd5; border-radius: 2px; }
+.vote-share-ticks { position: relative; height: 16px; margin-top: 4px; color: #4a5d6c; font-size: 10px; font-variant-numeric: tabular-nums; }
+.vote-share-ticks span { position: absolute; transform: translateX(-50%); }
+.vote-share-ticks span:first-child { transform: none; }.vote-share-ticks span:last-child { transform: translateX(-100%); }
 .map-attribution { position: absolute; z-index: 800; bottom: 6px; right: 14px; font-size: 10px; line-height: 1.5; padding: 1px 4px; color: #4a5d6c; background: #edf1f2d9; }
 .map-attribution a { color: inherit; }
 .ward-tooltip { border: 0; border-radius: 4px; padding: 9px 12px; font-family: 'Ubuntu Sans', sans-serif; box-shadow: 0 3px 12px #26384624; color: #202b32; }
@@ -116,17 +128,17 @@ h1, h2, h3, p { margin: 0; }
 @media (max-width: 1100px) and (min-width: 801px) {
   .explorer-main { grid-template-columns: minmax(0, 1fr) 390px; }
   .ward-search { width: calc(100% - 120px); left: 16px; }.search-field { gap: 7px; padding-left: 9px; }.search-field input { font-size: 13px; }
-  .map-controls { right: 16px; }.map-legend { left: 16px; padding: 10px; }.map-legend ul { gap: 8px; }.map-legend li { font-size: 10px; gap: 4px; }
+  .map-controls { right: 16px; }.map-legend { left: 16px; right: 16px; padding: 10px; }.map-legend li { font-size: 10px; }
   .ward-details { padding-left: 26px; padding-right: 26px; }.details-footer { gap: 9px; }
 }
 @media (max-width: 800px) {
   .ward-explorer { height: auto; min-height: 100dvh; }.explorer-header { padding: 20px; min-height: auto; display: block; }
   .explorer-header h1 { font-size: 34px; letter-spacing: -1px; }.explorer-header p { font-size: 16px; max-width: 520px; line-height: 1.4; }
   .about-button { margin-top: 12px; font-size: 14px; }.explorer-main { display: flex; flex-direction: column; }
-  .map-panel { height: 62svh; min-height: 430px; max-height: 650px; }.ward-search { left: 14px; top: 14px; width: calc(100% - 113px); }
+  .map-panel { height: auto; }.ward-map { height: 62svh; min-height: 430px; max-height: 650px; }.ward-search { left: 14px; top: 14px; width: calc(100% - 113px); }
   .search-field { height: 45px; gap: 7px; padding-left: 10px; }.search-field svg { width: 19px; height: 19px; }.search-field input { font-size: 14px; }
   .map-controls { right: 14px; top: 14px; }.zoom-controls button { width: 42px; height: 42px; }.reset-view { padding: 8px; font-size: 12px; }
-  .map-legend { left: 12px; right: 12px; bottom: 24px; max-width: 375px; padding: 10px 12px; }.map-legend h2 { font-size: 11px; margin-bottom: 7px; }.map-legend ul { gap: 8px 7px; }.map-legend li { font-size: 10px; gap: 4px; }.map-legend li span { width: 10px; height: 10px; }
+  .map-legend { position: relative; left: auto; right: auto; bottom: auto; max-width: none; margin: 0 12px 28px; padding: 10px 12px; }.map-legend h2 { font-size: 11px; }.map-legend li { font-size: 10px; }.legend-party { gap: 4px; }.legend-swatch { width: 10px; height: 10px; }
   .map-attribution { font-size: 9px; }.ward-details { padding: 25px 24px 28px; overflow: visible; border-left: 0; border-top: 1px solid var(--rule); }
   .ward-heading h2 { font-size: 35px; letter-spacing: -1px; }.ward-region { font-size: 16px; }.ward-constituency { font-size: 16px; }
   .ward-heading { padding-bottom: 22px; }.vote-chart { margin-top: 24px; }.vote-chart h3 { font-size: 24px; }.chart-subtitle { font-size: 15px; }
@@ -134,5 +146,5 @@ h1, h2, h3, p { margin: 0; }
   .method-content { padding: 27px 22px; }.method-content h2 { font-size: 26px; }.method-content p { font-size: 15px; }
   .ward-notice { padding: 10px 20px; }.loading-state { min-height: 60svh; }
 }
-@media (max-width: 360px) { .map-legend ul { grid-template-columns: repeat(3, max-content); } }
+@media (max-width: 380px), (min-width: 801px) and (max-width: 900px) { .map-legend ul { grid-template-columns: repeat(3, auto); } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; } }
