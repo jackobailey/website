@@ -1,0 +1,65 @@
+.threshold-page { padding-block: 46px 32px; }
+.threshold-intro { margin-bottom: 36px; }
+.threshold-intro h1 { font-size: clamp(36px, 4.5vw, 56px); font-weight: 500; line-height: 1.08; letter-spacing: -.045em; margin: 0 0 18px; }
+.threshold-intro p { font: 400 18px/1.5 var(--sans, "Ubuntu Sans", sans-serif); color: #596b78; margin: 0; }
+.threshold-paper-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 14px; color: #3B0F70; font: 500 16px/1.5 var(--sans, sans-serif); text-decoration: underline; text-underline-offset: 4px; }
+.threshold-paper-link:hover { color: #F76F5C; }
+.threshold-paper-link:focus-visible { outline: 2px solid #3B0F70; outline-offset: 4px; }
+.threshold-explorer { --curve: #F76F5C; --vote: #3B0F70; font: 400 15px/1.5 var(--sans, sans-serif); }
+.threshold-explorer * { box-sizing: border-box; }
+.threshold-explorer input { font: inherit; }
+.threshold-explorer input:focus-visible { outline: 2px solid #111; outline-offset: 4px; }
+.threshold-workspace { display: grid; grid-template-columns: minmax(270px, 320px) minmax(0, 1fr); border-block: 1px solid var(--line, #dedede); }
+.threshold-controls { padding: 26px 30px 30px 0; border-right: 1px solid var(--line, #dedede); }
+.threshold-controls > .threshold-control:first-child { margin-top: 0; }
+.threshold-control { margin-block: 24px; }
+.threshold-control__label { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-weight: 500; }
+.threshold-number-wrap { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+.threshold-explorer input[type=number] { border: 1px solid #b9b9b9; border-radius: 4px; background: #fff; color: #111; min-height: 38px; padding: 7px 8px; font-variant-numeric: tabular-nums; }
+.threshold-number-wrap input { width: 76px; text-align: right; }
+.threshold-explorer input[type=range] { display: block; width: 100%; height: 25px; margin: 12px 0 7px; accent-color: var(--curve); cursor: pointer; }
+.threshold-help { color: #666; font-size: 13px; line-height: 1.55; margin: 6px 0 0; }
+.threshold-results { min-width: 0; padding: 27px 0 24px 32px; }
+.threshold-plot { margin: 0; }
+.threshold-plot__heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.threshold-plot__heading h2 { font-size: 15px; font-weight: 500; margin: 0; }
+.threshold-plot svg { display: block; width: 100%; height: auto; overflow: visible; margin-top: 6px; touch-action: pan-y; }
+.threshold-grid { stroke: #e5e5e5; stroke-width: 1; }
+.threshold-grid--half { stroke: #aaa; stroke-dasharray: 4 5; }
+.threshold-axis, .threshold-axis-title { fill: #555; font-size: 15px; }
+.threshold-axis-title { font-size: 16px; }
+.threshold-marker { stroke: var(--curve); stroke-width: 1.5; stroke-dasharray: 5 5; }
+.threshold-area { fill: #f76f5c; opacity: .07; }
+.threshold-curve { stroke: var(--curve); stroke-width: 3; stroke-linejoin: round; fill: none; }
+.threshold-crossing { fill: white; stroke: var(--curve); stroke-width: 2.5; }
+.threshold-vote-guide { stroke: var(--vote); stroke-width: 1.5; stroke-dasharray: 3 4; }
+.threshold-vote-dot { fill: var(--vote); stroke: white; stroke-width: 2; }
+.threshold-annotation { font-size: 18px; paint-order: stroke; stroke: white; stroke-width: 5px; stroke-linejoin: round; pointer-events: none; }
+.threshold-annotation--threshold { fill: var(--curve); }
+.threshold-annotation--vote { fill: var(--vote); }
+.threshold-annotation__value { font-size: 22px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.threshold-notice { background: #faf3ef; padding: 12px 14px; font-size: 13px; border-left: 2px solid var(--curve); margin-top: 18px; }
+.threshold-invalid { padding: 64px 16px; max-width: 470px; }
+.threshold-invalid h2 { font-size: 25px; font-weight: 500; }
+@media (min-width: 761px) {
+  .threshold-intro p { text-wrap: balance; }
+}
+@media (max-width: 1050px) {
+  .threshold-workspace { grid-template-columns: minmax(245px, .85fr) minmax(0, 1.3fr); }
+  .threshold-controls { padding-right: 22px; }
+  .threshold-results { padding-left: 22px; }
+}
+@media (max-width: 760px) {
+  .threshold-page { padding-top: 32px; }
+  .threshold-intro { margin-bottom: 28px; }
+  .threshold-intro p { font-size: 16px; }
+  .threshold-workspace { display: block; }
+  .threshold-controls { border-right: 0; padding: 24px 0; }
+  .threshold-results { padding: 25px 0; border-top: 1px solid #dedede; }
+  .threshold-plot__heading h2 { font-size: 14px; }
+  .threshold-annotation { font-size: 23px; }
+  .threshold-annotation__value { font-size: 25px; }
+  .threshold-plot svg { width: calc(100% + 15px); margin-left: -15px; }
+  .threshold-axis, .threshold-axis-title { font-size: 21px; }
+  .threshold-invalid { padding: 20px 0; }
+}

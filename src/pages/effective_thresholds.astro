@@ -1,0 +1,73 @@
+---
+import ThresholdExplorer from "@/components/thresholds/ThresholdExplorer";
+import "@/components/thresholds/threshold-page.css";
+import { siteConfig } from "@/site.config";
+import ubuntuRegular from "@fontsource/ubuntu-sans/files/ubuntu-sans-latin-400-normal.woff2?url";
+import ubuntuMedium from "@fontsource/ubuntu-sans/files/ubuntu-sans-latin-500-normal.woff2?url";
+import ubuntuSemibold from "@fontsource/ubuntu-sans/files/ubuntu-sans-latin-600-normal.woff2?url";
+
+// Keep this release independent of the unfinished shared website redesign.
+const title = `${siteConfig.name} | Effective electoral thresholds`;
+const description = "Explore how district magnitude and party competition shape the vote share needed to win a first seat. An interactive based on Jack Bailey’s research.";
+const canonical = new URL("/effective_thresholds/", Astro.site).toString();
+const profiles = [
+  { label: "Bluesky", href: siteConfig.social.bluesky, icon: "bi bi-bluesky" },
+  { label: "GitHub", href: siteConfig.social.github, icon: "bi bi-github" },
+  { label: "LinkedIn", href: siteConfig.social.linkedin, icon: "bi bi-linkedin" },
+  { label: "Google Scholar", href: siteConfig.social.scholar, icon: "ai ai-google-scholar" }
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title="Jack Bailey — Writing" href="/rss.xml" />
+    {[ubuntuRegular, ubuntuMedium, ubuntuSemibold].map((href) => <link rel="preload" href={href} as="font" type="font/woff2" crossorigin="anonymous" />)}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+  </head>
+  <body>
+    <a href="#content" class="threshold-skip-link">Skip to content</a>
+    <header class="masthead page-shell">
+      <a href="/" class="masthead__name" aria-label={`${siteConfig.name} home`}>JACK BAILEY</a>
+      <nav aria-label="Primary navigation">
+        <ul class="masthead__nav">
+          <li><a href="/writing/" class="nav-link">Writing</a></li>
+          <li><a href="/about/" class="nav-link">About</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main id="content" class="page-shell threshold-page">
+      <header class="threshold-intro">
+        <h1>What does it take to win a seat?</h1>
+        <p>At the effective threshold, a party has a 50% chance of winning a seat. Explore how it changes with district size and party competition.</p>
+        <a class="threshold-paper-link" href="https://doi.org/10.1016/j.electstud.2026.103179"><span>Read the article in <em>Electoral Studies</em></span> <span aria-hidden="true">→</span></a>
+      </header>
+      <ThresholdExplorer client:load />
+      <noscript><p>This calculator needs JavaScript to update its controls and plot. <a href="https://doi.org/10.1016/j.electstud.2026.103179">Read the article for the formulas and worked examples.</a></p></noscript>
+    </main>
+    <footer class="site-footer page-shell">
+      <div class="site-footer__row">
+        <a class="quiet-link" href="/writing/">All writing</a>
+        <nav class="footer-icons" aria-label="Contact and profiles">
+          <a href={`mailto:${siteConfig.email}`} class="footer-icon-link" aria-label="Email" title="Email"><i class="bi bi-envelope-fill" aria-hidden="true"></i></a>
+          {profiles.map(({ label, href, icon }) => <a href={href} class="footer-icon-link" aria-label={label} title={label} target="_blank" rel="noreferrer"><i class={icon} aria-hidden="true"></i></a>)}
+          <a href="/rss.xml" class="footer-icon-link" aria-label="RSS" title="RSS"><i class="bi bi-rss-fill" aria-hidden="true"></i></a>
+        </nav>
+      </div>
+      <p class="site-footer__license">Content licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a></p>
+    </footer>
+  </body>
+</html>
