@@ -1,7 +1,5 @@
 ---
 import { siteConfig } from "@/site.config";
-import "@fontsource/ubuntu-sans/latin-500.css";
-import "@fontsource/ubuntu-sans/latin-600.css";
 
 const pathname = `${Astro.url.pathname.replace(/\/+$/, "")}/`;
 const navItems = [
@@ -29,6 +27,25 @@ const navItems = [
 </header>
 
 <style>
+  /* Embed the menu faces in its stylesheet so navigation cannot paint a fallback
+     while a separate font request completes. A distinct family keeps page-level
+     Ubuntu Sans declarations from overriding this loading policy. */
+  @font-face {
+    font-family: "Ubuntu Sans Menu";
+    font-style: normal;
+    font-weight: 500;
+    font-display: block;
+    src: url("@fontsource/ubuntu-sans/files/ubuntu-sans-latin-500-normal.woff2?inline") format("woff2");
+  }
+
+  @font-face {
+    font-family: "Ubuntu Sans Menu";
+    font-style: normal;
+    font-weight: 600;
+    font-display: block;
+    src: url("@fontsource/ubuntu-sans/files/ubuntu-sans-latin-600-normal.woff2?inline") format("woff2");
+  }
+
   /* Share the reference menu without depending on either page's content styles. */
   .masthead {
     box-sizing: border-box;
@@ -41,7 +58,7 @@ const navItems = [
     padding: 32px 0 16px;
     border-bottom: 1px solid #dedede;
     color: #111;
-    font: 400 16px/1.5 "Ubuntu Sans", Arial, sans-serif;
+    font: 400 16px/1.5 "Ubuntu Sans Menu", Arial, sans-serif;
   }
 
   a {
