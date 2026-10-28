@@ -110,7 +110,7 @@ export default function RankSizePrincipleInteractive() {
   }
 
   return (
-    <div className="not-prose article-figure--compact my-10">
+    <div className="not-prose article-table my-10">
       <section className="interactive-panel overflow-hidden">
         <div className="px-5 py-5 sm:px-6 sm:py-6">
           <p className="eyebrow">The Rank-Size Principle in Action</p>
@@ -118,17 +118,12 @@ export default function RankSizePrincipleInteractive() {
 
         <div className="px-5 pb-5 sm:px-6 sm:pb-6">
           <div className="overflow-x-auto px-4">
-            <table className="w-full table-fixed border-collapse">
-              <colgroup>
-                <col style={{ width: "40%" }} />
-                <col style={{ width: "20%" }} />
-                <col style={{ width: "40%" }} />
-              </colgroup>
+            <table className="border-collapse">
               <thead className="border-b border-black/8">
                 <tr className="text-left text-xs font-semibold uppercase tracking-[0.16em] text-black/50 sm:text-[0.82rem]">
                   <th className="px-0 py-3 pl-4 pr-6 sm:pr-8">Party</th>
-                  <th className="px-0 py-3 text-center">Votes</th>
-                  <th className="px-0 py-3 pr-4">
+                  <th className="px-4 py-3 text-center">Votes</th>
+                  <th className="px-4 py-3">
                     <div className={`ml-auto ${SEATS_CONTROL_WIDTH_CLASS} text-center`}>Seats</div>
                   </th>
                 </tr>
@@ -139,10 +134,10 @@ export default function RankSizePrincipleInteractive() {
                     <td className="px-0 py-3 pl-4 text-sm font-semibold text-[#111111] sm:pr-8 sm:text-[0.98rem]">
                       <span style={{ color: party.color }}>{party.label}</span>
                     </td>
-                    <td className="px-0 py-3 text-center text-sm font-semibold tabular-nums text-[#111111] sm:text-[0.98rem]">
+                    <td className="px-4 py-3 text-center text-sm font-semibold tabular-nums text-[#111111] sm:text-[0.98rem]">
                       {party.votes}%
                     </td>
-                    <td className="px-0 py-3 pr-4">
+                    <td className="px-4 py-3">
                       <div
                         className={`ml-auto flex ${SEATS_CONTROL_WIDTH_CLASS} items-center justify-between`}
                       >
@@ -181,7 +176,7 @@ export default function RankSizePrincipleInteractive() {
         </div>
 
         <div className="border-t border-black/8 px-5 py-5 sm:px-6 sm:py-6">
-          <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto] items-start gap-x-3 px-4 sm:[grid-template-columns:40%_20%_40%] sm:gap-x-0">
+          <div className="flex flex-wrap items-start justify-between gap-4 px-4">
             <div className="min-w-0 space-y-2 sm:pl-4">
               <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-black/45 sm:text-[0.72rem] sm:tracking-[0.16em]">
                 Votes

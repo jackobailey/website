@@ -101,19 +101,28 @@
 }
 
 /* MDX emits Astro figures directly and hydrated React figures inside islands. */
-.article-prose > :is(.not-prose, astro-island, figure, video, iframe, table, .article-figure),
+.article-prose > :is(.not-prose, astro-island, figure, video, iframe, .article-figure),
 .article-prose > p:has(> img:only-child) {
   width: 100%;
   max-width: none;
   margin-inline: 0;
 }
 
-/* Simple result panels opt into the prose measure; other figures stay wide. */
-.article-prose > .article-figure--compact,
-.article-prose > astro-island:has(> .article-figure--compact) {
-  max-width: var(--article-text-width);
+/* Static and interactive tables size to their content. Use article-table--wide
+   when the extra width improves a visual comparison, such as MMP's seat bars. */
+.article-prose > .article-table:not(.article-table--wide),
+.article-prose > astro-island:has(> .article-table:not(.article-table--wide)) {
+  width: fit-content;
+  max-width: 100%;
   margin-inline: auto;
 }
+
+.article-prose .article-table:not(.article-table--wide) table { width: auto; max-width: none; table-layout: auto; }
+.article-prose .article-table--plain { margin-block: 2rem; overflow-x: auto; }
+.article-prose .article-table--plain table { margin-block: 0; }
+.article-prose .article-table--plain :is(th, td) { padding-inline: 1.25rem; }
+.article-prose .article-table--plain :is(th, td):first-child { padding-left: 0; }
+.article-prose .article-table--plain :is(th, td):last-child { padding-right: 0; }
 
 .article-prose > astro-island { display: block; }
 .article-prose .not-prose { font-size: 1rem; line-height: 1.5; }

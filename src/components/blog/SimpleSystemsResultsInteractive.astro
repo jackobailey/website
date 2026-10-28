@@ -86,66 +86,68 @@ const animatedRows = [
 ];
 ---
 
-<div class="not-prose article-figure--compact my-10">
+<div class="not-prose article-table my-10">
   <section
     class="interactive-panel overflow-hidden simple-systems-results"
     data-target-mode="party"
     data-visible-mode="party"
     data-phase="party"
   >
-    <div class="mx-auto max-w-[40rem] p-5 sm:p-6">
+    <div class="p-5 sm:p-6">
       <p class="eyebrow">
         {SIMPLE_SYSTEMS_DISTRICT}, Samoa (2006)
       </p>
 
-      <div class="mt-5 overflow-hidden">
-        <div
-          class="results-grid results-grid-head border-b border-black/8 px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-black/50 sm:text-[0.82rem]"
-        >
-          <span class="results-label-cell min-w-0" aria-live="polite">
-            <span class="results-heading-party">Party</span>
-            <span class="results-heading-candidate">Candidate</span>
-          </span>
-          <span class="results-number-cell">Votes</span>
-          <span class="results-number-cell">Seats</span>
-        </div>
+      <div class="mt-5 overflow-x-auto" tabindex="0" role="region" aria-label="Samoa election results">
+        <div class="w-max">
+          <div
+            class="results-grid results-grid-head border-b border-black/8 px-4 py-3 text-xs font-semibold uppercase tracking-[0.16em] text-black/50 sm:text-[0.82rem]"
+          >
+            <span class="results-label-cell min-w-0" aria-live="polite">
+              <span class="results-heading-party">Party</span>
+              <span class="results-heading-candidate">Candidate</span>
+            </span>
+            <span class="results-number-cell">Votes</span>
+            <span class="results-number-cell">Seats</span>
+          </div>
 
-        <div class="results-motion-stage">
-          {
-            animatedRows.map((row) => (
-              <div
-                class="results-grid results-motion-row"
-                data-row={row.id}
-              >
-                <div class="results-label-cell min-w-0">
-                  {row.party && (
-                    <div class="mode-content mode-party">
+          <div class="results-motion-stage">
+            {
+              animatedRows.map((row) => (
+                <div
+                  class="results-grid results-motion-row"
+                  data-row={row.id}
+                >
+                  <div class="results-label-cell min-w-0">
+                    {row.party && (
+                      <div class="mode-content mode-party">
+                        <p class="text-sm font-semibold leading-5 text-[#111111] sm:text-[0.98rem]">
+                          {row.party.label}
+                        </p>
+                      </div>
+                    )}
+
+                    <div class="mode-content mode-candidate">
                       <p class="text-sm font-semibold leading-5 text-[#111111] sm:text-[0.98rem]">
-                        {row.party.label}
+                        {row.candidate.label}
                       </p>
+                      <p class="text-sm leading-5 text-black/60">{row.candidate.detail}</p>
                     </div>
-                  )}
+                  </div>
 
-                  <div class="mode-content mode-candidate">
-                    <p class="text-sm font-semibold leading-5 text-[#111111] sm:text-[0.98rem]">
-                      {row.candidate.label}
-                    </p>
-                    <p class="text-sm leading-5 text-black/60">{row.candidate.detail}</p>
+                  <div class="results-number-cell text-sm font-semibold tabular-nums text-[#111111] sm:text-[0.98rem]">
+                    {row.party && <span class="mode-content mode-party">{formatNumber(row.party.votes)}</span>}
+                    <span class="mode-content mode-candidate">{formatNumber(row.candidate.votes)}</span>
+                  </div>
+
+                  <div class="results-number-cell text-sm font-semibold tabular-nums text-[#111111] sm:text-[0.98rem]">
+                    {row.party && <span class="mode-content mode-party">{row.party.seats}</span>}
+                    <span class="mode-content mode-candidate">{row.candidate.seats}</span>
                   </div>
                 </div>
-
-                <div class="results-number-cell text-sm font-semibold tabular-nums text-[#111111] sm:text-[0.98rem]">
-                  {row.party && <span class="mode-content mode-party">{formatNumber(row.party.votes)}</span>}
-                  <span class="mode-content mode-candidate">{formatNumber(row.candidate.votes)}</span>
-                </div>
-
-                <div class="results-number-cell text-sm font-semibold tabular-nums text-[#111111] sm:text-[0.98rem]">
-                  {row.party && <span class="mode-content mode-party">{row.party.seats}</span>}
-                  <span class="mode-content mode-candidate">{row.candidate.seats}</span>
-                </div>
-              </div>
-            ))
-          }
+              ))
+            }
+          </div>
         </div>
       </div>
 
@@ -267,6 +269,9 @@ const animatedRows = [
     --results-seat-width: 4.25rem;
     align-items: center;
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
     min-height: 3rem;
     position: relative;
   }
@@ -340,10 +345,7 @@ const animatedRows = [
     display: inline-flex;
     gap: 0.5rem;
     padding: 0.45rem 0.72rem 0.45rem 0.9rem;
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+    margin-left: auto;
   }
 
   .results-principle-text {
@@ -401,6 +403,8 @@ const animatedRows = [
     --party-row-height: calc(var(--stage-height) / 4);
     --candidate-row-height: calc(var(--stage-height) / 5);
     background: #ffffff;
+    display: grid;
+    align-items: start;
     height: var(--stage-height);
     isolation: isolate;
     position: relative;
@@ -416,7 +420,9 @@ const animatedRows = [
     min-height: 0;
     overflow: hidden;
     padding: 0.5rem 1rem;
-    position: absolute;
+    /* Overlapping grid rows retain their intrinsic width while animating. */
+    position: relative;
+    grid-area: 1 / 1;
     transform: translate3d(0, var(--row-y, 0), 0);
     transition:
       transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
@@ -571,7 +577,7 @@ const animatedRows = [
     .results-controls {
       align-items: center;
       flex-direction: row;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       gap: 0.75rem;
       justify-content: space-between;
       min-height: 0;

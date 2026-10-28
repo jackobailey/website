@@ -233,7 +233,7 @@ export default function MmpSeatSimulator() {
   };
 
   return (
-    <div className="not-prose my-10">
+    <div className="not-prose article-table article-table--wide my-10">
       <section className="interactive-panel overflow-hidden">
         <div className="grid border-b border-black/8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
           <div className="border-b border-black/8 p-5 sm:p-6 md:border-b-0 md:border-r">

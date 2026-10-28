@@ -1,0 +1,7 @@
+---
+const { class: className, ...attributes } = Astro.props;
+---
+
+<div class="article-table article-table--plain" tabindex="0" role="region" aria-label="Article table">
+  <table class={className} {...attributes}><slot /></table>
+</div>

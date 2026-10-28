@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ArticleShare from "@/components/writing/ArticleShare.astro";
+import ArticleTable from "@/components/writing/ArticleTable.astro";
 import { siteConfig } from "@/site.config";
 import { getBlogPosts, getRelatedPosts, getTagEntries } from "@/lib/content";
 import { buildTagLookup, getTagHref, getTagLabel } from "@/lib/tags";
@@ -89,7 +90,7 @@ const structuredData = {
       </aside>
 
       <div class="prose-editorial article-prose">
-        <Content />
+        <Content components={{ table: ArticleTable }} />
       </div>
     </div>
 
