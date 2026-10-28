@@ -134,7 +134,6 @@
 .article-prose figcaption { max-width: var(--article-text-width); margin-inline: auto; font-size: 0.875rem; line-height: 1.5; }
 .article-prose section[data-footnotes] { font-size: 0.875rem; line-height: 1.65; }
 .article-prose .katex-display { overflow-x: auto; overflow-y: hidden; padding-block: 0.25rem; }
-.article-prose :where(a):not(:where(.not-prose *)) { color: #111; text-decoration: underline; text-decoration-color: #f76f5c; text-underline-offset: 3px; }
 
 .article-related {
   width: min(calc(100% - 96px), 70rem);
