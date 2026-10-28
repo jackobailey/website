@@ -1,4 +1,5 @@
 ---
+import Header from "@/components/layout/Header.astro";
 import ThresholdExplorer from "@/components/thresholds/ThresholdExplorer";
 import "@/components/thresholds/threshold-page.css";
 import { siteConfig } from "@/site.config";
@@ -6,7 +7,7 @@ import ubuntuRegular from "@fontsource/ubuntu-sans/files/ubuntu-sans-latin-400-n
 import ubuntuMedium from "@fontsource/ubuntu-sans/files/ubuntu-sans-latin-500-normal.woff2?url";
 import ubuntuSemibold from "@fontsource/ubuntu-sans/files/ubuntu-sans-latin-600-normal.woff2?url";
 
-// Keep this release independent of the unfinished shared website redesign.
+// Keep the interactive's content styles independent of the shared website layout.
 const title = `${siteConfig.name} | Effective electoral thresholds`;
 const description = "Explore how district magnitude and party competition shape the vote share needed to win a first seat. An interactive based on Jack Bailey’s research.";
 const canonical = new URL("/effective_thresholds/", Astro.site).toString();
@@ -40,15 +41,7 @@ const profiles = [
   </head>
   <body>
     <a href="#content" class="threshold-skip-link">Skip to content</a>
-    <header class="masthead page-shell">
-      <a href="/" class="masthead__name" aria-label={`${siteConfig.name} home`}>JACK BAILEY</a>
-      <nav aria-label="Primary navigation">
-        <ul class="masthead__nav">
-          <li><a href="/writing/" class="nav-link">Writing</a></li>
-          <li><a href="/about/" class="nav-link">About</a></li>
-        </ul>
-      </nav>
-    </header>
+    <Header />
     <main id="content" class="page-shell threshold-page">
       <header class="threshold-intro">
         <h1>What does it take to win a seat?</h1>

@@ -29,11 +29,7 @@ svg { display: block; vertical-align: middle; max-width: 100%; }
 .sr-only, .threshold-skip-link:not(:focus) { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 .threshold-skip-link:focus { position: absolute; top: 16px; left: 16px; z-index: 50; padding: 8px 16px; border-radius: 999px; background: var(--ink); color: #fff; }
 .page-shell { width: min(calc(100% - var(--gutter) * 2), var(--page-width)); margin-inline: auto; }
-.masthead { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 32px 0 16px; border-bottom: 1px solid var(--line); }
-.masthead__name { font-size: 20px; font-weight: 600; letter-spacing: .02em; line-height: 1.3; }
-.masthead__nav { display: flex; align-items: center; gap: 26px; padding: 0; margin: 0; list-style: none; }
-.nav-link { display: flex; align-items: center; min-height: 44px; font-size: 14px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
-.nav-link:hover, .footer-icon-link:hover { color: var(--accent); }
+.footer-icon-link:hover { color: var(--accent); }
 .site-footer { padding: 37px 0 34px; font-size: 13px; }
 .site-footer__row { display: flex; gap: 28px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
 .footer-icons { display: flex; align-items: center; gap: 4px; }
@@ -47,9 +43,6 @@ svg { display: block; vertical-align: middle; max-width: 100%; }
 }
 @media (max-width: 600px) {
   :root { --gutter: 24px; }
-  .masthead { display: block; padding-top: 26px; padding-bottom: 0; }
-  .masthead__nav { margin-top: 15px; gap: 18px; justify-content: space-between; }
-  .nav-link { font-size: 12px; }
   .site-footer { padding: 29px 0; }
   .site-footer__row { gap: 16px; }
   .footer-icon-link { width: 44px; height: 44px; }
