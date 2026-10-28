@@ -1,9 +1,11 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import { getBlogPosts } from "@/lib/content";
+import { getBlogPosts, getTagEntries } from "@/lib/content";
+import { buildTagLookup, getTagLabel } from "@/lib/tags";
 import { formatDate, getReadingTime } from "@/lib/format";
 
-const posts = await getBlogPosts();
+const [posts, tags] = await Promise.all([getBlogPosts(), getTagEntries()]);
+const tagLookup = buildTagLookup(tags);
 ---
 
 <BaseLayout
@@ -18,7 +20,7 @@ const posts = await getBlogPosts();
             <article
               class:list={[index === 0 ? "pt-0" : "surface pt-4 sm:pt-6"]}
               data-post-card
-              data-search={`${post.data.title} ${post.data.summary} ${post.data.tags.join(" ")}`.toLowerCase()}
+              data-search={`${post.data.title} ${post.data.summary} ${post.data.tags.join(" ")} ${post.data.tags.map((tag) => getTagLabel(tag, tagLookup)).join(" ")}`.toLowerCase()}
             >
               <div class="min-w-0">
                 <p class="eyebrow mt-2">{formatDate(post.data.date)}</p>

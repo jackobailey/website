@@ -8,6 +8,12 @@ import remarkMath from "remark-math";
 
 export default defineConfig({
   site: "https://jack-bailey.co.uk",
+  redirects: {
+    "/tags/miscellaneous/": "/tags/taxation/",
+    "/writing/tags/miscellaneous/": "/tags/taxation/",
+    "/tags/explainers/": "/tags/elections/",
+    "/writing/tags/explainers/": "/tags/elections/"
+  },
   integrations: [
     mdx(),
     react(),

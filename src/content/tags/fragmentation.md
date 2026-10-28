@@ -1,5 +1,5 @@
 ---
-name: Fragmentation
+name: Party fragmentation
 description: Notes and posts about party-system fragmentation and how to conceptualise or measure it.
 seoTitle: Fragmentation
 seoDescription: Writing on party-system fragmentation, measurement, and related political-science questions.

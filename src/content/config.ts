@@ -7,7 +7,7 @@ const blog = defineCollection({
     summary: z.string(),
     date: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
-    tags: z.array(z.string()).min(1),
+    tags: z.array(z.string()).min(1).max(6),
     featured: z.boolean().default(false),
     seoTitle: z.string().optional()
   })
@@ -17,7 +17,7 @@ const tags = defineCollection({
   type: "content",
   schema: z.object({
     name: z.string(),
-    description: z.string(),
+    description: z.string().optional(),
     seoTitle: z.string().optional(),
     seoDescription: z.string().optional(),
     featured: z.boolean().default(false)

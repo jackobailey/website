@@ -18,10 +18,10 @@ const tagLookup = buildTagLookup(await getTagEntries());
 ---
 
 <BaseLayout
-  title={tag.data.seoTitle ?? `${tag.data.name} entries`}
-  description={tag.data.seoDescription ?? tag.data.description}
+  title={tag.data.seoTitle ?? tag.data.name}
+  description={tag.data.seoDescription ?? tag.data.description ?? `Articles about ${tag.data.name}.`}
 >
-  <PageIntro eyebrow="Tag" title={tag.data.name} description={tag.data.description} />
+  <PageIntro eyebrow="Topic" title={tag.data.name} />
 
   <section class="page-shell pb-14 sm:pb-20">
     <div class="grid gap-8 md:grid-cols-2">

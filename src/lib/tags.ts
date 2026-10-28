@@ -19,7 +19,7 @@ export function buildTagLookup(tags: CollectionEntry<"tags">[]) {
 
 export function getTagLabel(
   slug: string,
-  lookup: Record<string, { label: string; description: string }>
+  lookup: Record<string, { label: string; description?: string }>
 ) {
   return lookup[slug]?.label ?? sentenceCaseFromSlug(slug);
 }
