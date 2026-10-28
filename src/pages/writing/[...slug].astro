@@ -1,11 +1,13 @@
 ---
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
-import CopyLinkButton from "@/components/ui/CopyLinkButton.astro";
+import ArticleShare from "@/components/writing/ArticleShare.astro";
 import { siteConfig } from "@/site.config";
-import { getBlogPosts, getRelatedPosts } from "@/lib/content";
+import { getBlogPosts, getRelatedPosts, getTagEntries } from "@/lib/content";
+import { buildTagLookup, getTagHref, getTagLabel } from "@/lib/tags";
 import { formatDate, getReadingTime } from "@/lib/format";
 import { getWritingArtwork } from "@/lib/writingArtwork";
+import "@/styles/article.css";
 
 export async function getStaticPaths() {
   const posts = await getBlogPosts();
@@ -19,8 +21,12 @@ const { post } = Astro.props;
 const { Content } = await post.render();
 const allPosts = await getBlogPosts();
 const relatedPosts = getRelatedPosts(post, allPosts);
-const hasRelatedPosts = relatedPosts.length > 0;
+const suggestedPosts = relatedPosts.length
+  ? relatedPosts
+  : allPosts.filter((entry) => entry.slug !== post.slug).slice(0, 3);
+const tagLookup = buildTagLookup(await getTagEntries());
 const artwork = getWritingArtwork(post.slug);
+const canonical = new URL(`/writing/${post.slug}/`, Astro.site).toString();
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
@@ -41,57 +47,70 @@ const structuredData = {
   description={post.data.summary}
   structuredData={structuredData}
 >
-  <section class="section-space">
-    <div class:list={["page-shell gap-8", hasRelatedPosts ? "grid lg:grid-cols-[minmax(0,1fr)_300px]" : ""]}>
-      <article class:list={["space-y-8", !hasRelatedPosts && "max-w-4xl"]}>
-        <header class="writing-hero">
-          <Image
-            src={artwork.image}
-            alt=""
-            class="writing-hero__image"
-            style={`object-position: ${artwork.objectPosition};`}
-            widths={[768, 1024, 1536]}
-            sizes="(min-width: 1024px) 760px, 100vw"
-            loading="eager"
-          />
-          <div class="writing-hero__copy">
-            <p class="writing-hero__meta">
-              {formatDate(post.data.date)} · {getReadingTime(post.body)}
-            </p>
-            <h1 class="writing-hero__title">{post.data.title}</h1>
-            <p class="writing-hero__summary">{post.data.summary}</p>
-          </div>
-        </header>
+  <article class="article-page" aria-labelledby="article-title">
+    <header class="article-heading">
+      <h1 id="article-title">{post.data.title}</h1>
+      <p class="article-deck">{post.data.summary}</p>
+    </header>
 
-        <div class="flex flex-wrap items-center justify-end gap-4 text-sm text-muted">
-          {post.data.updatedDate && <span>Updated {formatDate(post.data.updatedDate)}</span>}
-          <CopyLinkButton />
-        </div>
-
-        <div class="surface pt-7 sm:pt-8">
-          <div class="prose-editorial">
-            <Content />
-          </div>
-        </div>
-      </article>
-
-      {hasRelatedPosts && (
-        <aside class="editorial-sidebar space-y-6">
-          <div class="space-y-4">
-            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-accent">Related posts</p>
-            <ul class="space-y-4">
-              {relatedPosts.map((entry) => (
-                <li class="border-t panel-rule pt-4 first:border-t-0 first:pt-0">
-                  <a href={`/writing/${entry.slug}/`} class="font-semibold text-ink hover:text-accent">
-                    {entry.data.title}
-                  </a>
-                  <p class="mt-2 text-sm leading-6 text-ink">{entry.data.summary}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </aside>
+    <div class="article-media">
+      <Image
+        src={artwork.image}
+        alt=""
+        class="article-media__image"
+        style={`object-position: ${artwork.objectPosition};`}
+        widths={[480, 768, 1024, 1280, 1536]}
+        sizes="(min-width: 1376px) 1280px, (min-width: 1051px) calc(100vw - 96px), (min-width: 601px) calc(100vw - 64px), calc(100vw - 48px)"
+        loading="eager"
+        fetchpriority="high"
+      />
+      <div class="article-meta">
+        <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+        <span>{getReadingTime(post.body)}</span>
+      </div>
+      {post.data.updatedDate && (
+        <p class="article-updated">Updated <time datetime={post.data.updatedDate.toISOString()}>{formatDate(post.data.updatedDate)}</time></p>
       )}
     </div>
-  </section>
+
+    <div class="article-reading">
+      <aside class="article-topics article-rail" aria-labelledby="article-topics-title">
+        <h2 id="article-topics-title" class="article-rail__title">Topics</h2>
+        <ul>
+          {post.data.tags.map((tag) => (
+            <li><a href={getTagHref(tag)}>{getTagLabel(tag, tagLookup)}</a></li>
+          ))}
+        </ul>
+      </aside>
+
+      <aside class="article-share article-rail" aria-labelledby="article-share-title">
+        <h2 id="article-share-title" class="article-rail__title">Share</h2>
+        <ArticleShare title={post.data.title} url={canonical} />
+      </aside>
+
+      <div class="prose-editorial article-prose">
+        <Content />
+      </div>
+    </div>
+
+    {suggestedPosts.length > 0 && (
+      <section class="article-related" aria-labelledby="related-title">
+        <h2 id="related-title">{relatedPosts.length ? "Related reading" : "More writing"}</h2>
+        <ul>
+          {suggestedPosts.map((entry) => {
+            const relatedArtwork = getWritingArtwork(entry.slug);
+            return (
+              <li>
+                <a class="article-related__link" href={`/writing/${entry.slug}/`}>
+                  <Image src={relatedArtwork.image} alt="" widths={[320, 640, 960]} sizes="(min-width: 1051px) 350px, (min-width: 601px) 45vw, calc(100vw - 48px)" loading="lazy" />
+                  <h3>{entry.data.title}</h3>
+                </a>
+                <p>{entry.data.summary}</p>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    )}
+  </article>
 </BaseLayout>

@@ -1,0 +1,26 @@
+---
+import CopyLinkButton from "@/components/ui/CopyLinkButton.astro";
+
+interface Props {
+  title: string;
+  url: string;
+}
+
+const { title, url } = Astro.props;
+const shareLinks = [
+  { label: "Bluesky", icon: "bi-bluesky", href: `https://bsky.app/intent/compose?text=${encodeURIComponent(`${title}\n${url}`)}` },
+  { label: "LinkedIn", icon: "bi-linkedin", href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}` },
+  { label: "Email", icon: "bi-envelope-fill", href: `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(url)}` }
+];
+---
+
+<ul>
+  {shareLinks.map(({ label, icon, href }) => (
+    <li>
+      <a href={href} class="share-icon" aria-label={`Share by ${label}`} title={`Share by ${label}`}>
+        <i class:list={["bi", icon]} aria-hidden="true"></i>
+      </a>
+    </li>
+  ))}
+  <li><CopyLinkButton url={url} iconOnly /></li>
+</ul>

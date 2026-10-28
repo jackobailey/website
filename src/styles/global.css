@@ -308,8 +308,7 @@
     outline-offset: 4px;
   }
 
-  .writing-card__image,
-  .writing-hero__image {
+  .writing-card__image {
     height: 100%;
     inset: 0;
     object-fit: cover;
@@ -336,8 +335,7 @@
     text-shadow: 0 1px 3px rgb(71 22 30 / 0.36);
   }
 
-  .writing-card__meta,
-  .writing-hero__meta {
+  .writing-card__meta {
     color: rgb(255 255 255 / 0.86);
     font-size: 0.75rem;
     font-weight: 700;
@@ -359,45 +357,6 @@
     line-height: 1.45;
     margin-top: 0.65rem;
     max-width: 34rem;
-  }
-
-  .writing-hero {
-    background: #f76f5c;
-    border-radius: 1.625rem;
-    color: #ffffff;
-    isolation: isolate;
-    min-height: clamp(26rem, 48vw, 31rem);
-    overflow: hidden;
-    position: relative;
-  }
-
-  .writing-hero__image {
-    z-index: -2;
-  }
-
-  .writing-hero__copy {
-    bottom: 0;
-    left: 0;
-    padding: clamp(1.5rem, 4vw, 2.75rem);
-    position: absolute;
-    right: 0;
-  }
-
-  .writing-hero__title {
-    font-size: clamp(2.25rem, 6vw, 4.25rem);
-    font-weight: 700;
-    letter-spacing: -0.045em;
-    line-height: 0.98;
-    margin-top: 0.75rem;
-    max-width: 13ch;
-  }
-
-  .writing-hero__summary {
-    color: rgb(255 255 255 / 0.92);
-    font-size: clamp(1rem, 2vw, 1.2rem);
-    line-height: 1.55;
-    margin-top: 0.9rem;
-    max-width: 42rem;
   }
 
   @media (min-width: 480px) {

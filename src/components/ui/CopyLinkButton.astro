@@ -1,27 +1,53 @@
+---
+interface Props {
+  url?: string;
+  iconOnly?: boolean;
+}
+const { url, iconOnly = false } = Astro.props;
+---
+
 <button
   type="button"
-  class="meta-inline-link"
+  class:list={["meta-inline-link", { "share-icon": iconOnly }]}
   data-copy-link
+  data-copy-url={url}
+  aria-live="polite"
+  title="Copy link"
 >
-  Copy link
+  {iconOnly && <i class="bi bi-link-45deg" data-copy-icon aria-hidden="true"></i>}
+  <span data-copy-label class:list={{ "sr-only": iconOnly }}>Copy link</span>
 </button>
 
 <script>
-  const buttons = document.querySelectorAll("[data-copy-link]");
+  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-copy-link]");
 
   for (const button of buttons) {
+    const label = button.querySelector<HTMLElement>("[data-copy-label]");
+    const icon = button.querySelector<HTMLElement>("[data-copy-icon]");
+    let resetTimer: number | undefined;
+
     button.addEventListener("click", async () => {
-      const original = button.textContent;
+      window.clearTimeout(resetTimer);
+      let message: string;
+      let iconClass: string;
 
       try {
-        await navigator.clipboard.writeText(window.location.href);
-        button.textContent = "Link copied";
+        await navigator.clipboard.writeText(button.dataset.copyUrl ?? window.location.href);
+        message = "Link copied";
+        iconClass = "bi bi-check2";
       } catch {
-        button.textContent = "Copy failed";
+        message = "Copy failed";
+        iconClass = "bi bi-exclamation-circle";
       }
 
-      window.setTimeout(() => {
-        button.textContent = original;
+      if (label) label.textContent = message;
+      if (icon) icon.className = iconClass;
+      button.title = message;
+
+      resetTimer = window.setTimeout(() => {
+        if (label) label.textContent = "Copy link";
+        if (icon) icon.className = "bi bi-link-45deg";
+        button.title = "Copy link";
       }, 1800);
     });
   }
