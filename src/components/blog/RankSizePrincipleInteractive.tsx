@@ -110,7 +110,7 @@ export default function RankSizePrincipleInteractive() {
   }
 
   return (
-    <div className="not-prose my-10">
+    <div className="not-prose article-figure--compact my-10">
       <section className="interactive-panel overflow-hidden">
         <div className="px-5 py-5 sm:px-6 sm:py-6">
           <p className="eyebrow">The Rank-Size Principle in Action</p>

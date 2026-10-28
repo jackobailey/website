@@ -108,6 +108,13 @@
   margin-inline: 0;
 }
 
+/* Simple result panels opt into the prose measure; other figures stay wide. */
+.article-prose > .article-figure--compact,
+.article-prose > astro-island:has(> .article-figure--compact) {
+  max-width: var(--article-text-width);
+  margin-inline: auto;
+}
+
 .article-prose > astro-island { display: block; }
 .article-prose .not-prose { font-size: 1rem; line-height: 1.5; }
 .article-prose > :first-child { margin-top: 0; }
