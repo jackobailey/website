@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import Image from "@/components/writing/ArtworkImage.astro";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ArticleShare from "@/components/writing/ArticleShare.astro";
 import ArticleTable from "@/components/writing/ArticleTable.astro";
@@ -63,7 +63,6 @@ const structuredData = {
         alt=""
         class="article-media__image"
         style={`object-position: ${artwork.objectPosition};`}
-        widths={[480, 768, 1024, 1280, 1536]}
         sizes="(min-width: 1376px) 1280px, (min-width: 1051px) calc(100vw - 96px), (min-width: 601px) calc(100vw - 64px), calc(100vw - 48px)"
         loading="eager"
         fetchpriority="high"
@@ -106,7 +105,7 @@ const structuredData = {
             return (
               <li>
                 <a class="article-related__link" href={`/writing/${entry.slug}/`}>
-                  <Image src={relatedArtwork.image} alt="" widths={[320, 640, 960]} sizes="(min-width: 1051px) 350px, (min-width: 601px) 45vw, calc(100vw - 48px)" loading="lazy" />
+                  <Image src={relatedArtwork.image} alt="" sizes="(min-width: 1216px) 352px, (min-width: 1051px) calc((100vw - 160px) / 3), (min-width: 601px) calc((100vw - 96px) / 2), calc(100vw - 48px)" loading="lazy" />
                   <h3>{entry.data.title}</h3>
                 </a>
                 <p>{entry.data.summary}</p>

@@ -1,5 +1,6 @@
 /** Twice the interactive's 6px radius, measured in CSS pixels on every screen. */
 export const PAPER_GAS = { radius: 12, maxCount: 100, step: 1 / 120 } as const;
+export const GAS_COLORS = ["#F76F5C", "#3B0F70"] as const;
 
 export type GasParticle = {
   x: number;
@@ -7,7 +8,6 @@ export type GasParticle = {
   vx: number;
   vy: number;
   color: 0 | 1;
-  cut: number;
 };
 
 export function createGas(width: number, height: number): GasParticle[] {
@@ -30,7 +30,7 @@ export function createGas(width: number, height: number): GasParticle[] {
       if (particles.some((p) => (p.x - x) ** 2 + (p.y - y) ** 2 < (radius * 2 + 2) ** 2)) continue;
       const angle = random() * Math.PI * 2;
       const speed = 96 + random() * 56;
-      particles.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, color: i % 2 as 0 | 1, cut: i % 4 });
+      particles.push({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed, color: i % 2 as 0 | 1 });
       break;
     }
   }

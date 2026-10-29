@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import Image from "@/components/writing/ArtworkImage.astro";
 import type { CollectionEntry } from "astro:content";
 import { formatDate, getReadingTime } from "@/lib/format";
 import { getTagHref, getTagLabel } from "@/lib/tags";
@@ -26,8 +26,7 @@ const searchText = [post.data.title, post.data.summary, ...post.data.tags,
       src={artwork.image}
       alt=""
       style={`object-position: ${artwork.objectPosition};`}
-      widths={[360, 640, 960]}
-      sizes="(min-width: 1216px) 318px, (min-width: 1051px) 28vw, (min-width: 601px) 40vw, calc(100vw - 48px)"
+      sizes="(min-width: 1216px) 342px, (min-width: 1051px) calc((100vw - 412px) * 0.425), (min-width: 824px) 303px, (min-width: 601px) calc((100vw - 112px) * 0.425), calc(100vw - 48px)"
       loading={eager ? "eager" : "lazy"}
     />
   </a>

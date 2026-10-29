@@ -1,5 +1,5 @@
 ---
-import { Image } from "astro:assets";
+import Image from "@/components/writing/ArtworkImage.astro";
 import type { CollectionEntry } from "astro:content";
 import { formatDate } from "@/lib/format";
 import { getWritingArtwork } from "@/lib/writingArtwork";
@@ -20,7 +20,6 @@ const artwork = getWritingArtwork(post.slug);
       alt=""
       class="home-article__image"
       style={`object-position: ${artwork.objectPosition};`}
-      widths={featured ? [480, 768, 1024, 1536] : [320, 480, 768]}
       sizes={featured
         ? "(min-width: 1216px) 804px, (min-width: 1051px) calc(75vw - 108px), (min-width: 824px) 740px, (min-width: 601px) calc(100vw - 84px), calc(100vw - 48px)"
         : "(min-width: 1216px) 386px, (min-width: 1051px) calc(37.5vw - 70px), (min-width: 824px) 356px, (min-width: 601px) calc((100vw - 112px) / 2), calc((100vw - 64px) / 2)"}
