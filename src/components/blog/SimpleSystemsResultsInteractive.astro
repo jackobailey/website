@@ -277,7 +277,16 @@ const animatedRows = [
   }
 
   .results-label-cell {
+    align-items: center;
+    display: grid;
     padding-left: 1rem;
+  }
+
+  /* Both modes contribute to the width, even while one is hidden. */
+  .mode-content,
+  .results-heading-party,
+  .results-heading-candidate {
+    grid-area: 1 / 1;
   }
 
   .results-grid-head .results-label-cell {
@@ -286,8 +295,8 @@ const animatedRows = [
 
   .results-number-cell {
     align-items: center;
-    display: flex;
-    justify-content: center;
+    display: grid;
+    justify-items: center;
     text-align: center;
     width: 100%;
   }
@@ -353,7 +362,10 @@ const animatedRows = [
     line-height: 1;
   }
 
-  .results-heading-candidate,
+  .results-heading-candidate {
+    visibility: hidden;
+  }
+
   .results-principle-candidate {
     display: none;
   }
@@ -388,12 +400,18 @@ const animatedRows = [
     color: #ffffff;
   }
 
-  .simple-systems-results[data-visible-mode="candidate"] .results-heading-party,
+  .simple-systems-results[data-visible-mode="candidate"] .results-heading-party {
+    visibility: hidden;
+  }
+
+  .simple-systems-results[data-visible-mode="candidate"] .results-heading-candidate {
+    visibility: visible;
+  }
+
   .simple-systems-results[data-visible-mode="candidate"] .results-principle-party {
     display: none;
   }
 
-  .simple-systems-results[data-visible-mode="candidate"] .results-heading-candidate,
   .simple-systems-results[data-visible-mode="candidate"] .results-principle-candidate {
     display: inline;
   }
@@ -434,25 +452,25 @@ const animatedRows = [
   }
 
   .mode-candidate {
-    display: none;
+    visibility: hidden;
   }
 
   .simple-systems-results[data-phase="candidate"] .mode-party {
-    display: none;
+    visibility: hidden;
   }
 
   .simple-systems-results[data-phase="candidate"] .mode-candidate {
-    display: block;
+    visibility: visible;
   }
 
   .simple-systems-results[data-phase="candidate-split"] [data-row="hrpp-main"] .mode-party,
   .simple-systems-results[data-phase="candidate-split"] [data-row="hrpp-secondary"] .mode-party {
-    display: none;
+    visibility: hidden;
   }
 
   .simple-systems-results[data-phase="candidate-split"] [data-row="hrpp-main"] .mode-candidate,
   .simple-systems-results[data-phase="candidate-split"] [data-row="hrpp-secondary"] .mode-candidate {
-    display: block;
+    visibility: visible;
   }
 
   .simple-systems-results[data-phase="party"] [data-row="hrpp-main"] {
