@@ -2,9 +2,10 @@
 import WardExplorer from '@/components/ward2024/WardExplorer';
 import { getImage } from 'astro:assets';
 import wardSticker from '@/assets/ward2024/ward-mrp-hex.png';
+import { siteConfig } from '@/site.config';
 import ubuntuRegular from '@fontsource/ubuntu-sans/files/ubuntu-sans-latin-400-normal.woff2?url';
 import ubuntuBold from '@fontsource/ubuntu-sans/files/ubuntu-sans-latin-700-normal.woff2?url';
-const title = 'UK General Election 2024: Ward by Ward';
+const title = `${siteConfig.name} | UK General Election 2024: Ward by Ward`;
 const description = 'Explore Jack Bailey’s 2024 general election estimates for 7,993 wards in Great Britain. Select a ward to see party vote shares and 95% uncertainty intervals.';
 const sticker = await getImage({ src: wardSticker, width: 264, format: 'webp' });
 ---
