@@ -5,6 +5,7 @@ import ArticleShare from "@/components/writing/ArticleShare.astro";
 import ArticleTable from "@/components/writing/ArticleTable.astro";
 import PaperGasHero from "@/components/writing/PaperGasHero.astro";
 import SystemsPendulumHero from "@/components/writing/SystemsPendulumHero.astro";
+import MmpSeatsHero from "@/components/writing/MmpSeatsHero.astro";
 import { siteConfig } from "@/site.config";
 import { getBlogPosts, getRelatedPosts, getTagEntries } from "@/lib/content";
 import { buildTagLookup, getTagHref, getTagLabel } from "@/lib/tags";
@@ -61,6 +62,8 @@ const structuredData = {
         <PaperGasHero poster={artwork.image} />
       ) : post.slug === "not-so-simple-systems" ? (
         <SystemsPendulumHero />
+      ) : post.slug === "just-do-mmp" ? (
+        <MmpSeatsHero />
       ) : <Image
         src={artwork.image}
         alt=""
