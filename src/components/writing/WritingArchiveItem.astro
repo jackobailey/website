@@ -1,0 +1,44 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { formatDate, getReadingTime } from "@/lib/format";
+import { getTagHref, getTagLabel } from "@/lib/tags";
+import { getWritingArtwork } from "@/lib/writingArtwork";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  tagLookup: Record<string, { label: string; description?: string }>;
+  eager?: boolean;
+}
+
+const { post, tagLookup, eager = false } = Astro.props;
+const artwork = getWritingArtwork(post.slug);
+const topic = post.data.tags[0];
+const href = `/writing/${post.slug}/`;
+const titleId = `writing-${post.slug}`;
+const searchText = [post.data.title, post.data.summary, ...post.data.tags,
+  ...post.data.tags.map((tag) => getTagLabel(tag, tagLookup))].join(" ").toLowerCase();
+---
+
+<article class="archive-item" aria-labelledby={titleId} data-post-card data-search={searchText}>
+  <a class="archive-item__artwork" href={href} aria-label={post.data.title} tabindex="-1">
+    <Image
+      src={artwork.image}
+      alt=""
+      style={`object-position: ${artwork.objectPosition};`}
+      widths={[360, 640, 960]}
+      sizes="(min-width: 1216px) 318px, (min-width: 1051px) 28vw, (min-width: 601px) 40vw, calc(100vw - 48px)"
+      loading={eager ? "eager" : "lazy"}
+    />
+  </a>
+  <div class="archive-item__copy">
+    {topic && <a class="archive-item__topic" href={getTagHref(topic)}>{getTagLabel(topic, tagLookup)}</a>}
+    <h3 id={titleId}><a href={href}>{post.data.title}</a></h3>
+    <p class="archive-item__meta">
+      <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+      <span aria-hidden="true">·</span>
+      <span>{getReadingTime(post.body)}</span>
+    </p>
+    <p class="archive-item__summary">{post.data.summary}</p>
+  </div>
+</article>

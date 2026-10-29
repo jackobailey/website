@@ -1,61 +1,74 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import WritingArchiveItem from "@/components/writing/WritingArchiveItem.astro";
+import { siteConfig } from "@/site.config";
 import { getBlogPosts, getTagEntries } from "@/lib/content";
-import { buildTagLookup, getTagLabel } from "@/lib/tags";
-import { formatDate, getReadingTime } from "@/lib/format";
+import { buildTagLookup, getTagCounts, getTagHref, getTagLabel } from "@/lib/tags";
+import "@/styles/writing-index.css";
 
 const [posts, tags] = await Promise.all([getBlogPosts(), getTagEntries()]);
 const tagLookup = buildTagLookup(tags);
+const tagCounts = getTagCounts(posts);
+const browseTopics = ["elections", "political-parties", "effective-parties", "electoral-systems", "mathematical-modelling", "taxation"]
+  .filter((tag) => tagCounts.has(tag));
 ---
 
 <BaseLayout
   title="Writing"
-  description="Public-facing writing on polling, elections, campaigns, and political change."
+  description="Essays and explainers on elections, representation, and the ideas behind them."
 >
-  <section class="page-shell pt-4 pb-14 sm:pt-5 sm:pb-20" data-filter-shell>
-    <div class="grid gap-10 lg:grid-cols-[minmax(0,1.45fr)_280px]">
-      <div class="min-w-0">
-        <div class="space-y-8" data-post-list>
-          {posts.map((post, index) => (
-            <article
-              class:list={[index === 0 ? "pt-0" : "surface pt-4 sm:pt-6"]}
-              data-post-card
-              data-search={`${post.data.title} ${post.data.summary} ${post.data.tags.join(" ")} ${post.data.tags.map((tag) => getTagLabel(tag, tagLookup)).join(" ")}`.toLowerCase()}
-            >
-              <div class="min-w-0">
-                <p class="eyebrow mt-2">{formatDate(post.data.date)}</p>
-                <h2 class="mt-3 text-3xl font-semibold tracking-tight text-ink">
-                  <a href={`/writing/${post.slug}/`} class="hover:text-accent">
-                    {post.data.title}
-                  </a>
-                </h2>
-                <p class="mt-4 max-w-3xl text-base leading-8 text-ink">{post.data.summary}</p>
-                <p class="mt-5 text-sm text-muted">{getReadingTime(post.body)}</p>
-              </div>
-            </article>
-          ))}
-        </div>
+  <section class="writing-archive" aria-labelledby="writing-title" data-filter-shell>
+    <h1 id="writing-title" class="sr-only">Writing</h1>
 
-        <p class="surface mt-8 hidden pt-4 text-sm text-ink" data-empty-state>
-          No posts match that search yet. Try another topic or clear the search.
+    <div class="archive-layout">
+      <div class="archive-heading">
+        <h2 id="writing-list-title" data-results-heading>Latest writing</h2>
+        <p role="status" aria-live="polite" aria-atomic="true" data-results-count>
+          {posts.length} {posts.length === 1 ? "article" : "articles"}
         </p>
       </div>
 
-      <aside class="editorial-sidebar lg:sticky lg:top-8 lg:h-fit">
-        <div class="space-y-6">
-          <label for="writing-search" class="sr-only">Search posts</label>
-          <input
-            id="writing-search"
-            type="search"
-            placeholder="Search posts"
-            data-writing-search
-            class="glass-input"
-          />
-
-          <p class="text-sm font-medium text-ink">
-            <span data-results-count>{posts.length}</span> posts
-          </p>
+      <form class="archive-search" role="search" data-search-form hidden>
+        <label for="writing-search" class="sr-only">Search writing</label>
+        <div class="archive-search__field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" />
+          </svg>
+          <input id="writing-search" name="q" type="search" placeholder="Search writing" autocomplete="off" aria-controls="writing-list" data-writing-search />
         </div>
+      </form>
+
+      <div class="archive-results" id="writing-list" aria-labelledby="writing-list-title">
+        <div class="archive-list" data-post-list>
+          {posts.map((post, index) => <WritingArchiveItem post={post} tagLookup={tagLookup} eager={index === 0} />)}
+        </div>
+        <div class="archive-empty" data-empty-state hidden>
+          <h3>No articles found</h3>
+          <p>Try another word or explore a topic from the archive.</p>
+          <button type="button" class="archive-text-link" data-clear-search>Clear search</button>
+        </div>
+      </div>
+
+      <aside class="archive-sidebar" aria-label="Explore more writing">
+        <nav class="archive-topics" aria-labelledby="archive-topics-title">
+          <h2 id="archive-topics-title">Explore topics</h2>
+          <ul>
+            {browseTopics.map((tag) => (
+              <li><a href={getTagHref(tag)}>
+                <span>{getTagLabel(tag, tagLookup)}</span>
+                <span class="archive-topic-count" aria-label={`${tagCounts.get(tag)} ${tagCounts.get(tag) === 1 ? "article" : "articles"}`}>{tagCounts.get(tag)}</span>
+              </a></li>
+            ))}
+          </ul>
+          <a class="archive-text-link" href="/tags/">All topics</a>
+        </nav>
+        <section class="archive-follow" aria-labelledby="archive-follow-title">
+          <h2 id="archive-follow-title">Follow me online</h2>
+          <ul class="archive-follow__links">
+            <li><a class="archive-text-link" href={siteConfig.social.bluesky} target="_blank" rel="noreferrer">Bluesky</a></li>
+            <li><a class="archive-text-link" href={siteConfig.social.linkedin} target="_blank" rel="noreferrer">LinkedIn</a></li>
+          </ul>
+        </section>
       </aside>
     </div>
   </section>
@@ -64,35 +77,39 @@ const tagLookup = buildTagLookup(tags);
     const shell = document.querySelector("[data-filter-shell]");
 
     if (shell) {
-      const searchInput = shell.querySelector("[data-writing-search]") as HTMLInputElement | null;
-      const postCards = Array.from(shell.querySelectorAll<HTMLElement>("[data-post-card]"));
-      const countNode = shell.querySelector("[data-results-count]") as HTMLElement | null;
-      const emptyState = shell.querySelector("[data-empty-state]") as HTMLElement | null;
+      const form = shell.querySelector<HTMLFormElement>("[data-search-form]");
+      const input = shell.querySelector<HTMLInputElement>("[data-writing-search]");
+      const cards = Array.from(shell.querySelectorAll<HTMLElement>("[data-post-card]"));
+      const count = shell.querySelector<HTMLElement>("[data-results-count]");
+      const heading = shell.querySelector<HTMLElement>("[data-results-heading]");
+      const empty = shell.querySelector<HTMLElement>("[data-empty-state]");
+      const clear = shell.querySelector<HTMLButtonElement>("[data-clear-search]");
 
-      function applyFilters() {
-        const query = searchInput?.value?.toLowerCase().trim() ?? "";
-        let visibleCount = 0;
+      function applySearch() {
+        const query = input?.value.toLowerCase().trim() ?? "";
+        const words = query.split(/\s+/).filter(Boolean);
+        let visible = 0;
 
-        for (const card of postCards) {
-          const searchBlob = card.dataset.search ?? "";
-          const matchesSearch = query === "" || searchBlob.includes(query);
-          const visible = matchesSearch;
-          card.classList.toggle("hidden", !visible);
-
-          if (visible) {
-            visibleCount += 1;
-          }
+        for (const card of cards) {
+          const matches = words.every((word) => (card.dataset.search ?? "").includes(word));
+          card.hidden = !matches;
+          if (matches) visible += 1;
         }
 
-        if (countNode) {
-          countNode.textContent = String(visibleCount);
-        }
-
-        emptyState?.classList.toggle("hidden", visibleCount > 0);
+        if (count) count.textContent = `${visible} ${visible === 1 ? "article" : "articles"}`;
+        if (heading) heading.textContent = query ? "Search results" : "Latest writing";
+        if (empty) empty.hidden = visible > 0;
       }
 
-      searchInput?.addEventListener("input", applyFilters);
-      applyFilters();
+      if (form) form.hidden = false;
+      form?.addEventListener("submit", (event) => { event.preventDefault(); applySearch(); });
+      input?.addEventListener("input", applySearch);
+      clear?.addEventListener("click", () => {
+        if (input) { input.value = ""; input.focus(); }
+        applySearch();
+      });
+      window.addEventListener("pageshow", applySearch);
+      applySearch();
     }
   </script>
 </BaseLayout>
