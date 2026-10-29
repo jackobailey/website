@@ -1,0 +1,89 @@
+---
+import { renderSystemsScene } from "@/lib/systemsScene";
+---
+
+<systems-pendulum>
+  <Fragment set:html={renderSystemsScene()} />
+</systems-pendulum>
+
+<style>
+  systems-pendulum { display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #e4d8ed; }
+  systems-pendulum :global(svg) { display: block; width: 100%; height: 100%; }
+</style>
+
+<script>
+  import { DOUBLE_PENDULUM as P, pendulumPositions, pendulumRotations, stepPendulum } from "@/lib/doublePendulum";
+  import { PENDULUM_TRAIL, initialPendulumFrame, pendulumTrailPaths } from "@/lib/pendulumTrail";
+
+  class SystemsPendulum extends HTMLElement {
+    private initial = initialPendulumFrame();
+    private state = this.initial.state;
+    private trail = this.initial.trail;
+    private stepsSinceSample = 0;
+    private frame = 0;
+    private previous = 0;
+    private accumulated = 0;
+    private visible = false;
+    private abort?: AbortController;
+    private intersection?: IntersectionObserver;
+    private upper!: SVGGElement;
+    private lower!: SVGGElement;
+    private trailPaths!: SVGPathElement[];
+
+    connectedCallback() {
+      this.abort = new AbortController();
+      this.upper = this.querySelector('[data-pendulum-arm="upper"]')!;
+      this.lower = this.querySelector('[data-pendulum-arm="lower"]')!;
+      this.trailPaths = Array.from(this.querySelectorAll('[data-pendulum-trail] path'));
+      document.addEventListener("visibilitychange", () => this.schedule(), { signal: this.abort.signal });
+      this.intersection = new IntersectionObserver(([entry]) => {
+        this.visible = entry.isIntersecting;
+        this.schedule();
+      });
+      this.intersection.observe(this);
+      this.draw();
+    }
+
+    disconnectedCallback() {
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+      this.abort?.abort();
+      this.intersection?.disconnect();
+    }
+
+    private schedule() {
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+      this.previous = 0;
+      this.accumulated = 0;
+      if (this.visible && !document.hidden) this.frame = requestAnimationFrame(this.tick);
+    }
+
+    private tick = (now: number) => {
+      if (this.previous) this.accumulated += Math.min((now - this.previous) / 1000, 1 / 30) * P.timeScale;
+      this.previous = now;
+      while (this.accumulated >= P.step) {
+        this.state = stepPendulum(this.state);
+        this.accumulated -= P.step;
+        if (++this.stepsSinceSample === PENDULUM_TRAIL.stepsPerSample) {
+          this.trail.push(pendulumPositions(this.state).end);
+          if (this.trail.length > PENDULUM_TRAIL.maxPoints) this.trail.shift();
+          this.stepsSinceSample = 0;
+        }
+      }
+      this.draw();
+      this.frame = requestAnimationFrame(this.tick);
+    };
+
+    private draw() {
+      const { upper, lower } = pendulumRotations(this.state);
+      this.upper.setAttribute("transform", `rotate(${upper.toFixed(6)})`);
+      this.lower.setAttribute("transform", `rotate(${lower.toFixed(6)})`);
+      // Always finish at the current weight, including between history samples.
+      const points = this.stepsSinceSample ? [...this.trail, pendulumPositions(this.state).end] : this.trail;
+      pendulumTrailPaths(points).forEach((d, i) => this.trailPaths[i].setAttribute("d", d));
+    }
+  }
+
+  if (!customElements.get("systems-pendulum")) customElements.define("systems-pendulum", SystemsPendulum);
+</script>

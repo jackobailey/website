@@ -1,5 +1,5 @@
 import type { ImageMetadata } from "astro";
-import electionsTriangles from "@/assets/writing/elections-triangles-pink.png";
+import simpleSystems from "@/assets/writing/simple-systems-pendulum.svg";
 import effectiveParties from "@/assets/writing/collision-gas.svg";
 import justUseMmp from "@/assets/writing/just-use-mmp-coral.png";
 import taxCurve from "@/assets/writing/tax-curve-coral.png";
@@ -27,9 +27,9 @@ const writingArtworkBySlug: Record<string, WritingArtwork> = {
     objectPosition: "52% 50%"
   },
   "not-so-simple-systems": {
-    image: electionsTriangles,
+    image: simpleSystems,
     homeClass: "writing-card--simple",
-    objectPosition: "50% 52%"
+    objectPosition: "50% 50%"
   }
 };
 
