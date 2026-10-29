@@ -21,20 +21,10 @@ const writingArtworkBySlug: Record<string, WritingArtwork> = {
     homeClass: "writing-card--mmp",
     objectPosition: "50% 52%"
   },
-  "what-is-an-effective-party": {
-    image: effectiveParties,
-    homeClass: "writing-card--effective",
-    objectPosition: "52% 50%"
-  },
   "effective-parties-as-collisions": {
     image: effectiveParties,
     homeClass: "writing-card--collisions",
     objectPosition: "52% 50%"
-  },
-  "elections-as-hyper-dimensional-triangles": {
-    image: electionsTriangles,
-    homeClass: "writing-card--triangles",
-    objectPosition: "50% 52%"
   },
   "not-so-simple-systems": {
     image: electionsTriangles,
