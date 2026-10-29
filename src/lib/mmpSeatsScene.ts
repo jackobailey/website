@@ -1,5 +1,5 @@
 /** An editorial illustration, not a scaled election result or quantitative plot. */
-import { MMP_SEAT_COLORS, MMP_SEAT_POSITIONS, MMP_STILL_SLOTS } from "./mmpSeats";
+import { MMP_SEAT_COLORS, MMP_SEAT_POSITIONS, MMP_STILL_SLOTS } from "./mmpSeats.ts";
 type Point = [number, number, number];
 const ORIGIN = [640, 180];
 const project = ([x, y, z]: Point) => [ORIGIN[0] + (x - y) * Math.sqrt(3) / 2, ORIGIN[1] + (x + y) / 2 - z];
@@ -78,8 +78,8 @@ export function renderMmpSeatsScene() {
       <path d="${line([0, 0, 0], [0, 0, 142])}"/>
     </g>
     <circle cx="640" cy="180" r="5" fill="#937B88"/>
-    <g data-seats>
-    ${seats.map(seat => `<g data-seat data-slot="${seat.slot}" data-color="${seat.color}" transform="translate(${seat.x.toFixed(2)} ${seat.y.toFixed(2)})">
+    <g data-seats="">
+    ${seats.map(seat => `<g data-seat="" data-slot="${seat.slot}" data-color="${seat.color}" transform="translate(${seat.x.toFixed(2)} ${seat.y.toFixed(2)})">
       <path d="M-35 25L8 2L67 35L23 59Z" fill="#5E4D5D" opacity=".16" filter="url(#mmp-shadow)"/>
       <use href="#mmp-chair-${seat.color}"/>
     </g>`).join("")}
