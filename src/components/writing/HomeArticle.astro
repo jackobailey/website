@@ -1,0 +1,112 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+import { formatDate } from "@/lib/format";
+import { getWritingArtwork } from "@/lib/writingArtwork";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+  featured?: boolean;
+}
+
+const { post, featured = false } = Astro.props;
+const artwork = getWritingArtwork(post.slug);
+---
+
+<article class:list={["home-article", { "home-article--featured": featured }]}>
+  <a href={`/writing/${post.slug}/`} class="home-article__link">
+    <Image
+      src={artwork.image}
+      alt=""
+      class="home-article__image"
+      style={`object-position: ${artwork.objectPosition};`}
+      widths={featured ? [480, 768, 1024, 1536] : [320, 480, 768]}
+      sizes={featured
+        ? "(min-width: 1216px) 804px, (min-width: 1051px) calc(75vw - 108px), (min-width: 824px) 740px, (min-width: 601px) calc(100vw - 84px), calc(100vw - 48px)"
+        : "(min-width: 1216px) 386px, (min-width: 1051px) calc(37.5vw - 70px), (min-width: 824px) 356px, (min-width: 601px) calc((100vw - 112px) / 2), calc((100vw - 64px) / 2)"}
+      loading="eager"
+      fetchpriority={featured ? "high" : "auto"}
+    />
+    <div class="home-article__copy">
+      <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
+      <h2>{post.data.title}</h2>
+      <p>{post.data.summary}</p>
+    </div>
+  </a>
+</article>
+
+<style>
+  .home-article__link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .home-article__link:focus-visible {
+    outline: 2px solid #111;
+    outline-offset: 5px;
+  }
+
+  .home-article__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2.65;
+    object-fit: cover;
+  }
+
+  .home-article__copy { padding-top: 12px; }
+
+  .home-article--featured .home-article__image { aspect-ratio: 3.2; }
+
+  time {
+    display: block;
+    color: #666;
+    font-size: 11px;
+    line-height: 1.4;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 6px 0;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  p {
+    margin: 0;
+    color: #444;
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .home-article--featured h2 {
+    font-size: clamp(30px, 3vw, 40px);
+    margin-top: 7px;
+  }
+
+  .home-article--featured p {
+    max-width: 42em;
+    font-size: 17px;
+  }
+
+  .home-article__link:hover h2 { color: #d45343; }
+
+  @media (max-width: 1050px) {
+    .home-article__image { aspect-ratio: 2.15; }
+    .home-article--featured .home-article__image { aspect-ratio: 2.4; }
+    h2 { font-size: 22px; }
+  }
+
+  @media (max-width: 600px) {
+    .home-article__image { aspect-ratio: 1.6; }
+    .home-article--featured .home-article__image { aspect-ratio: 2; }
+    h2 { font-size: 21px; }
+    p { font-size: 14px; }
+    .home-article--featured p { font-size: 16px; }
+  }
+</style>

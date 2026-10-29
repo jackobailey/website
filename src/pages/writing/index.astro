@@ -65,8 +65,16 @@ const browseTopics = ["elections", "political-parties", "effective-parties", "el
         <section class="archive-follow" aria-labelledby="archive-follow-title">
           <h2 id="archive-follow-title">Follow me online</h2>
           <ul class="archive-follow__links">
-            <li><a class="archive-text-link" href={siteConfig.social.bluesky} target="_blank" rel="noreferrer">Bluesky</a></li>
-            <li><a class="archive-text-link" href={siteConfig.social.linkedin} target="_blank" rel="noreferrer">LinkedIn</a></li>
+            <li>
+              <a class="archive-social-link" href={siteConfig.social.bluesky} aria-label="Bluesky" title="Bluesky" target="_blank" rel="noreferrer">
+                <i class="bi bi-bluesky" aria-hidden="true"></i>
+              </a>
+            </li>
+            <li>
+              <a class="archive-social-link" href={siteConfig.social.linkedin} aria-label="LinkedIn" title="LinkedIn" target="_blank" rel="noreferrer">
+                <i class="bi bi-linkedin" aria-hidden="true"></i>
+              </a>
+            </li>
           </ul>
         </section>
       </aside>

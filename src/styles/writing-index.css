@@ -87,6 +87,8 @@
 .archive-text-link:hover, .archive-item__topic:hover { color: #111; }
 .archive-follow { margin-top: 2rem; border-top: 1px solid var(--line-color); padding-top: 1.75rem; }
 .archive-follow__links { display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; margin-top: 0.85rem; }
+.archive-social-link { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; color: #f76f5c; font-size: 1.5rem; line-height: 1; }
+.archive-social-link:hover { color: #111; }
 .archive-empty { padding-block: 2rem 4rem; }
 .archive-empty h3 { font-size: 1.5rem; font-weight: 700; }
 .archive-empty p { margin-block: 0.75rem 1.25rem; color: #555; line-height: 1.6; }
