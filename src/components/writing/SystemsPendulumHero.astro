@@ -12,20 +12,21 @@ import { renderSystemsScene } from "@/lib/systemsScene";
 </style>
 
 <script>
-  import { DOUBLE_PENDULUM as P, pendulumPositions, pendulumRotations, stepPendulum } from "@/lib/doublePendulum";
+  import { DOUBLE_PENDULUM as P, pendulumPositions, pendulumRotations, randomPendulum, stepPendulum } from "@/lib/doublePendulum";
   import { PENDULUM_TRAIL, initialPendulumFrame, pendulumTrailPaths } from "@/lib/pendulumTrail";
 
   class SystemsPendulum extends HTMLElement {
-    private initial = initialPendulumFrame();
+    private initial = initialPendulumFrame(randomPendulum());
     private state = this.initial.state;
     private trail = this.initial.trail;
     private stepsSinceSample = 0;
     private frame = 0;
-    private previous = 0;
+    private previous: number | undefined;
     private accumulated = 0;
     private visible = false;
     private abort?: AbortController;
     private intersection?: IntersectionObserver;
+    private reducedMotion?: MediaQueryList;
     private upper!: SVGGElement;
     private lower!: SVGGElement;
     private trailPaths!: SVGPathElement[];
@@ -35,6 +36,8 @@ import { renderSystemsScene } from "@/lib/systemsScene";
       this.upper = this.querySelector('[data-pendulum-arm="upper"]')!;
       this.lower = this.querySelector('[data-pendulum-arm="lower"]')!;
       this.trailPaths = Array.from(this.querySelectorAll('[data-pendulum-trail] path'));
+      this.reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+      this.reducedMotion.addEventListener("change", () => this.schedule(), { signal: this.abort.signal });
       document.addEventListener("visibilitychange", () => this.schedule(), { signal: this.abort.signal });
       this.intersection = new IntersectionObserver(([entry]) => {
         this.visible = entry.isIntersecting;
@@ -47,6 +50,8 @@ import { renderSystemsScene } from "@/lib/systemsScene";
     disconnectedCallback() {
       cancelAnimationFrame(this.frame);
       this.frame = 0;
+      this.previous = undefined;
+      this.accumulated = 0;
       this.abort?.abort();
       this.intersection?.disconnect();
     }
@@ -54,13 +59,14 @@ import { renderSystemsScene } from "@/lib/systemsScene";
     private schedule() {
       cancelAnimationFrame(this.frame);
       this.frame = 0;
-      this.previous = 0;
+      this.previous = undefined;
       this.accumulated = 0;
-      if (this.visible && !document.hidden) this.frame = requestAnimationFrame(this.tick);
+      if (this.visible && !document.hidden && !this.reducedMotion?.matches) this.frame = requestAnimationFrame(this.tick);
     }
 
     private tick = (now: number) => {
-      if (this.previous) this.accumulated += Math.min((now - this.previous) / 1000, 1 / 30) * P.timeScale;
+      // Keep elapsed-time playback at lower refresh rates, but bound catch-up after a stall.
+      if (this.previous !== undefined) this.accumulated += Math.min((now - this.previous) / 1000, 0.1) * P.timeScale;
       this.previous = now;
       while (this.accumulated >= P.step) {
         this.state = stepPendulum(this.state);

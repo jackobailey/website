@@ -1,12 +1,13 @@
 import { initialPendulum, pendulumPositions, stepPendulum } from "./doublePendulum.ts";
+import type { PendulumState } from "./doublePendulum.ts";
 
 export type TrailPoint = { x: number; y: number };
 
 // Eight simulated seconds, sampled at 120 Hz regardless of display refresh rate.
 export const PENDULUM_TRAIL = { stepsPerSample: 2, maxPoints: 961, segments: 24 } as const;
 
-export function initialPendulumFrame() {
-  let state = initialPendulum();
+export function initialPendulumFrame(start: PendulumState = initialPendulum()) {
+  let state = start;
   const trail = [pendulumPositions(state).end];
   for (let i = 1; i <= (PENDULUM_TRAIL.maxPoints - 1) * PENDULUM_TRAIL.stepsPerSample; i++) {
     state = stepPendulum(state);

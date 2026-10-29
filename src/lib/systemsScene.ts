@@ -1,7 +1,7 @@
 import { DOUBLE_PENDULUM, PENDULUM_SCENE, pendulumRotations } from "./doublePendulum.ts";
 import { initialPendulumFrame, pendulumTrailPaths } from "./pendulumTrail.ts";
 
-/** The animation and lossless vector poster start at the same point in the motion. */
+/** A reproducible poster and fallback using the live animation's geometry and physics. */
 export function renderSystemsScene() {
   const { state, trail } = initialPendulumFrame();
   const { upper, lower } = pendulumRotations(state);

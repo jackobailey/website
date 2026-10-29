@@ -20,8 +20,16 @@ export const PENDULUM_SCENE = {
   bobRadius: 23
 } as const;
 
+/** Reproducible starting state for the static poster and no-JavaScript fallback. */
 export function initialPendulum(): PendulumState {
   return [-0.68, -2.25, 0.45, -3.6];
+}
+
+/** Release from varied angles; keep enough headroom for the entire trajectory. */
+export function randomPendulum(random: () => number = Math.random): PendulumState {
+  const upper = (random() * 2 - 1) * 0.95;
+  const lower = (2 + random() * 0.7) * (random() < 0.5 ? -1 : 1);
+  return [upper, lower, 0, 0];
 }
 
 /**
