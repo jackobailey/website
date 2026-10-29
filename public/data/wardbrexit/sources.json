@@ -1,0 +1,26 @@
+{
+  "source": "brexit_ward_mrp/_output/ward_brexit_results.csv (local project snapshot)",
+  "download": "/data/wardbrexit/ward_brexit_results.csv",
+  "csvSha256": "996afbbc60273158ae173cb5546e282bedd9f6720e745eac3d185dcfd2bd7716",
+  "method": "/data/wardbrexit/method.md",
+  "methodSha256": "5635301faf8c967afc2cd5888e4c99657d2b1fe9decf83c8540d2502184f3140",
+  "wardCount": 7993,
+  "rowCount": 15986,
+  "responses": {
+    "rejoin": "Rejoin the EU",
+    "out": "Stay out of the EU"
+  },
+  "survey": "British Election Study Internet Panel, Wave 31",
+  "estimand": "Voting intention among those choosing Rejoin or Stay out; excludes don't knows and non-voters",
+  "pointEstimate": "Mean expected response count divided by mean total expected Rejoin and Stay out count",
+  "interval": "2.5th and 97.5th percentiles of posterior draw-level response shares",
+  "calibration": "Not calibrated to election results; 2024 election results and estimated 2016 Leave shares are contextual predictors",
+  "boundaries": "/data/ward2024/wards.topo.json",
+  "topologySha256": "ed09162102404733d414c49c11420bd83171c361a6188a78891834b9b94491b9",
+  "boundarySource": "https://www.arcgis.com/home/item.html?id=a2c204fedefe4120ac93f062c647bdcb",
+  "boundaryDescription": "ONS December 2022 UK BFC; dissolved/rekeyed to 2022 census wards, excluding Northern Ireland",
+  "shapefileSha256": "67b24f03dce957d283ab7600289e45f238b444ec9e500441690e7de7b5ae171e",
+  "simplification": "Douglas-Peucker 35 metres in EPSG:27700; keep-shapes; WGS84 quantization 1000000; clean with no gap fill and 0.00002 degree snapping; final validity checked",
+  "attribution": "Contains OS data \u00a9 Crown copyright and database right 2022. Contains National Statistics data \u00a9 Crown copyright and database right 2022.",
+  "sharePrecision": "Source CSV numeric precision preserved in browser JSON; displayed percentages rounded to one decimal place"
+}

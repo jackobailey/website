@@ -1,0 +1,33 @@
+---
+import WardExplorer from '@/components/wardbrexit/WardExplorer';
+import { getImage } from 'astro:assets';
+import wardSticker from '@/assets/wardbrexit/brexit-ward-mrp-hex.png';
+import { siteConfig } from '@/site.config';
+import ubuntuRegular from '@fontsource/ubuntu-sans/files/ubuntu-sans-latin-400-normal.woff2?url';
+import ubuntuBold from '@fontsource/ubuntu-sans/files/ubuntu-sans-latin-700-normal.woff2?url';
+const title = `${siteConfig.name} | Brexit 2.0: Ward by Ward`;
+const description = 'Explore Jack Bailey’s MRP estimates of Rejoin versus Stay out voting intention in 7,993 Great Britain wards, with 95% uncertainty intervals.';
+const sticker = await getImage({ src: wardSticker, width: 264, format: 'webp', quality: 95 });
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#d4ded8" />
+    <link rel="icon" type="image/webp" href={sticker.src} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href="https://jack-bailey.co.uk/wardbrexit" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://jack-bailey.co.uk/wardbrexit" />
+    <link rel="preload" href={ubuntuRegular} as="font" type="font/woff2" crossorigin="anonymous" />
+    <link rel="preload" href={ubuntuBold} as="font" type="font/woff2" crossorigin="anonymous" />
+  </head>
+  <body>
+    <WardExplorer stickerSrc={sticker.src} client:load />
+    <noscript><p style="padding: 24px; font: 18px sans-serif">Enable JavaScript to explore the map, or <a href="/data/wardbrexit/ward_brexit_results.csv">download the ward estimates</a>.</p></noscript>
+  </body>
+</html>

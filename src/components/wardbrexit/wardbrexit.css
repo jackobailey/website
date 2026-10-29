@@ -1,0 +1,26 @@
+/* Preserve the standalone ward explorer layout and typography. */
+@import '../ward2024/ward2024.css';
+
+.brexit-explorer .ward-project-link { padding: 0; border: 0; background: none; }
+.brexit-explorer { --map-background: #d4ded8; }
+.brexit-explorer .map-panel,
+.brexit-explorer .ward-map,
+.brexit-explorer .loading-state { background: var(--map-background); }
+.brexit-explorer .map-attribution { background: #d4ded8e6; }
+.brexit-share-scale { margin-top: 12px; }
+.brexit-scale-directions { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 7px; font-size: 11px; color: #4a5d6c; }
+.brexit-share-scale .vote-share-gradient { height: 14px; position: relative; }
+.brexit-scale-tick { position: absolute; top: 0; bottom: 0; width: 1px; background: #24323d80; }
+.brexit-scale-tick.is-midpoint { top: -3px; bottom: -3px; background: #24323d; }
+.brexit-share-labels { position: relative; height: 14px; margin-top: 7px; font-size: 11px; color: #4a5d6c; font-variant-numeric: tabular-nums; }
+.brexit-share-labels span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.brexit-share-labels span:first-child { transform: none; }
+.brexit-share-labels span:last-child { transform: translateX(-100%); }
+.brexit-explorer .chart-subtitle { line-height: 1.45; }
+.brexit-explorer .bar-interval,
+.brexit-explorer .bar-interval::before,
+.brexit-explorer .bar-interval::after { box-shadow: 0 0 0 1px #ffffffe6; }
+
+@media (min-width: 801px) {
+  .brexit-explorer .map-legend { max-width: 350px; }
+}
