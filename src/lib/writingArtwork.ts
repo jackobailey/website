@@ -2,7 +2,7 @@ import type { ImageMetadata } from "astro";
 import simpleSystems from "@/assets/writing/simple-systems-pendulum.svg";
 import effectiveParties from "@/assets/writing/collision-gas.svg";
 import justUseMmp from "@/assets/writing/just-use-mmp-seats.svg";
-import taxCurve from "@/assets/writing/tax-curve-coral.png";
+import taxCurve from "@/assets/writing/tax-curve.svg";
 
 interface WritingArtwork {
   image: ImageMetadata;
@@ -14,7 +14,7 @@ const writingArtworkBySlug: Record<string, WritingArtwork> = {
   "growth-curve": {
     image: taxCurve,
     homeClass: "writing-card--tax",
-    objectPosition: "52% 50%"
+    objectPosition: "50% 50%"
   },
   "just-do-mmp": {
     image: justUseMmp,

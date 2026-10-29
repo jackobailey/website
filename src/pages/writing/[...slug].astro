@@ -6,6 +6,7 @@ import ArticleTable from "@/components/writing/ArticleTable.astro";
 import PaperGasHero from "@/components/writing/PaperGasHero.astro";
 import SystemsPendulumHero from "@/components/writing/SystemsPendulumHero.astro";
 import MmpSeatsHero from "@/components/writing/MmpSeatsHero.astro";
+import TaxCurveHero from "@/components/writing/TaxCurveHero.astro";
 import { siteConfig } from "@/site.config";
 import { getBlogPosts, getRelatedPosts, getTagEntries } from "@/lib/content";
 import { buildTagLookup, getTagHref, getTagLabel } from "@/lib/tags";
@@ -64,6 +65,8 @@ const structuredData = {
         <SystemsPendulumHero />
       ) : post.slug === "just-do-mmp" ? (
         <MmpSeatsHero />
+      ) : post.slug === "growth-curve" ? (
+        <TaxCurveHero />
       ) : <Image
         src={artwork.image}
         alt=""

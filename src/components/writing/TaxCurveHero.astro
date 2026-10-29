@@ -1,0 +1,96 @@
+---
+import { renderTaxCurveScene } from "@/lib/taxCurveScene";
+---
+
+<tax-curve>
+  <Fragment set:html={renderTaxCurveScene()} />
+</tax-curve>
+
+<style>
+  tax-curve { display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #efe4db; }
+  tax-curve > :global(svg) { display: block; width: 100%; height: 100%; }
+</style>
+
+<script>
+  import { TAX_CURVE_SCENE, taxCurvePath, taxCurveEchoes } from "@/lib/taxCurve";
+
+  class TaxCurve extends HTMLElement {
+    private time: number = TAX_CURVE_SCENE.initialTime;
+    private motionSeed = crypto.getRandomValues(new Uint32Array(1))[0];
+    private frame = 0;
+    private previous: number | null = null;
+    private visible = false;
+    private printing = false;
+    private abort?: AbortController;
+    private observer?: IntersectionObserver;
+    private motion = matchMedia("(prefers-reduced-motion: reduce)");
+    private print = matchMedia("print");
+    private paths: SVGPathElement[] = [];
+    private echoes: SVGPathElement[] = [];
+
+    connectedCallback() {
+      this.abort = new AbortController();
+      const { signal } = this.abort;
+      this.paths = Array.from(this.querySelectorAll("[data-tax-track]"));
+      this.echoes = Array.from(this.querySelectorAll("[data-tax-echo]"));
+      this.motion.addEventListener("change", () => this.schedule(), { signal });
+      this.print.addEventListener("change", () => this.schedule(), { signal });
+      document.addEventListener("visibilitychange", () => this.schedule(), { signal });
+      window.addEventListener("beforeprint", () => { this.printing = true; this.schedule(); }, { signal });
+      window.addEventListener("afterprint", () => { this.printing = false; this.schedule(); }, { signal });
+      this.observer = new IntersectionObserver(([entry]) => {
+        this.visible = entry.isIntersecting;
+        this.schedule();
+      });
+      this.observer.observe(this);
+      this.draw(this.time);
+      this.setAttribute("data-ready", "");
+    }
+
+    disconnectedCallback() {
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+      this.previous = null;
+      this.visible = false;
+      this.abort?.abort();
+      this.observer?.disconnect();
+      this.removeAttribute("data-running");
+    }
+
+    private schedule() {
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+      this.previous = null;
+      const staticView = this.motion.matches || this.print.matches || this.printing;
+      const running = this.isConnected && this.visible && !document.hidden && !staticView;
+      this.toggleAttribute("data-running", running);
+      this.draw(staticView ? TAX_CURVE_SCENE.initialTime : this.time);
+      if (running) this.frame = requestAnimationFrame(this.tick);
+    }
+
+    private tick = (now: number) => {
+      // Use elapsed time rather than frame count; resetting previous on suspension
+      // prevents a catch-up jump when returning to the illustration.
+      if (this.previous !== null) this.time += (now - this.previous) / 1000;
+      this.previous = now;
+      this.draw(this.time);
+      this.frame = requestAnimationFrame(this.tick);
+    };
+
+    private draw(time: number) {
+      const path = taxCurvePath(time, TAX_CURVE_SCENE.samples, this.motionSeed);
+      this.paths.forEach(element => element.setAttribute("d", path));
+      taxCurveEchoes(time, this.motionSeed).forEach((echo, index) => {
+        const element = this.echoes[index];
+        if (element.dataset.sampledAt !== String(echo.sampledAt)) {
+          element.setAttribute("d", echo.path);
+          element.dataset.sampledAt = String(echo.sampledAt);
+        }
+        element.setAttribute("stroke", echo.color);
+        element.setAttribute("opacity", echo.opacity.toFixed(5));
+      });
+    }
+  }
+
+  if (!customElements.get("tax-curve")) customElements.define("tax-curve", TaxCurve);
+</script>
