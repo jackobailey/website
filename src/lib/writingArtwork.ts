@@ -1,6 +1,6 @@
 import type { ImageMetadata } from "astro";
 import electionsTriangles from "@/assets/writing/elections-triangles-pink.png";
-import effectiveParties from "@/assets/writing/effective-parties-purple.png";
+import effectiveParties from "@/assets/writing/collision-paper-poster.webp";
 import justUseMmp from "@/assets/writing/just-use-mmp-coral.png";
 import taxCurve from "@/assets/writing/tax-curve-coral.png";
 

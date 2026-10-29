@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import ArticleShare from "@/components/writing/ArticleShare.astro";
 import ArticleTable from "@/components/writing/ArticleTable.astro";
+import PaperGasHero from "@/components/writing/PaperGasHero.astro";
 import { siteConfig } from "@/site.config";
 import { getBlogPosts, getRelatedPosts, getTagEntries } from "@/lib/content";
 import { buildTagLookup, getTagHref, getTagLabel } from "@/lib/tags";
@@ -55,7 +56,9 @@ const structuredData = {
     </header>
 
     <div class="article-media">
-      <Image
+      {post.slug === "effective-parties-as-collisions" ? (
+        <PaperGasHero poster={artwork.image} />
+      ) : <Image
         src={artwork.image}
         alt=""
         class="article-media__image"
@@ -64,7 +67,7 @@ const structuredData = {
         sizes="(min-width: 1376px) 1280px, (min-width: 1051px) calc(100vw - 96px), (min-width: 601px) calc(100vw - 64px), calc(100vw - 48px)"
         loading="eager"
         fetchpriority="high"
-      />
+      />}
       <div class="article-meta">
         <time datetime={post.data.date.toISOString()}>{formatDate(post.data.date)}</time>
         <span>{getReadingTime(post.body)}</span>

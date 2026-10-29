@@ -1,0 +1,198 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import paperSource from "@/assets/writing/collision-paper-source.webp";
+
+interface Props { poster: ImageMetadata; }
+const { poster } = Astro.props;
+---
+
+<paper-gas data-texture={paperSource.src}>
+  <Image
+    src={poster}
+    alt="Coral and purple paper circles form a gas, bouncing off one another inside a box."
+    class="paper-gas__poster"
+    widths={[480, 768, 1024, 1280, 1536]}
+    sizes="(min-width: 1376px) 1280px, (min-width: 1051px) calc(100vw - 96px), (min-width: 601px) calc(100vw - 64px), calc(100vw - 48px)"
+    loading="eager"
+    fetchpriority="high"
+  />
+  <canvas width="1280" height="720" aria-hidden="true"></canvas>
+</paper-gas>
+
+<style>
+  paper-gas { display: block; position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #faf8f5; }
+  .paper-gas__poster, canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  canvas { opacity: 0; pointer-events: none; }
+  paper-gas[data-ready] canvas { opacity: 1; }
+  paper-gas[data-ready] .paper-gas__poster { opacity: 0; }
+  @media print { canvas { display: none; } paper-gas[data-ready] .paper-gas__poster { opacity: 1; } }
+</style>
+
+<script>
+  import { PAPER_GAS as G, createGas, stepGas, type GasParticle } from "@/lib/paperGas";
+
+  class PaperGas extends HTMLElement {
+    private frame = 0;
+    private previous = 0;
+    private accumulated = 0;
+    private visible = false;
+    private loaded = false;
+    private width = 0;
+    private height = 0;
+    private particles: GasParticle[] = [];
+    private abort?: AbortController;
+    private resize?: ResizeObserver;
+    private intersection?: IntersectionObserver;
+    private canvas!: HTMLCanvasElement;
+    private ctx!: CanvasRenderingContext2D;
+    private paper?: CanvasPattern;
+    private sprites: HTMLCanvasElement[] = [];
+    private background = document.createElement("canvas");
+
+    connectedCallback() {
+      this.abort = new AbortController();
+      const { signal } = this.abort;
+      this.canvas = this.querySelector("canvas")!;
+      const context = this.canvas.getContext("2d");
+      if (!context) return;
+      this.ctx = context;
+      document.addEventListener("visibilitychange", () => this.schedule(), { signal });
+      this.resize = new ResizeObserver(() => this.fit());
+      this.resize.observe(this);
+      this.intersection = new IntersectionObserver(([entry]) => {
+        this.visible = entry.isIntersecting;
+        this.schedule();
+      });
+      this.intersection.observe(this);
+
+      const image = new window.Image();
+      image.onload = () => {
+        if (signal.aborted) return;
+        this.prepareTextures(image);
+        this.loaded = true;
+        this.fit();
+        this.setAttribute("data-ready", "");
+        this.schedule();
+      };
+      // A missing texture or JavaScript leaves the server-rendered still visible.
+      image.src = this.dataset.texture!;
+    }
+
+    disconnectedCallback() {
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+      this.abort?.abort();
+      this.resize?.disconnect();
+      this.intersection?.disconnect();
+    }
+
+    private prepareTextures(image: HTMLImageElement) {
+      // Clean paper and cut-paper fibres sampled from the selected illustration.
+      const tile = document.createElement("canvas");
+      tile.width = 560;
+      tile.height = 440;
+      const paper = tile.getContext("2d")!;
+      for (let x = 0; x < 2; x++) for (let y = 0; y < 2; y++) {
+        paper.save();
+        paper.translate(x ? 560 : 0, y ? 440 : 0);
+        paper.scale(x ? -1 : 1, y ? -1 : 1);
+        paper.drawImage(image, 0, 0, 280, 220, 0, 0, 280, 220);
+        paper.restore();
+      }
+      this.paper = this.ctx.createPattern(tile, "repeat")!;
+      const fibre = document.createElement("canvas");
+      fibre.width = fibre.height = 228;
+      const fibreContext = fibre.getContext("2d")!;
+      fibreContext.drawImage(image, 1132, 350, 228, 228, 0, 0, 228, 228);
+      const source = fibreContext.getImageData(0, 0, 228, 228);
+      this.sprites = [];
+
+      for (const color of [[247, 111, 92], [59, 15, 112]]) {
+        const pixels = new ImageData(new Uint8ClampedArray(source.data), 228, 228);
+        for (let i = 0; i < pixels.data.length; i += 4) {
+          const light = .2126 * source.data[i] + .7152 * source.data[i + 1] + .0722 * source.data[i + 2];
+          const grain = (light - 130) * .42;
+          for (let c = 0; c < 3; c++) pixels.data[i + c] = color[c] + grain;
+        }
+        fibreContext.putImageData(pixels, 0, 0);
+        for (let cut = 0; cut < 4; cut++) {
+          const sprite = document.createElement("canvas");
+          sprite.width = sprite.height = 96;
+          const ctx = sprite.getContext("2d")!;
+          ctx.translate(48, 48);
+          ctx.beginPath();
+          for (let i = 0; i < 80; i++) {
+            const angle = i * Math.PI * 2 / 80;
+            const radius = 47.2 + .5 * Math.sin(i * 2.13 + cut) + .3 * Math.cos(i * .91 + cut);
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+          ctx.clip();
+          ctx.rotate(cut * Math.PI / 2);
+          ctx.drawImage(fibre, -48, -48, 96, 96);
+          this.sprites.push(sprite);
+        }
+      }
+    }
+
+    private fit() {
+      if (!this.loaded) return;
+      const { width, height } = this.getBoundingClientRect();
+      if (!width || !height) return;
+      if (width !== this.width || height !== this.height) {
+        this.width = width;
+        this.height = height;
+        this.particles = createGas(width, height);
+        this.accumulated = 0;
+      }
+      const ratio = Math.min(devicePixelRatio || 1, 2);
+      for (const canvas of [this.canvas, this.background]) {
+        canvas.width = Math.round(width * ratio);
+        canvas.height = Math.round(height * ratio);
+      }
+      const bg = this.background.getContext("2d")!;
+      bg.scale(this.canvas.width / width, this.canvas.height / height);
+      bg.fillStyle = this.paper!;
+      bg.fillRect(0, 0, width, height);
+      bg.fillStyle = "rgba(250,248,245,.55)";
+      bg.fillRect(0, 0, width, height);
+      this.draw();
+    }
+
+    private schedule() {
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+      this.previous = 0;
+      this.accumulated = 0;
+      if (this.loaded && this.visible && !document.hidden) {
+        this.frame = requestAnimationFrame(this.tick);
+      }
+    }
+
+    private tick = (now: number) => {
+      if (this.previous) this.accumulated += Math.min((now - this.previous) / 1000, 1 / 30);
+      this.previous = now;
+      while (this.accumulated >= G.step) {
+        stepGas(this.particles, this.width, this.height, G.step);
+        this.accumulated -= G.step;
+      }
+      this.draw();
+      this.frame = requestAnimationFrame(this.tick);
+    };
+
+    private draw() {
+      this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+      this.ctx.drawImage(this.background, 0, 0);
+      this.ctx.setTransform(this.canvas.width / this.width, 0, 0, this.canvas.height / this.height, 0, 0);
+      for (const p of this.particles) {
+        this.ctx.drawImage(this.sprites[p.color * 4 + p.cut], p.x - G.radius, p.y - G.radius, G.radius * 2, G.radius * 2);
+      }
+    }
+  }
+
+  if (!customElements.get("paper-gas")) customElements.define("paper-gas", PaperGas);
+</script>
