@@ -2,7 +2,7 @@ import { useId, useMemo, useState } from "react";
 import { percent, probabilityLabel, voteForProbability, winProbability, type ThresholdModel } from "./model";
 import { useAnimatedPlot } from "./useAnimatedPlot";
 
-interface Props { model: ThresholdModel; vote: number; }
+interface Props { model: ThresholdModel; vote: number; showHeading?: boolean; }
 const WIDTH = 720, HEIGHT = 390;
 const LEFT = 65, RIGHT = 22, TOP = 30, BOTTOM = 58;
 const INNER_WIDTH = WIDTH - LEFT - RIGHT, INNER_HEIGHT = HEIGHT - TOP - BOTTOM;
@@ -40,7 +40,7 @@ function pointOnCurve(curve: ReturnType<typeof makeCurve>, position: number) {
     probability: before.probability + (after.probability - before.probability) * progress };
 }
 
-export default function ProbabilityPlot({ model, vote }: Props) {
+export default function ProbabilityPlot({ model, vote, showHeading = true }: Props) {
   const id = useId();
   const [hoverVote, setHoverVote] = useState<number | null>(null);
   const tickStep = 0.2;
@@ -73,9 +73,9 @@ export default function ProbabilityPlot({ model, vote }: Props) {
   const path = displayCurve.points.map((point, i) => `${i === 0 ? "M" : "L"}${x(point.vote).toFixed(3)},${y(point.probability).toFixed(3)}`).join(" ");
 
   return <figure className="threshold-plot">
-    <div className="threshold-plot__heading">
+    {showHeading && <div className="threshold-plot__heading">
       <h2>Chance of winning a seat</h2>
-    </div>
+    </div>}
     <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-labelledby={`${id}-title ${id}-desc`}
       onPointerMove={(event) => {
         const bounds = event.currentTarget.getBoundingClientRect();

@@ -5,12 +5,19 @@
 .threshold-paper-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 14px; color: #3B0F70; font: 500 16px/1.5 var(--sans, sans-serif); text-decoration: underline; text-underline-offset: 4px; }
 .threshold-paper-link:hover { color: #F76F5C; }
 .threshold-paper-link:focus-visible { outline: 2px solid #3B0F70; outline-offset: 4px; }
-.threshold-explorer { --curve: #F76F5C; --vote: #3B0F70; font: 400 15px/1.5 var(--sans, sans-serif); }
+.threshold-explorer { --curve: #F76F5C; --vote: #3B0F70; font: 400 15px/1.5 var(--sans, "Ubuntu Sans", system-ui, sans-serif); }
 .threshold-explorer * { box-sizing: border-box; }
 .threshold-explorer input { font: inherit; }
 .threshold-explorer input:focus-visible { outline: 2px solid #111; outline-offset: 4px; }
-.threshold-workspace { display: grid; grid-template-columns: minmax(270px, 320px) minmax(0, 1fr); border-block: 1px solid var(--line, #dedede); }
+.threshold-workspace { display: grid; grid-template-columns: minmax(270px, 320px) minmax(0, 1fr); }
+.threshold-workspace:not(.interactive-panel) { border-block: 1px solid var(--line, #dedede); }
+.threshold-presets { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.threshold-presets button { border: 0; border-radius: 999px; background: var(--curve); color: #fff; min-height: 32px; padding: 8px 12px; font: inherit; font-size: 0.62rem; font-weight: 600; line-height: 1.5; text-transform: uppercase; letter-spacing: 0.08em; cursor: pointer; transition: background-color 150ms ease, box-shadow 150ms ease; }
+.threshold-presets button:hover { background: #e56553; }
+.threshold-presets button[aria-pressed="true"] { background: #e56553; box-shadow: inset 0 0 0 2px rgba(17, 17, 17, 0.18); }
+.threshold-presets button:focus-visible { outline: 2px solid var(--curve); outline-offset: 3px; }
 .threshold-controls { padding: 26px 30px 30px 0; border-right: 1px solid var(--line, #dedede); }
+.threshold-controls > .eyebrow { margin: 0; color: var(--curve); }
 .threshold-controls > .threshold-control:first-child { margin-top: 0; }
 .threshold-control { margin-block: 24px; }
 .threshold-control__label { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-weight: 500; }
@@ -22,7 +29,7 @@
 .threshold-results { min-width: 0; padding: 27px 0 24px 32px; }
 .threshold-plot { margin: 0; }
 .threshold-plot__heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-.threshold-plot__heading h2 { font-size: 15px; font-weight: 500; margin: 0; }
+.threshold-plot__heading h2 { margin: 0; font-size: 15px; font-weight: 500; }
 .threshold-plot svg { display: block; width: 100%; height: auto; overflow: visible; margin-top: 6px; touch-action: pan-y; }
 .threshold-grid { stroke: #e5e5e5; stroke-width: 1; }
 .threshold-grid--half { stroke: #aaa; stroke-dasharray: 4 5; }
@@ -62,4 +69,11 @@
   .threshold-plot svg { width: calc(100% + 15px); margin-left: -15px; }
   .threshold-axis, .threshold-axis-title { font-size: 21px; }
   .threshold-invalid { padding: 20px 0; }
+}
+.threshold-workspace--embedded :is(.threshold-controls, .threshold-results) { padding: 24px; }
+@media (max-width: 600px) {
+  .threshold-workspace--embedded :is(.threshold-controls, .threshold-results) { padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .threshold-presets button { transition: none; }
 }

@@ -1,0 +1,105 @@
+---
+import { renderThresholdRaceScene } from "@/lib/thresholdRaceScene";
+---
+
+<threshold-race>
+  <Fragment set:html={renderThresholdRaceScene()} />
+</threshold-race>
+
+<style>
+  threshold-race { display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #a9bcae; }
+  threshold-race :global(svg) { display: block; width: 100%; height: 100%; image-rendering: pixelated; }
+</style>
+
+<script>
+  import { raceFrame, RACE_SCENE, RACERS } from "@/lib/thresholdRaceScene";
+
+  class ThresholdRace extends HTMLElement {
+    private elapsed = RACE_SCENE.posterTime;
+    private previous: number | undefined;
+    private frame = 0;
+    private visible = false;
+    private printing = false;
+    private abort?: AbortController;
+    private observer?: IntersectionObserver;
+    private motion?: MediaQueryList;
+    private field!: SVGGElement;
+    private flags: SVGPathElement[] = [];
+    private racers: { root: SVGGElement; horse: SVGUseElement; dust: SVGGElement; trophy: SVGGElement | null }[] = [];
+
+    connectedCallback() {
+      this.abort = new AbortController();
+      const { signal } = this.abort;
+      this.field = this.querySelector('[data-race-field]')!;
+      this.flags = Array.from(this.querySelectorAll<SVGPathElement>('[data-finish-flag]'));
+      this.racers = RACERS.map(({ id }) => {
+        const root = this.querySelector<SVGGElement>(`[data-racer="${id}"]`)!;
+        return { root, horse: root.querySelector('[data-horse]')!, dust: root.querySelector('[data-dust]')!,
+          trophy: root.querySelector('[data-trophy]') };
+      });
+      this.motion = matchMedia('(prefers-reduced-motion: reduce)');
+      this.motion.addEventListener('change', () => {
+        this.elapsed = RACE_SCENE.posterTime;
+        if (this.motion?.matches) this.draw(this.elapsed);
+        this.schedule();
+      }, { signal });
+      document.addEventListener('visibilitychange', () => this.schedule(), { signal });
+      window.addEventListener('beforeprint', () => {
+        this.printing = true;
+        this.schedule();
+        this.draw(RACE_SCENE.posterTime);
+      }, { signal });
+      window.addEventListener('afterprint', () => { this.printing = false; this.schedule(); }, { signal });
+      this.observer = new IntersectionObserver(([entry]) => {
+        this.visible = entry.isIntersecting;
+        this.schedule();
+      });
+      this.observer.observe(this);
+    }
+
+    disconnectedCallback() {
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+      this.previous = undefined;
+      this.observer?.disconnect();
+      this.abort?.abort();
+    }
+
+    private schedule() {
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+      this.previous = undefined;
+      const running = this.visible && !document.hidden && !this.motion?.matches && !this.printing;
+      this.dataset.running = String(running);
+      if (running) this.frame = requestAnimationFrame(this.tick);
+    }
+
+    private tick = (now: number) => {
+      if (this.previous !== undefined) this.elapsed += Math.min((now - this.previous) / 1000, 0.1);
+      this.previous = now;
+      this.draw(this.elapsed);
+      this.frame = requestAnimationFrame(this.tick);
+    };
+
+    private draw(elapsed: number) {
+      const state = raceFrame(elapsed);
+      this.field.setAttribute('opacity', String(state.opacity));
+      this.flags[0].setAttribute('fill', state.upperWon ? '#3B0F70' : '#FAF8F5');
+      this.flags[1].setAttribute('fill', state.lowerWon ? '#F76F5C' : '#FAF8F5');
+      state.racers.forEach((racer, i) => {
+        const nodes = this.racers[i];
+        nodes.root.setAttribute('transform', `translate(${racer.x} ${racer.feet})`);
+        nodes.horse.setAttribute('href', `#threshold-race-${racer.coat}-${racer.frame}`);
+        nodes.horse.setAttribute('y', String(-32 + racer.bob));
+        nodes.dust.setAttribute('visibility', racer.dust < 0 ? 'hidden' : 'visible');
+        nodes.dust.setAttribute('transform', `translate(${-racer.dust * 2} ${racer.dust === 1 ? -1 : 0})`);
+        if (nodes.trophy) {
+          nodes.trophy.setAttribute('visibility', state.awardProgress > 0 ? 'visible' : 'hidden');
+          nodes.trophy.setAttribute('transform', `translate(48 ${-21 - Math.round(state.awardProgress * 4)})`);
+        }
+      });
+    }
+  }
+
+  if (!customElements.get('threshold-race')) customElements.define('threshold-race', ThresholdRace);
+</script>

@@ -1,0 +1,38 @@
+---
+title: How Many Votes is Enough For a Party to Win a Seat?
+summary: Vote shares only make sense in context, so how can we know how many it takes to win?
+date: 2026-10-30
+tags:
+  - electoral-systems
+  - fragmentation
+  - mathematical-modelling
+  - first-past-the-post
+  - proportional-representation
+---
+
+import ThresholdExplorer from "@/components/thresholds/ThresholdExplorer";
+
+Something curious happened in Canada in 2015. In [Repentigny](https://en.wikipedia.org/wiki/Repentigny_(federal_electoral_district)), a riding[^riding] in Quebec, Monique Pauzé won the seat for the Bloc Québécois with 34.7% of the vote. However, in [Winnipeg South](https://en.wikipedia.org/wiki/Winnipeg_South), a riding in Manitoba, Gordon Giesbrecht came in second place despite also winning 34.7% of the vote. So why was this vote share enough for one but not the other?
+
+The answer is obvious: Pauzé won more votes than her opponents, while Giesbrecht did not. But this raises more interesting questions. If the same vote share can produce such different outcomes, what share does a party or candidate actually need? And how does this differ in different electoral systems?
+
+I try to answer these questions in [my new article in *Electoral Studies*](https://doi.org/10.1016/j.electstud.2026.103179), where I develop a model of the *effective threshold*: the vote share a party or candidate needs to have a 50% chance of winning a seat in a district.
+
+You can think about the effective threshold as the vote share at which the odds of winning are the same as in a coin toss. Below it, losing is more likely. Above it, winning is more likely instead. Of course, this does not mean that elections are decided by chance: the rules are the rules. But it does give us a starting point for working out a "win number" that parties and candidates can target with the limited information we have before an election. A safer target would sit above this 50/50 point.
+
+Imagine that you're standing for election and think that you will win 35% of the vote. If there is only one seat and your only opponent wins the remaining 65% of the vote, you lose. But if you have three opponents who divide the remaining support into shares of 30%, 20%, and 15%, you win instead. It's a little like running a race: knowing your finishing time can tell us something about your general performance, but whether or not you win a medal depends on everyone else and how many spaces there are on the podium.
+
+As well as the party or candidate's vote share, my model brings together the electoral equivalents of these things:
+
+* First is the *district magnitude*: the number of seats available in the district. Winning a first seat is generally easier when there are several to go around. This helps explain why smaller parties have an easier time in proportional systems with larger districts.
+* Second is the [*effective number of parties*](https://en.wikipedia.org/wiki/Effective_number_of_parties): a measure of how widely and evenly voters spread their support. Four equally popular parties would count as four, whereas two large parties surrounded by several smaller ones would count as something closer to two. Simply counting the number of parties would ignore the fact that size matters.
+
+<ThresholdExplorer embedded client:load />
+
+The interactive above lets you explore the model yourself. To see what it implies, let's think again about Canada in 2015. Canadian federal elections use first-past-the-post, where each district elects a single MP. But fragmentation differed from place to place. Repentigny had roughly 3.8 effective parties, while Winnipeg South had about 2.2. As such, my model puts their effective thresholds at around 32% and 48%, respectively. Pauzé's 34.7% cleared the first, but Giesbrecht's almost identical share fell well below the second. However, if a comparable district elected two MPs under proportional representation, with the same distribution of party support, the model suggests that Giesbrecht would almost certainly have won a seat.
+
+So, to understand what it takes to win, we need to look at who else is competing and how many seats there are to win. This is a key distinction between my model and those that came before it, which tended to focus only on the number of seats. Or, to put it more simply, vote shares only make sense in context.
+
+<p className="article-paper-cta"><a href="https://www.sciencedirect.com/science/article/pii/S026137942600137X">Read the paper in <em>Electoral Studies</em> <span aria-hidden="true">→</span></a></p>
+
+[^riding]: Otherwise known as an electoral district or constituency.
