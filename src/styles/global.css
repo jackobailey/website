@@ -546,6 +546,11 @@
     @apply prose prose-slate max-w-none prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-accent prose-a:no-underline hover:prose-a:text-ink prose-blockquote:border-l-accent prose-blockquote:text-ink prose-strong:text-ink;
   }
 
+  /* Bold link text follows the link colour, including its hover state. */
+  .prose-editorial :where(a strong):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+    color: inherit;
+  }
+
   .prose-editorial > :not(.not-prose, astro-island) {
     width: 100%;
     max-width: 72ch;
