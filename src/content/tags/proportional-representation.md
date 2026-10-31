@@ -1,3 +1,3 @@
 ---
-name: Proportional representation
+name: Proportional Representation
 ---

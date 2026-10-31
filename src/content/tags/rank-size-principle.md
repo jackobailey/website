@@ -1,3 +1,3 @@
 ---
-name: Rank-size principle
+name: Rank-Size Principle
 ---

@@ -1,3 +1,3 @@
 ---
-name: Political parties
+name: Political Parties
 ---

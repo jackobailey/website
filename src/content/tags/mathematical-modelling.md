@@ -1,3 +1,3 @@
 ---
-name: Mathematical modelling
+name: Mathematical Modelling
 ---

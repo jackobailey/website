@@ -74,7 +74,7 @@ export default function ProbabilityPlot({ model, vote, showHeading = true }: Pro
 
   return <figure className="threshold-plot">
     {showHeading && <div className="threshold-plot__heading">
-      <h2>Chance of winning a seat</h2>
+      <h2>Chance of Winning a Seat</h2>
     </div>}
     <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-labelledby={`${id}-title ${id}-desc`}
       onPointerMove={(event) => {

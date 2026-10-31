@@ -110,7 +110,7 @@ const structuredData = {
 
     {suggestedPosts.length > 0 && (
       <section class="article-related" aria-labelledby="related-title">
-        <h2 id="related-title">{relatedPosts.length ? "Related reading" : "More writing"}</h2>
+        <h2 id="related-title">{relatedPosts.length ? "Related Reading" : "More Writing"}</h2>
         <ul>
           {suggestedPosts.map((entry) => {
             const relatedArtwork = getWritingArtwork(entry.slug);

@@ -114,7 +114,7 @@ export default function WardMap({ wards, topology, selection, onSelect }: {
     {!ready && <div className="map-status" role="status">{error ? <>The map could not load. You can still explore every ward using search. <button onClick={() => window.location.reload()}>Reload map</button></> : 'Drawing 7,993 ward boundaries…'}</div>}
     <div className="map-legend" aria-label="Map colouring">
       <div className="legend-heading">
-        <h2>Estimated voting intention</h2>
+        <h2>Estimated Voting Intention</h2>
       </div>
       <div className="brexit-share-scale" role="img" aria-label="Voting-intention colour scale: dark purple is 100% Rejoin, warm off-white is a 50/50 split, and coral is 100% Stay out. A gentle logistic scale emphasises differences near 50/50. Tick labels show actual shares: 100% Rejoin, 60% Rejoin, 50/50, 60% Stay out, 100% Stay out.">
         <div className="brexit-scale-directions" aria-hidden="true"><span>Rejoin the EU</span><span>Stay out of the EU</span></div>

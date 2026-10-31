@@ -1,3 +1,3 @@
 ---
-name: First-past-the-post
+name: First-past-the-Post
 ---

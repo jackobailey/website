@@ -1,3 +1,3 @@
 ---
-name: Electoral reform
+name: Electoral Reform
 ---

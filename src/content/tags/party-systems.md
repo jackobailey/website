@@ -1,3 +1,3 @@
 ---
-name: Party systems
+name: Party Systems
 ---

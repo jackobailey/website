@@ -22,7 +22,7 @@ const browseTopics = ["elections", "political-parties", "effective-parties", "el
 
     <div class="archive-layout">
       <div class="archive-heading">
-        <h2 id="writing-list-title" data-results-heading>Latest writing</h2>
+        <h2 id="writing-list-title" data-results-heading>Latest Writing</h2>
         <p role="status" aria-live="polite" aria-atomic="true" data-results-count>
           {posts.length} {posts.length === 1 ? "article" : "articles"}
         </p>
@@ -43,7 +43,7 @@ const browseTopics = ["elections", "political-parties", "effective-parties", "el
           {posts.map((post, index) => <WritingArchiveItem post={post} tagLookup={tagLookup} eager={index === 0} />)}
         </div>
         <div class="archive-empty" data-empty-state hidden>
-          <h3>No articles found</h3>
+          <h3>No Articles Found</h3>
           <p>Try another word or explore a topic from the archive.</p>
           <button type="button" class="archive-text-link" data-clear-search>Clear search</button>
         </div>
@@ -51,7 +51,7 @@ const browseTopics = ["elections", "political-parties", "effective-parties", "el
 
       <aside class="archive-sidebar" aria-label="Explore more writing">
         <nav class="archive-topics" aria-labelledby="archive-topics-title">
-          <h2 id="archive-topics-title">Explore topics</h2>
+          <h2 id="archive-topics-title">Explore Topics</h2>
           <ul>
             {browseTopics.map((tag) => (
               <li><a href={getTagHref(tag)}>
@@ -63,7 +63,7 @@ const browseTopics = ["elections", "political-parties", "effective-parties", "el
           <a class="archive-text-link" href="/tags/">All topics</a>
         </nav>
         <section class="archive-follow" aria-labelledby="archive-follow-title">
-          <h2 id="archive-follow-title">Follow me online</h2>
+          <h2 id="archive-follow-title">Follow Me Online</h2>
           <ul class="archive-follow__links">
             <li>
               <a class="archive-social-link" href={siteConfig.social.bluesky} aria-label="Bluesky" title="Bluesky" target="_blank" rel="noreferrer">
@@ -105,7 +105,7 @@ const browseTopics = ["elections", "political-parties", "effective-parties", "el
         }
 
         if (count) count.textContent = `${visible} ${visible === 1 ? "article" : "articles"}`;
-        if (heading) heading.textContent = query ? "Search results" : "Latest writing";
+        if (heading) heading.textContent = query ? "Search Results" : "Latest Writing";
         if (empty) empty.hidden = visible > 0;
       }
 

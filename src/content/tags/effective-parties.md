@@ -1,7 +1,7 @@
 ---
-name: Effective number of parties
+name: Effective Number of Parties
 description: Notes and posts about the effective number of parties and the concepts behind it.
-seoTitle: Effective number of parties
+seoTitle: Effective Number of Parties
 seoDescription: Writing on the effective number of parties, party-system measurement, and related concepts.
 featured: false
 ---

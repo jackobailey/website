@@ -1,3 +1,3 @@
 ---
-name: Agent-based modelling
+name: Agent-Based Modelling
 ---

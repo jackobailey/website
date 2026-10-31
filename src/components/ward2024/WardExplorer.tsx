@@ -74,19 +74,19 @@ export default function WardExplorer({ stickerSrc }: { stickerSrc: string }) {
         <VoteChart ward={ward} />
         <footer className="details-footer"><div><button className="text-button" onClick={openMethod}>Method &amp; data</button><a href={data.estimates.download} target="_blank" rel="noreferrer">Download CSV</a></div><span>Estimates by <a href="https://bsky.app/profile/jack-bailey.co.uk" target="_blank" rel="noreferrer">Jack Bailey</a></span></footer>
       </aside>
-    </main> : <main className="loading-state" role="status"><h2>{error ? 'The estimates could not load' : 'Loading the ward estimates…'}</h2><p>{error ? 'Check your connection and try again.' : 'Preparing the map of Great Britain.'}</p>{error && <button className="retry-button" onClick={() => setAttempt(value => value + 1)}>Try again</button>}</main>}
+    </main> : <main className="loading-state" role="status"><h2>{error ? 'The Estimates Could Not Load' : 'Loading the Ward Estimates…'}</h2><p>{error ? 'Check your connection and try again.' : 'Preparing the map of Great Britain.'}</p>{error && <button className="retry-button" onClick={() => setAttempt(value => value + 1)}>Try again</button>}</main>}
     <dialog className="method-dialog" ref={dialog} aria-labelledby="method-title" onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
       <div className="method-content">
         <button className="dialog-close" aria-label="Close about the estimates" onClick={() => dialog.current?.close()}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button>
-        <h2 id="method-title">About the estimates</h2>
+        <h2 id="method-title">About the Estimates</h2>
         <p>These are Jack Bailey’s estimates of party vote shares in the 2024 general election for 7,993 census ward areas in England, Scotland and Wales.</p>
-        <h3>How they were made</h3>
+        <h3>How They Were Made</h3>
         <p>Multilevel regression and poststratification (MRP) combines Wave 29 of the British Election Study Internet Panel with census data from England and Wales (2021) and Scotland (2022). Predictions are weighted to each ward’s demographic profile and calibrated to the known 2024 constituency results, accounting for wards that cross constituency boundaries.</p>
-        <h3>Reading the map and chart</h3>
+        <h3>Reading the Map and Chart</h3>
         <p>Map colours initially show the party or category with the largest estimated vote share. Select a party in the legend to shade every ward by its estimated share of valid votes, from white at 0% to the full party colour at 100%. A square-root colour scale emphasises differences at lower shares: 25% receives half the colour intensity. Legend labels and hover values show actual vote percentages. Select the party again or choose “Show leading party” to return to the original view. These colours do not show the probability of winning.</p>
         <p>Bars show the estimated share of valid votes; whiskers show the supplied 95% uncertainty interval. The chart and party map scales stay at 0–100% when you change wards or parties.</p>
         <p>“Other” combines other parties and independents. Only parties with positive estimated shares appear, following the CSV. Small shares can round to 0.0% on the chart. Matching constituency results does not establish accuracy within each ward.</p>
-        <h3>Which boundaries?</h3>
+        <h3>Which Boundaries?</h3>
         <p>The map uses <strong>2022 census ward areas</strong>, which can differ from the wards in use at the 2024 election. Northern Ireland is excluded. The City of London and Isles of Scilly each form a single census area; Hunmanby &amp; Sherburn has separate Ryedale and Scarborough parts. Boundaries are simplified for display.</p>
         <p>The constituency shown beneath a ward’s name is the one containing its largest share of census adult population. It is a label: a ward may cross constituency boundaries.</p>
         <p>Drag or pinch the map to explore; select any ward to update the chart. For keyboard access, search a ward name, constituency or ward code, use the arrow keys, then press Enter. The address updates so you can copy a link to the selected ward.</p>

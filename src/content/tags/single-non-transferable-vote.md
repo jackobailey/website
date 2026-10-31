@@ -1,3 +1,3 @@
 ---
-name: Single non-transferable vote
+name: Single Non-transferable Vote
 ---

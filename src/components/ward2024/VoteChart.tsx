@@ -80,7 +80,7 @@ function useAnimatedVotes(target: Vote[]) {
 export default function VoteChart({ ward }: { ward: Ward }) {
   const { votes, rows } = useAnimatedVotes(ward.votes);
   return <section className="vote-chart" aria-labelledby="vote-chart-title">
-    <h3 id="vote-chart-title">Estimated vote share</h3>
+    <h3 id="vote-chart-title">Estimated Vote Share</h3>
     <p className="chart-subtitle">% of valid votes</p>
     <div className="chart-bars" aria-hidden="true" ref={rows}>
       {votes.map(([party, est, lower, upper]) => <div className="chart-row" key={party} data-party={party}>

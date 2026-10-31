@@ -2,7 +2,7 @@
 
 This repository contains the code to produce MRP estimates of **Rejoin the EU** versus **Stay out of the EU** voting intention in all **7,993 2022 census wards in Great Britain**. Northern Ireland is not included.
 
-## About the estimates
+## About the Estimates
 
 I use **multilevel regression and poststratification (MRP)** to combine Wave 31 of the British Election Study Internet Panel with census data from England and Wales (2021) and Scotland (2022).
 
@@ -13,7 +13,7 @@ The process has two steps:
 
 The 2024 constituency results and estimated 2016 Leave shares are contextual predictors. Leave shares use 2024 constituency boundaries and enter both training and prediction as raw proportions from 0 to 1. Remain shares are omitted because they equal one minus Leave. The Brexit estimates are not calibrated to election results.
 
-## Running the scripts
+## Running the Scripts
 
 Run `_scripts/000_run_all.R` from the project root. The prediction stage saves all three response categories in `_data/proc/ward_brexit_draws.rds`. The summary stage writes `_data/proc/ward_brexit_preds.rds` and `_output/ward_brexit_results.csv`, and the plotting stage writes `_output/ward_brexit_map.png`.
 

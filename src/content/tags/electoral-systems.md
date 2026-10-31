@@ -1,3 +1,3 @@
 ---
-name: Electoral systems
+name: Electoral Systems
 ---

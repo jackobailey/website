@@ -137,7 +137,7 @@ export default function WardMap({ wards, topology, selection, onSelect }: {
     {!ready && <div className="map-status" role="status">{error ? <>The map could not load. You can still explore every ward using search. <button onClick={() => window.location.reload()}>Reload map</button></> : 'Drawing 7,993 ward boundaries…'}</div>}
     <div className="map-legend" aria-label="Map colouring">
       <div className="legend-heading">
-        <h2 aria-live="polite">{selectedParty ? `${PARTIES[selectedParty].name} vote share` : 'Largest estimated vote share'}</h2>
+        <h2 aria-live="polite">{selectedParty ? `${PARTIES[selectedParty].name} Vote Share` : 'Largest Estimated Vote Share'}</h2>
         {selectedParty && <button type="button" className="text-button legend-reset" onClick={() => setSelectedParty(null)}>Show leading party</button>}
       </div>
       <ul>{Object.entries(PARTIES).map(([code, party]) => <li key={code}>

@@ -62,7 +62,7 @@ export default function ThresholdExplorer({ embedded = false }: { embedded?: boo
         {model ? <>
           <ProbabilityPlot model={model} vote={vote} showHeading={!embedded} />
           {model.isStep ? <p className="threshold-notice">The model’s bounds coincide here, so its usual probability formula is undefined. The plot shows the limiting step, with 50% at the threshold as a display convention. It does not describe real-world certainty.</p> : null}
-        </> : <div className="threshold-invalid" role="status"><h2>Complete your scenario</h2><p>{error}</p><p className="threshold-help">The plot will update once the inputs are valid.</p></div>}
+        </> : <div className="threshold-invalid" role="status"><h2>Complete Your Scenario</h2><p>{error}</p><p className="threshold-help">The plot will update once the inputs are valid.</p></div>}
       </section>
     </div>
 

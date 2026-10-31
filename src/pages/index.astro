@@ -16,7 +16,7 @@ const structuredData = {
 ---
 
 <BaseLayout structuredData={structuredData}>
-  <h1 class="sr-only">Latest writing by {siteConfig.name}</h1>
+  <h1 class="sr-only">Latest Writing by {siteConfig.name}</h1>
   <div class="home-layout">
     <section class="home-intro" aria-labelledby="home-intro-title">
       <img
@@ -47,7 +47,7 @@ const structuredData = {
       </div>
     </section>
 
-    <section class="home-writing" aria-label="Latest writing">
+    <section class="home-writing" aria-label="Latest Writing">
       {leadPost && <HomeArticle post={leadPost} featured />}
       {recentPosts.length > 0 && (
         <div class="home-writing__recent">
