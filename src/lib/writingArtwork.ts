@@ -10,21 +10,18 @@ interface WritingArtwork {
   image: ImageMetadata;
   homeClass: string;
   objectPosition: string;
-  homeAspectRatio?: string;
 }
 
 const writingArtworkBySlug: Record<string, WritingArtwork> = {
   "ward-level-election-estimates": {
     image: wardTour,
     homeClass: "writing-card--ward-estimates",
-    objectPosition: "50% 50%",
-    homeAspectRatio: "16 / 9"
+    objectPosition: "50% 50%"
   },
   "effective-electoral-thresholds": {
     image: thresholdRace,
     homeClass: "writing-card--thresholds",
-    objectPosition: "50% 50%",
-    homeAspectRatio: "16 / 9"
+    objectPosition: "50% 50%"
   },
   "growth-curve": {
     image: taxCurve,

@@ -19,7 +19,7 @@ const artwork = getWritingArtwork(post.slug);
       src={artwork.image}
       alt=""
       class="home-article__image"
-      style={`object-position: ${artwork.objectPosition};${artwork.homeAspectRatio ? ` aspect-ratio: ${artwork.homeAspectRatio};` : ""}`}
+      style={`object-position: ${artwork.objectPosition};`}
       sizes={featured
         ? "(min-width: 1216px) 804px, (min-width: 1051px) calc(75vw - 108px), (min-width: 824px) 740px, (min-width: 601px) calc(100vw - 84px), calc(100vw - 48px)"
         : "(min-width: 1216px) 386px, (min-width: 1051px) calc(37.5vw - 70px), (min-width: 824px) 356px, (min-width: 601px) calc((100vw - 112px) / 2), calc((100vw - 64px) / 2)"}
@@ -50,13 +50,11 @@ const artwork = getWritingArtwork(post.slug);
     display: block;
     width: 100%;
     height: auto;
-    aspect-ratio: 2.1;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
   }
 
   .home-article__copy { padding-top: 12px; }
-
-  .home-article--featured .home-article__image { aspect-ratio: 2.6; }
 
   time {
     display: block;
@@ -96,14 +94,10 @@ const artwork = getWritingArtwork(post.slug);
   .home-article__link:hover h2 { color: #d45343; }
 
   @media (max-width: 1050px) {
-    .home-article__image { aspect-ratio: 1.8; }
-    .home-article--featured .home-article__image { aspect-ratio: 2; }
     h2 { font-size: 22px; }
   }
 
   @media (max-width: 600px) {
-    .home-article__image { aspect-ratio: 1.5; }
-    .home-article--featured .home-article__image { aspect-ratio: 1.75; }
     h2 { font-size: 21px; }
     p { font-size: 14px; }
     .home-article--featured p { font-size: 16px; }
