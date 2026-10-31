@@ -10,7 +10,7 @@ async function readJson<T>(url: string, signal: AbortSignal): Promise<T> {
   return response.json();
 }
 
-export default function WardExplorer({ stickerSrc }: { stickerSrc: string }) {
+export default function WardExplorer({ stickerSrc, embedded = false }: { stickerSrc?: string; embedded?: boolean }) {
   const [data, setData] = useState<{ estimates: Estimates; topology: WardTopology } | null>(null);
   const [selection, setSelection] = useState<Selection>({ id: DEFAULT_WARD, focus: false, sequence: 0 });
   const [error, setError] = useState(false);
@@ -54,17 +54,17 @@ export default function WardExplorer({ stickerSrc }: { stickerSrc: string }) {
   const ward = data?.estimates.wards.find(item => item.id === selection.id);
   const openMethod = () => dialog.current?.showModal();
 
-  return <div className="ward-explorer">
+  return <div className={`ward-explorer${embedded ? ' ward-explorer--embedded' : ''}`}>
     <a className="skip-link" href="#ward-details" onClick={event => { event.preventDefault(); document.getElementById('ward-details')?.focus(); }}>Skip to ward estimates</a>
-    <header className="explorer-header">
+    {!embedded && <header className="explorer-header">
       <div><h1>UK General Election 2024: Ward by Ward</h1><p>Explore MRP estimates of the general election in 7,993 wards across Great Britain</p></div>
       <a className="ward-project-link" href="https://github.com/jackobailey/ward_mrp" target="_blank" rel="noreferrer" aria-label="Ward MRP 2024 on GitHub">
         <img src={stickerSrc} width="264" height="264" alt="Ward MRP 2024 hex sticker" />
       </a>
-    </header>
+    </header>}
     {notice && <p className="ward-notice" role="status">{notice}</p>}
     {data && ward ? <main className="explorer-main">
-      <WardMap wards={data.estimates.wards} topology={data.topology} selection={selection} onSelect={selectWard} />
+      <WardMap wards={data.estimates.wards} topology={data.topology} selection={selection} onSelect={selectWard} scrollWheelZoom={!embedded} />
       <aside id="ward-details" className="ward-details" aria-labelledby="selected-ward" tabIndex={-1}>
         <div className="ward-heading"><p className="ward-region">{ward.region}</p>
           <h2 id="selected-ward" title={ward.name} aria-label={ward.name}>{wardHeading(ward.name)}</h2>
@@ -72,7 +72,10 @@ export default function WardExplorer({ stickerSrc }: { stickerSrc: string }) {
         </div>
         <p className="sr-only" role="status" aria-live="polite">Showing estimates for {ward.name}, {ward.pcon}.</p>
         <VoteChart ward={ward} />
-        <footer className="details-footer"><div><button className="text-button" onClick={openMethod}>Method &amp; data</button><a href={data.estimates.download} target="_blank" rel="noreferrer">Download CSV</a></div><span>Estimates by <a href="https://bsky.app/profile/jack-bailey.co.uk" target="_blank" rel="noreferrer">Jack Bailey</a></span></footer>
+        <footer className="details-footer"><div>{embedded
+          ? <a href="https://github.com/jackobailey/ward_mrp#about-the-estimates" target="_blank" rel="noreferrer">Method &amp; data</a>
+          : <button className="text-button" onClick={openMethod}>Method &amp; data</button>}
+          <a href={data.estimates.download} target="_blank" rel="noreferrer">Download CSV</a></div><span>Estimates by <a href="https://bsky.app/profile/jack-bailey.co.uk" target="_blank" rel="noreferrer">Jack Bailey</a></span></footer>
       </aside>
     </main> : <main className="loading-state" role="status"><h2>{error ? 'The Estimates Could Not Load' : 'Loading the Ward Estimates…'}</h2><p>{error ? 'Check your connection and try again.' : 'Preparing the map of Great Britain.'}</p>{error && <button className="retry-button" onClick={() => setAttempt(value => value + 1)}>Try again</button>}</main>}
     <dialog className="method-dialog" ref={dialog} aria-labelledby="method-title" onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }}>

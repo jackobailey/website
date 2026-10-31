@@ -1,0 +1,28 @@
+---
+import WardExplorer from '@/components/ward2024/WardExplorer';
+import '@/components/ward2024/embed.css';
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>2024 general election: ward estimates</title>
+    <link rel="canonical" href="https://jack-bailey.co.uk/ward2024" />
+  </head>
+  <body>
+    <WardExplorer embedded client:load />
+    <noscript><p>Enable JavaScript to explore the map, or <a href="https://github.com/jackobailey/ward_mrp" target="_blank" rel="noreferrer">download the ward estimates on GitHub</a>.</p></noscript>
+    <script>
+      const explorer = document.querySelector('.ward-explorer');
+      if (explorer && window.parent !== window) {
+        const reportHeight = () => window.parent.postMessage({
+          type: 'ward2024:resize', height: explorer.getBoundingClientRect().height + 2,
+        }, window.location.origin);
+        new ResizeObserver(reportHeight).observe(explorer);
+        reportHeight();
+      }
+    </script>
+  </body>
+</html>

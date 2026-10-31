@@ -1,0 +1,25 @@
+---
+title: The 2024 UK General Election, Ward by Ward
+summary: Using MRP to estimate how Britain voted in 7,993 wards.
+date: 2026-09-28
+tags:
+  - elections
+  - united-kingdom
+  - political-parties
+  - mrp
+  - mathematical-modelling
+---
+
+import Ward2024Embed from "@/components/blog/Ward2024Embed.astro";
+
+The 2024 general election was both [**the most fragmented**](https://www.tandfonline.com/doi/full/10.1080/01402382.2024.2430915) and [**the most disproportionate**](https://onlinelibrary.wiley.com/doi/full/10.1111/1467-923X.13504) in British history. Labour won a "razor-thin" majority, with almost two-thirds of the seats but only one third of the vote, while parties beyond Labour and the Conservatives gained more support than ever before.
+
+We know how many votes each candidate received in each constituency. However, below that level, the picture becomes much less clear. Unlike [**Australia**](https://results.aec.gov.au/27966/website/HouseDownloadsMenu-27966-Csv.htm), which releases polling station-level results, the UK does not publish general-election votes below the constituency level. In fact, the country quite literally _cannot_ provide polling-station results, since UK law requires that [**ballot papers from different boxes must be mixed before counting**](https://www.electoralcommission.org.uk/full-guidance/guidance-acting-returning-officers-administering-a-uk-parliamentary-election-great-britain). Consequently, there is a lot that we do not know about the voting patterns of smaller communities.
+
+The only way around this problem is to estimate lower-level results. With this in mind, I used multilevel regression and poststratification, or MRP, to estimate party vote shares in all 7,993 of Great Britain’s 2022 census wards. This approach combines tens of thousands of reported votes from the [**British Election Study**](https://www.britishelectionstudy.com/) with information from the last Census about each individual ward. First, I modelled vote choice based on age, sex, ethnicity, religion, education, housing tenure, socio-economic class, and economic activity, alongside constituency election results and information about respondents’ wards, constituencies, and regions. Next, I used this model to predict voting patterns, weighted those predictions to each ward’s demographic profile, then calibrated the ward vote counts to the known constituency results to produce local estimates consistent with the counts at constituency level. Note that I exclude Northern Ireland because of its different party system and because it is not included in the British Election Study data.
+
+<Ward2024Embed />
+
+The interactive above shows the resulting estimates: search for a ward by name or select one on the map to explore its vote shares. Hopefully, these estimates will help researchers better understand political geography, help journalists describe local patterns of support, and help parties plan their campaigns. Remember, however, that these are only model-based estimates and, while I think that they are accurate overall, they might not always be right in some cases, so remember to take note of the 95% uncertainty intervals.
+
+<p className="article-paper-cta"><a href="https://github.com/jackobailey/ward_mrp"><strong>Download the estimates on GitHub</strong> <span aria-hidden="true">→</span></a></p>

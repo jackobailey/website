@@ -1,0 +1,21 @@
+/* The iframe keeps the standalone explorer's styles out of article prose. */
+.ward-explorer.ward-explorer--embedded { height: auto; min-height: 0; }
+.ward-explorer--embedded .explorer-main { flex: none; grid-template-columns: minmax(0, 1.15fr) minmax(300px, 1fr); min-height: 640px; }
+.ward-explorer--embedded .ward-details { padding: 24px; overflow: visible; }
+.ward-explorer--embedded .ward-heading { padding-bottom: 18px; }
+.ward-explorer--embedded .ward-heading h2 { font-size: 30px; }
+.ward-explorer--embedded .ward-region, .ward-explorer--embedded .ward-constituency { font-size: 15px; }
+.ward-explorer--embedded .vote-chart { margin-top: 20px; }
+.ward-explorer--embedded .vote-chart h3 { font-size: 23px; }
+.ward-explorer--embedded .chart-subtitle { font-size: 15px; }
+.ward-explorer--embedded .bar-label { font-size: 14px; }
+.ward-explorer--embedded .bar-track { height: 17px; }
+.ward-explorer--embedded .chart-row + .chart-row { margin-top: 12px; }
+.ward-explorer--embedded .details-footer { font-size: 12px; gap: 12px; }
+.ward-explorer--embedded .loading-state { min-height: 640px; }
+@media (max-width: 800px) {
+  .ward-explorer--embedded .explorer-main { min-height: 0; }
+  .ward-explorer--embedded .ward-map { height: 370px; min-height: 370px; max-height: none; }
+  .ward-explorer--embedded .ward-details { padding: 22px 18px; }
+  .ward-explorer--embedded .ward-heading h2 { font-size: 30px; }
+}

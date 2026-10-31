@@ -1,0 +1,35 @@
+<figure class="ward-article-embed not-prose">
+  <div class="ward-article-embed__heading">
+    <h2>Explore the estimates</h2>
+    <a href="/ward2024" target="_blank" rel="noreferrer">Open full screen <span aria-hidden="true">↗</span></a>
+  </div>
+  <iframe
+    src="/ward2024/embed/"
+    title="2024 general election: interactive ward estimates"
+    loading="lazy"
+    data-ward-embed
+  ></iframe>
+  <figcaption>Estimated shares of valid votes in 7,993 census wards across Great Britain. Bars show point estimates; whiskers show 95% uncertainty intervals.</figcaption>
+</figure>
+
+<script>
+  window.addEventListener('message', (event: MessageEvent) => {
+    if (event.origin !== window.location.origin || event.data?.type !== 'ward2024:resize') return;
+    const height = event.data.height;
+    if (typeof height !== 'number' || !Number.isFinite(height) || height < 300 || height > 2400) return;
+    document.querySelectorAll<HTMLIFrameElement>('iframe[data-ward-embed]').forEach((frame) => {
+      if (event.source === frame.contentWindow) frame.style.height = `${Math.ceil(height)}px`;
+    });
+  });
+</script>
+
+<style>
+  .ward-article-embed { margin-block: 2.5rem; }
+  .ward-article-embed__heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: .5rem 1rem; border-top: 1px solid #111; padding-block: 1rem; }
+  .ward-article-embed__heading h2 { margin: 0; font-size: 1.25rem; font-weight: 700; letter-spacing: -.025em; }
+  .ward-article-embed__heading a { color: #555; font-size: .875rem; text-decoration: underline; text-underline-offset: 4px; }
+  .ward-article-embed__heading a:hover { color: #111; }
+  iframe { display: block; width: 100%; height: 650px; border: 1px solid #dce2e5; background: #edf1f2; }
+  .ward-article-embed figcaption { margin-top: 1rem; color: #555; }
+  @media (max-width: 928px) { iframe { height: 1220px; } }
+</style>

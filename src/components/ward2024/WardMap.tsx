@@ -24,9 +24,10 @@ function fitCountry(map: LeafletMap, animate = false) {
   map.fitBounds(GB_BOUNDS, { paddingTopLeft: narrow ? [18, 82] : [100, 26], paddingBottomRight: narrow && !legendBelowMap ? [18, 240] : [22, 38], animate });
 }
 
-export default function WardMap({ wards, topology, selection, onSelect }: {
+export default function WardMap({ wards, topology, selection, onSelect, scrollWheelZoom = true }: {
   wards: Ward[]; topology: WardTopology; selection: Selection;
   onSelect: (id: string, focus: boolean) => void;
+  scrollWheelZoom?: boolean;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<LeafletMap | null>(null);
@@ -48,6 +49,7 @@ export default function WardMap({ wards, topology, selection, onSelect }: {
       if (cancelled || !container.current) return;
       const instance = L.map(container.current, {
         preferCanvas: true, zoomControl: false, attributionControl: false,
+        scrollWheelZoom,
         minZoom: 3, maxZoom: 15, zoomSnap: 0.1, zoomDelta: 1,
         // Repaint the vector map at its final scale rather than stretching a
         // clipped canvas during zoom. This also handles repeated wheel zooms.
@@ -103,7 +105,7 @@ export default function WardMap({ wards, topology, selection, onSelect }: {
       cancelled = true; resize?.disconnect(); map.current?.remove(); map.current = null;
       polygons.current.clear(); allWards.current = null; selectedLayer.current = null;
     };
-  }, [wards, topology, onSelect]);
+  }, [wards, topology, onSelect, scrollWheelZoom]);
 
   useEffect(() => {
     mapParty.current = selectedParty;

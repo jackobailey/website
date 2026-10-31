@@ -8,6 +8,7 @@ import SystemsPendulumHero from "@/components/writing/SystemsPendulumHero.astro"
 import MmpSeatsHero from "@/components/writing/MmpSeatsHero.astro";
 import TaxCurveHero from "@/components/writing/TaxCurveHero.astro";
 import ThresholdRaceHero from "@/components/writing/ThresholdRaceHero.astro";
+import WardTourHero from "@/components/writing/WardTourHero.astro";
 import { siteConfig } from "@/site.config";
 import { getBlogPosts, getRelatedPosts, getTagEntries } from "@/lib/content";
 import { buildTagLookup, getTagHref, getTagLabel } from "@/lib/tags";
@@ -70,6 +71,8 @@ const structuredData = {
         <TaxCurveHero />
       ) : post.slug === "effective-electoral-thresholds" ? (
         <ThresholdRaceHero />
+      ) : post.slug === "ward-level-election-estimates" ? (
+        <WardTourHero />
       ) : <Image
         src={artwork.image}
         alt=""
