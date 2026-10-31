@@ -40,7 +40,7 @@ const browseTopics = ["elections", "political-parties", "effective-parties", "el
 
       <div class="archive-results" id="writing-list" aria-labelledby="writing-list-title">
         <div class="archive-list" data-post-list>
-          {posts.map((post, index) => <WritingArchiveItem post={post} tagLookup={tagLookup} eager={index === 0} />)}
+          {posts.map((post, index) => <WritingArchiveItem post={post} tagLookup={tagLookup} eager={index < 2} />)}
         </div>
         <div class="archive-empty" data-empty-state hidden>
           <h3>No Articles Found</h3>

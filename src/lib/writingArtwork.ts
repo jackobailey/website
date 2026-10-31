@@ -4,7 +4,7 @@ import effectiveParties from "@/assets/writing/collision-gas.svg";
 import justUseMmp from "@/assets/writing/just-use-mmp-seats.svg";
 import taxCurve from "@/assets/writing/tax-curve.svg";
 import thresholdRace from "@/assets/writing/effective-thresholds-race.svg";
-import wardTour from "@/assets/writing/ward-election-tour.svg";
+import wardTour from "@/assets/writing/ward-election-thumbnail.svg";
 
 interface WritingArtwork {
   image: ImageMetadata;

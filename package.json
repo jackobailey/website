@@ -36,6 +36,7 @@
     "@types/topojson-client": "^3.1.5",
     "autoprefixer": "latest",
     "mapshaper": "^0.6.113",
+    "svgo": "4.0.1",
     "typescript": "latest"
   }
 }
