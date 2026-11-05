@@ -1,5 +1,6 @@
 ---
 import WardExplorer from '@/components/ward2024/WardExplorer';
+import Favicon from '@/components/layout/Favicon.astro';
 import { getImage } from 'astro:assets';
 import wardSticker from '@/assets/ward2024/ward-mrp-hex.png';
 import { siteConfig } from '@/site.config';
@@ -13,6 +14,7 @@ const sticker = await getImage({ src: wardSticker, width: 264, format: 'webp', q
 <html lang="en-GB">
   <head>
     <meta charset="utf-8" />
+    <Favicon />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#edf1f2" />
     <title>{title}</title>

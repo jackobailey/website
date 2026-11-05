@@ -1,5 +1,6 @@
 ---
 import Header from "@/components/layout/Header.astro";
+import Favicon from "@/components/layout/Favicon.astro";
 import ThresholdExplorer from "@/components/thresholds/ThresholdExplorer";
 import "@/components/thresholds/threshold-page.css";
 import { siteConfig } from "@/site.config";
@@ -23,6 +24,7 @@ const profiles = [
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <Favicon />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />

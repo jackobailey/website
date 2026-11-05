@@ -1,5 +1,6 @@
 ---
 import WardExplorer from '@/components/wardbrexit/WardExplorer';
+import Favicon from '@/components/layout/Favicon.astro';
 import { getImage } from 'astro:assets';
 import wardSticker from '@/assets/wardbrexit/brexit-ward-mrp-hex.png';
 import { siteConfig } from '@/site.config';
@@ -13,9 +14,9 @@ const sticker = await getImage({ src: wardSticker, width: 264, format: 'webp', q
 <html lang="en-GB">
   <head>
     <meta charset="utf-8" />
+    <Favicon />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#d4ded8" />
-    <link rel="icon" type="image/webp" href={sticker.src} />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href="https://jack-bailey.co.uk/wardbrexit" />
