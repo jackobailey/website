@@ -1,0 +1,99 @@
+---
+import { cleaCorrections } from "./cleaCorrectionsData";
+
+interface Props { example: keyof typeof cleaCorrections }
+const { example } = Astro.props;
+const data = cleaCorrections[example];
+const format = (value: number) => value.toLocaleString("en-GB");
+---
+
+<figure class="not-prose article-table article-table--wide clea-comparison" data-clea-comparison data-mode="original">
+  <div class="clea-heading">
+    <p class="clea-context">{data.context}</p>
+    <h2 id={`clea-${example}-title`}>{data.title}</h2>
+    <div class="clea-controls" role="group" aria-label={`Data version for ${data.title}`}>
+      <button type="button" data-clea-mode="original" aria-pressed="true">Original CLEA</button>
+      <button type="button" data-clea-mode="corrected" aria-pressed="false">Clean CLEA</button>
+    </div>
+  </div>
+  <div class="clea-scroll" role="region" tabindex="0" aria-labelledby={`clea-${example}-title`}>
+    <table>
+      <caption class="sr-only">{data.title}: original and corrected party votes and seats. Highlighted cells are those affected by the correction.</caption>
+      <thead><tr><th scope="col">Party</th><th scope="col">Votes</th><th scope="col">Seats</th></tr></thead>
+      <tbody>
+        {data.rows.map(row => (
+          <tr>
+            <th scope="row">{row.party}{row.detail && <span class="clea-party-detail">{row.detail}</span>}</th>
+            {[0, 1].map(column => (
+              <td class:list={{ "clea-changed": row.original[column] !== row.corrected[column] }}>
+                <span class="clea-values">
+                  <span data-clea-value="original">{format(row.original[column])}</span>
+                  <span data-clea-value="corrected" aria-hidden="true">{format(row.corrected[column])}</span>
+                </span>
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <p class="clea-status" aria-live="polite" aria-atomic="true" data-clea-status data-original={data.originalNote} data-corrected={data.correctedNote}>{data.originalNote}</p>
+  <figcaption>
+    <p>Highlighted cells change when you switch versions. {data.tableNote}</p>
+    <p>Source: CLEA, October 2025 release. <a href={data.script}>Correction code</a> · <a href={data.source}>{data.sourceLabel}</a>.</p>
+    <noscript><p>Enable JavaScript to switch versions, or follow the correction code link to see the changes.</p></noscript>
+  </figcaption>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-clea-comparison]").forEach(root => {
+    const buttons = root.querySelectorAll<HTMLButtonElement>("[data-clea-mode]");
+    buttons.forEach(button => button.addEventListener("click", () => {
+      const mode = button.dataset.cleaMode;
+      if (mode !== "original" && mode !== "corrected") return;
+      root.dataset.mode = mode;
+      buttons.forEach(control => control.setAttribute("aria-pressed", String(control.dataset.cleaMode === mode)));
+      root.querySelectorAll<HTMLElement>("[data-clea-value]").forEach(value => {
+        value.setAttribute("aria-hidden", String(value.dataset.cleaValue !== mode));
+      });
+      const status = root.querySelector<HTMLElement>("[data-clea-status]");
+      if (status) status.textContent = status.dataset[mode] ?? "";
+    }));
+  });
+</script>
+
+<style>
+  .clea-comparison { margin-block: 2.5rem; border-top: 2px solid #111; border-bottom: 1px solid #dedede; color: #111; }
+  .clea-heading { padding: 1.25rem 0; }
+  .clea-context { font-size: 0.75rem; font-weight: 600; color: #555; }
+  .clea-heading h2 { margin: 0.4rem 0 1rem; font-size: 1.35rem; font-weight: 700; letter-spacing: -0.025em; line-height: 1.3; }
+  .clea-controls { display: inline-flex; flex-wrap: wrap; gap: 0.25rem; padding: 0.25rem; background: #f3f3f3; border-radius: 999px; }
+  .clea-controls button { min-height: 44px; padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.875rem; font-weight: 600; }
+  .clea-controls button[aria-pressed="true"] { background: #111; color: white; }
+  .clea-controls button:hover { box-shadow: inset 0 0 0 1px #777; }
+  .clea-comparison :is(button, a, .clea-scroll):focus-visible { outline: 2px solid #111; outline-offset: 3px; }
+  .clea-scroll { overflow-x: auto; }
+  table { width: 100%; min-width: 20rem; border-collapse: collapse; table-layout: fixed; font-size: 0.95rem; }
+  th, td { padding: 0.85rem 0.75rem; border-bottom: 1px solid #e5e5e5; vertical-align: middle; }
+  thead th { color: #555; font-size: 0.75rem; font-weight: 600; }
+  th:first-child { width: 58%; padding-left: 0; text-align: left; }
+  th:not(:first-child), td { text-align: right; font-variant-numeric: tabular-nums; }
+  th:last-child, td:last-child { width: 17%; }
+  tbody th { font-weight: 600; }
+  .clea-party-detail { display: block; margin-top: 0.15rem; font-size: 0.78rem; font-weight: 400; color: #555; }
+  .clea-changed { background: #fff0ed; font-weight: 700; box-shadow: inset 0 -2px #f76f5c; }
+  .clea-values { display: grid; }
+  .clea-values > span { grid-area: 1 / 1; }
+  [data-mode="original"] [data-clea-value="corrected"],
+  [data-mode="corrected"] [data-clea-value="original"] { visibility: hidden; }
+  .clea-status { margin: 1rem 0; padding-left: 0.8rem; border-left: 3px solid #f76f5c; font-size: 0.95rem; line-height: 1.5; min-height: 3em; }
+  .clea-comparison figcaption { max-width: none; margin: 0 0 1.25rem; color: #555; font-size: 0.78rem; line-height: 1.6; }
+  figcaption p + p { margin-top: 0.55rem; }
+  figcaption a { color: #111; text-decoration: underline; text-decoration-color: #aaa; text-underline-offset: 3px; }
+  figcaption a:hover { text-decoration-color: #f76f5c; }
+  @media (max-width: 600px) {
+    table { font-size: 0.85rem; }
+    th, td { padding-inline: 0.5rem; }
+    .clea-heading h2 { font-size: 1.2rem; }
+  }
+</style>

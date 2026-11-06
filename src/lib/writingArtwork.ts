@@ -5,14 +5,23 @@ import justUseMmp from "@/assets/writing/just-use-mmp-seats.svg";
 import taxCurve from "@/assets/writing/tax-curve.svg";
 import thresholdRace from "@/assets/writing/effective-thresholds-race.svg";
 import wardTour from "@/assets/writing/ward-election-thumbnail.svg";
+import cleaBallot from "@/assets/writing/clean-clea-ballot.svg";
+import cleaSocial from "@/assets/writing/clean-clea-social.png";
 
 interface WritingArtwork {
   image: ImageMetadata;
+  socialImage?: ImageMetadata;
   homeClass: string;
   objectPosition: string;
 }
 
 const writingArtworkBySlug: Record<string, WritingArtwork> = {
+  "clean-clea": {
+    image: cleaBallot,
+    socialImage: cleaSocial,
+    homeClass: "writing-card--clea",
+    objectPosition: "50% 50%"
+  },
   "ward-level-election-estimates": {
     image: wardTour,
     homeClass: "writing-card--ward-estimates",

@@ -1,0 +1,92 @@
+---
+import { renderCleaBallotScene } from "@/lib/cleaBallotScene";
+---
+
+<clea-ballot>
+  <Fragment set:html={renderCleaBallotScene()} />
+</clea-ballot>
+
+<style>
+  clea-ballot { display: block; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #e4d8ed; }
+  clea-ballot :global(svg) { display: block; width: 100%; height: 100%; }
+</style>
+
+<script>
+  import { ballotLensFrame, CLEA_BALLOT } from "@/lib/cleaBallotScene";
+
+  class CleaBallot extends HTMLElement {
+    private elapsed = Number(CLEA_BALLOT.posterTime);
+    private previous: number | undefined;
+    private frame = 0;
+    private visible = false;
+    private printing = false;
+    private abort?: AbortController;
+    private observer?: IntersectionObserver;
+    private motion?: MediaQueryList;
+    private lens!: SVGGElement;
+    private magnified!: SVGUseElement;
+
+    connectedCallback() {
+      this.abort = new AbortController();
+      const { signal } = this.abort;
+      this.lens = this.querySelector('[data-ballot-lens]')!;
+      this.magnified = this.querySelector('[data-ballot-magnified]')!;
+      this.motion = matchMedia('(prefers-reduced-motion: reduce)');
+      this.motion.addEventListener('change', () => {
+        if (this.motion?.matches) {
+          this.elapsed = CLEA_BALLOT.posterTime;
+          this.draw();
+        }
+        this.schedule();
+      }, { signal });
+      document.addEventListener('visibilitychange', () => this.schedule(), { signal });
+      window.addEventListener('beforeprint', () => {
+        this.printing = true;
+        this.elapsed = CLEA_BALLOT.posterTime;
+        this.draw();
+        this.schedule();
+      }, { signal });
+      window.addEventListener('afterprint', () => {
+        this.printing = false;
+        this.schedule();
+      }, { signal });
+      this.observer = new IntersectionObserver(([entry]) => {
+        this.visible = entry.isIntersecting;
+        this.schedule();
+      });
+      this.observer.observe(this);
+    }
+
+    disconnectedCallback() {
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+      this.previous = undefined;
+      this.observer?.disconnect();
+      this.abort?.abort();
+    }
+
+    private schedule() {
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+      this.previous = undefined;
+      const running = this.visible && !document.hidden && !this.motion?.matches && !this.printing;
+      this.dataset.running = String(running);
+      if (running) this.frame = requestAnimationFrame(this.tick);
+    }
+
+    private tick = (now: number) => {
+      if (this.previous !== undefined) this.elapsed += Math.min((now - this.previous) / 1000, 0.1);
+      this.previous = now;
+      this.draw();
+      this.frame = requestAnimationFrame(this.tick);
+    };
+
+    private draw() {
+      const state = ballotLensFrame(this.elapsed);
+      this.lens.setAttribute('transform', state.position);
+      this.magnified.setAttribute('transform', state.magnification);
+    }
+  }
+
+  if (!customElements.get('clea-ballot')) customElements.define('clea-ballot', CleaBallot);
+</script>

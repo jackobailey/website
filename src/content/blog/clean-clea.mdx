@@ -1,0 +1,29 @@
+---
+title: Cleaning Up CLEA
+summary: Hand-coded corrections to errors in the Constituency-Level Elections Archive
+date: 2026-11-06
+tags:
+  - data
+  - elections
+  - electoral-systems
+---
+
+import CleaCorrectionTable from "@/components/blog/CleaCorrectionTable.astro";
+
+To understand electoral systems, we have to compare what happens when people vote under different rules and in different contexts. We also have to look beyond national-level results, since electoral rules affect results at the constituency level. Otherwise, we risk confusing the impact of the electoral system from the impact of aggregating results.
+
+This is what makes the [**Constituency-Level Elections Archive**](https://electiondataarchive.org/data-and-documentation/clea-lower-chamber-elections-archive/), or CLEA, such a valuable resource. Its most recent release brings together data from 2,304 elections in 189 countries and territories, giving researchers access to detailed returns that would otherwise take them years to collect. I used these data in [**my recent paper on effective electoral thresholds**](https://www.sciencedirect.com/science/article/pii/S026137942600137X), which asks how many votes a party needs to have an even chance of winning a seat in its district. As I explained in [**the accompanying post**](/writing/effective-electoral-thresholds/), the answer depends on both the number of seats available and how voters divide their support.
+
+While working on that paper, however, I found a number of errors and impossible results in the CLEA data. Some parties had incorrect vote totals; others had the wrong number of seats. Some districts had the wrong district magnitude, some results were assigned to the wrong constituency, there were duplicated rows, and other similar issues. Most looked like simple transcription errors, but they were far from isolated: **In total, I found errors in 446 elections**. Obviously, these errors affect our ability to understand electoral systems.
+
+Take the district of Leiria, in Portugal’s 2015 election. CLEA records **120,700 votes** for the Democratic Unity Coalition (CDU). However, it also records the party as winning no seats, despite the fact that this many votes would have put it in first place. The reason why is that its support is ten times too large: the CDU actually won **12,070 votes**, as the [**official returns**](https://www.cne.pt/sites/default/files/dl/ar2015_mapa_oficial_resultados.pdf) make clear. Switch between the original and corrected figures below to see how this errant zero changes the apparent result.
+
+<CleaCorrectionTable example="portugal" />
+
+A similar error appears in Coventry South East in the 1992 UK general election. Dave Nellist, an Independent Labour candidate, won **10,551 votes** and finished third, just 40 votes behind the Conservative candidate. However, CLEA includes his vote total twice. Aggregating the data to the party level therefore gives Nellist **21,102 votes**, well ahead of Labour’s winning **11,902 votes**. Removing the duplicate restores the actual result.
+
+<CleaCorrectionTable example="coventry" />
+
+My GitHub repository [**Clean CLEA**](https://github.com/jackobailey/clean_clea) documents all of the errors I found with the CLEA data, together with the code and source references needed to inspect and reproduce them. The repository contains the cleaned archive and a separate dataset restricted to [**simple electoral systems**](/writing/not-so-simple-systems/), both available as **R files (`.rds`) and zipped Stata files (`.dta.zip`)**. I have also contacted the CLEA team to make them aware of the issues. If you inspect the data and find further issues, or can complement the data in any way, please let me know.
+
+<p className="article-paper-cta"><a href="https://github.com/jackobailey/clean_clea">Explore Clean CLEA on GitHub <span aria-hidden="true">→</span></a></p>

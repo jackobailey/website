@@ -9,6 +9,7 @@ import MmpSeatsHero from "@/components/writing/MmpSeatsHero.astro";
 import TaxCurveHero from "@/components/writing/TaxCurveHero.astro";
 import ThresholdRaceHero from "@/components/writing/ThresholdRaceHero.astro";
 import WardTourHero from "@/components/writing/WardTourHero.astro";
+import CleaBallotHero from "@/components/writing/CleaBallotHero.astro";
 import { siteConfig } from "@/site.config";
 import { getBlogPosts, getRelatedPosts, getTagEntries } from "@/lib/content";
 import { buildTagLookup, getTagHref, getTagLabel } from "@/lib/tags";
@@ -54,6 +55,15 @@ const structuredData = {
   description={post.data.summary}
   structuredData={structuredData}
 >
+  {artwork.socialImage && (
+    <Fragment slot="head">
+      <meta property="og:image" content={new URL(artwork.socialImage.src, Astro.site).toString()} />
+      <meta property="og:image:width" content={String(artwork.socialImage.width)} />
+      <meta property="og:image:height" content={String(artwork.socialImage.height)} />
+      <meta property="og:image:alt" content="A magnifying glass inspecting an imaginary ballot paper." />
+      <meta name="twitter:image" content={new URL(artwork.socialImage.src, Astro.site).toString()} />
+    </Fragment>
+  )}
   <article class="article-page" aria-labelledby="article-title">
     <header class="article-heading">
       <h1 id="article-title">{post.data.title}</h1>
@@ -73,6 +83,8 @@ const structuredData = {
         <ThresholdRaceHero />
       ) : post.slug === "ward-level-election-estimates" ? (
         <WardTourHero />
+      ) : post.slug === "clean-clea" ? (
+        <CleaBallotHero />
       ) : <Image
         src={artwork.image}
         alt=""
