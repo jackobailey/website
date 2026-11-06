@@ -63,33 +63,33 @@ const format = (value: number) => value.toLocaleString("en-GB");
 </script>
 
 <style>
-  .clea-comparison { margin-block: 2.5rem; border-top: 2px solid #111; border-bottom: 1px solid #dedede; color: #111; }
+  .clea-comparison { margin-block: 2.5rem; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--border-color); color: var(--ink); }
   .clea-heading { padding: 1.25rem 0; }
-  .clea-context { font-size: 0.75rem; font-weight: 600; color: #555; }
+  .clea-context { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); }
   .clea-heading h2 { margin: 0.4rem 0 1rem; font-size: 1.35rem; font-weight: 700; letter-spacing: -0.025em; line-height: 1.3; }
-  .clea-controls { display: inline-flex; flex-wrap: wrap; gap: 0.25rem; padding: 0.25rem; background: #f3f3f3; border-radius: 999px; }
+  .clea-controls { display: inline-flex; flex-wrap: wrap; gap: 0.25rem; padding: 0.25rem; background: var(--surface-soft); border-radius: 999px; }
   .clea-controls button { min-height: 44px; padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.875rem; font-weight: 600; }
-  .clea-controls button[aria-pressed="true"] { background: #111; color: white; }
-  .clea-controls button:hover { box-shadow: inset 0 0 0 1px #777; }
-  .clea-comparison :is(button, a, .clea-scroll):focus-visible { outline: 2px solid #111; outline-offset: 3px; }
+  .clea-controls button[aria-pressed="true"] { background: var(--ink); color: var(--canvas); }
+  .clea-controls button:hover { box-shadow: inset 0 0 0 1px var(--border-strong); }
+  .clea-comparison :is(button, a, .clea-scroll):focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
   .clea-scroll { overflow-x: auto; }
   table { width: 100%; min-width: 20rem; border-collapse: collapse; table-layout: fixed; font-size: 0.95rem; }
-  th, td { padding: 0.85rem 0.75rem; border-bottom: 1px solid #e5e5e5; vertical-align: middle; }
-  thead th { color: #555; font-size: 0.75rem; font-weight: 600; }
+  th, td { padding: 0.85rem 0.75rem; border-bottom: 1px solid var(--line-color); vertical-align: middle; }
+  thead th { color: var(--text-muted); font-size: 0.75rem; font-weight: 600; }
   th:first-child { width: 58%; padding-left: 0; text-align: left; }
   th:not(:first-child), td { text-align: right; font-variant-numeric: tabular-nums; }
   th:last-child, td:last-child { width: 17%; }
   tbody th { font-weight: 600; }
-  .clea-party-detail { display: block; margin-top: 0.15rem; font-size: 0.78rem; font-weight: 400; color: #555; }
-  .clea-changed { background: #fff0ed; font-weight: 700; box-shadow: inset 0 -2px #f76f5c; }
+  .clea-party-detail { display: block; margin-top: 0.15rem; font-size: 0.78rem; font-weight: 400; color: var(--text-muted); }
+  .clea-changed { background: var(--surface-highlight); font-weight: 700; box-shadow: inset 0 -2px #f76f5c; }
   .clea-values { display: grid; }
   .clea-values > span { grid-area: 1 / 1; }
   [data-mode="original"] [data-clea-value="corrected"],
   [data-mode="corrected"] [data-clea-value="original"] { visibility: hidden; }
   .clea-status { margin: 1rem 0; padding-left: 0.8rem; border-left: 3px solid #f76f5c; font-size: 0.95rem; line-height: 1.5; min-height: 3em; }
-  .clea-comparison figcaption { max-width: none; margin: 0 0 1.25rem; color: #555; font-size: 0.78rem; line-height: 1.6; }
+  .clea-comparison figcaption { max-width: none; margin: 0 0 1.25rem; color: var(--text-muted); font-size: 0.78rem; line-height: 1.6; }
   figcaption p + p { margin-top: 0.55rem; }
-  figcaption a { color: #111; text-decoration: underline; text-decoration-color: #aaa; text-underline-offset: 3px; }
+  figcaption a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--border-strong); text-underline-offset: 3px; }
   figcaption a:hover { text-decoration-color: #f76f5c; }
   @media (max-width: 600px) {
     table { font-size: 0.85rem; }

@@ -23,18 +23,18 @@ export default function OnePartyElectionInteractive() {
     <div className="not-prose my-10">
       <section className="interactive-panel overflow-hidden">
         <div className="grid lg:grid-cols-[minmax(250px,0.82fr)_minmax(0,1.18fr)]">
-          <div className="border-b border-black/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
+          <div className="border-b border-neutral/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
             <p className="eyebrow">The One Party Case</p>
 
             <div className="mt-6 space-y-5">
-              <div className="border-b border-black/10 pb-4">
-                <p className="text-sm leading-6 text-black/70">Party 1</p>
-                <p className="text-lg font-semibold tracking-tight tabular-nums text-[#111111] sm:text-[1.5rem]">
+              <div className="border-b border-neutral/10 pb-4">
+                <p className="text-sm leading-6 text-neutral/70">Party 1</p>
+                <p className="text-lg font-semibold tracking-tight tabular-nums text-ink sm:text-[1.5rem]">
                   100%
                 </p>
               </div>
 
-              <p className="text-sm leading-6 text-black/70">
+              <p className="text-sm leading-6 text-neutral/70">
                 With only one party on the ballot, every vote goes to the same place, so the
                 space of possible outcomes collapses to a single point at 100%.
               </p>
@@ -58,7 +58,7 @@ export default function OnePartyElectionInteractive() {
                       x2={x}
                       y1={axisY - 92}
                       y2={axisY}
-                      stroke="rgba(17,17,17,0.12)"
+                      stroke="rgb(var(--ink-rgb)/0.12)"
                       strokeDasharray="4 5"
                     />
                     <line
@@ -66,7 +66,7 @@ export default function OnePartyElectionInteractive() {
                       x2={x}
                       y1={axisY - 10}
                       y2={axisY + 10}
-                      stroke="rgba(17,17,17,0.24)"
+                      stroke="rgb(var(--ink-rgb)/0.24)"
                       strokeWidth="1.5"
                     />
                     <text
@@ -74,7 +74,7 @@ export default function OnePartyElectionInteractive() {
                       y={axisY + 38}
                       textAnchor="middle"
                       fontSize="22"
-                      fill="#111111"
+                      fill="var(--ink)"
                     >
                       {tick}%
                     </text>
@@ -87,7 +87,7 @@ export default function OnePartyElectionInteractive() {
                 x2={CHART_WIDTH - PADDING.right}
                 y1={axisY}
                 y2={axisY}
-                stroke="rgba(17,17,17,0.24)"
+                stroke="rgb(var(--ink-rgb)/0.24)"
                 strokeWidth="2"
               />
 
@@ -96,7 +96,7 @@ export default function OnePartyElectionInteractive() {
                 cy={axisY}
                 r="13"
                 fill={ACCENT}
-                stroke="#FFFFFF"
+                stroke="var(--surface)"
                 strokeWidth="4"
               />
             </svg>

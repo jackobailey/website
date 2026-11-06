@@ -28,24 +28,24 @@ const initialParty1Share = 100 - initialParty2Share;
 <div class="not-prose my-10" data-two-party-vote-share-interactive>
   <section class="interactive-panel overflow-hidden">
     <div class="grid lg:grid-cols-[minmax(250px,0.82fr)_minmax(0,1.18fr)]">
-      <div class="border-b border-black/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
+      <div class="border-b border-neutral/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
         <p class="eyebrow">The Two Party Case</p>
 
         <div class="mt-6 space-y-5">
-          <div class="flex items-end justify-between gap-4 border-b border-black/10 pb-4">
+          <div class="flex items-end justify-between gap-4 border-b border-neutral/10 pb-4">
             <div>
-              <p class="text-sm leading-6 text-black/70">Party 1</p>
+              <p class="text-sm leading-6 text-neutral/70">Party 1</p>
               <p
-                class="text-lg font-semibold tracking-tight tabular-nums text-[#111111] sm:text-[1.5rem]"
+                class="text-lg font-semibold tracking-tight tabular-nums text-ink sm:text-[1.5rem]"
                 data-party1-value
               >
                 {initialParty1Share}%
               </p>
             </div>
             <div class="text-right">
-              <p class="text-sm leading-6 text-black/70">Party 2</p>
+              <p class="text-sm leading-6 text-neutral/70">Party 2</p>
               <p
-                class="text-lg font-semibold tracking-tight tabular-nums text-[#111111] sm:text-[1.5rem]"
+                class="text-lg font-semibold tracking-tight tabular-nums text-ink sm:text-[1.5rem]"
                 data-party2-value
               >
                 {initialParty2Share}%
@@ -53,7 +53,7 @@ const initialParty1Share = 100 - initialParty2Share;
             </div>
           </div>
 
-          <p class="text-sm leading-6 text-black/70">
+          <p class="text-sm leading-6 text-neutral/70">
             Once there are two parties, the result is no longer pinned to a single point.
             Instead, it must fall on the line that intersects the points where the first party and
             the second party win 100%.
@@ -82,7 +82,7 @@ const initialParty1Share = 100 - initialParty2Share;
                     x2={chartWidth - padding.right}
                     y1={y}
                     y2={y}
-                    stroke="rgba(17,17,17,0.12)"
+                    stroke="rgb(var(--ink-rgb)/0.12)"
                     stroke-dasharray="4 5"
                   />
                   <line
@@ -90,14 +90,14 @@ const initialParty1Share = 100 - initialParty2Share;
                     x2={x}
                     y1={padding.top}
                     y2={chartHeight - padding.bottom}
-                    stroke="rgba(17,17,17,0.08)"
+                    stroke="rgb(var(--ink-rgb)/0.08)"
                   />
                   <text
                     x={padding.left - 18}
                     y={y + 7}
                     text-anchor="end"
                     font-size="22"
-                    fill="#111111"
+                    fill="var(--ink)"
                   >
                     {tick}%
                   </text>
@@ -106,7 +106,7 @@ const initialParty1Share = 100 - initialParty2Share;
                     y={chartHeight - padding.bottom + 34}
                     text-anchor="middle"
                     font-size="22"
-                    fill="#111111"
+                    fill="var(--ink)"
                   >
                     {tick}%
                   </text>
@@ -120,7 +120,7 @@ const initialParty1Share = 100 - initialParty2Share;
             x2={padding.left}
             y1={padding.top}
             y2={chartHeight - padding.bottom}
-            stroke="rgba(17,17,17,0.24)"
+            stroke="rgb(var(--ink-rgb)/0.24)"
             stroke-width="2"
           />
           <line
@@ -128,7 +128,7 @@ const initialParty1Share = 100 - initialParty2Share;
             x2={chartWidth - padding.right}
             y1={chartHeight - padding.bottom}
             y2={chartHeight - padding.bottom}
-            stroke="rgba(17,17,17,0.24)"
+            stroke="rgb(var(--ink-rgb)/0.24)"
             stroke-width="2"
           />
 
@@ -138,7 +138,7 @@ const initialParty1Share = 100 - initialParty2Share;
             x2={getX(initialParty2Share)}
             y1={getY(initialParty1Share)}
             y2={chartHeight - padding.bottom}
-            stroke="rgba(17,17,17,0.16)"
+            stroke="rgb(var(--ink-rgb)/0.16)"
             stroke-dasharray="4 5"
           />
           <line
@@ -147,7 +147,7 @@ const initialParty1Share = 100 - initialParty2Share;
             x2={getX(initialParty2Share)}
             y1={getY(initialParty1Share)}
             y2={getY(initialParty1Share)}
-            stroke="rgba(17,17,17,0.16)"
+            stroke="rgb(var(--ink-rgb)/0.16)"
             stroke-dasharray="4 5"
           />
 
@@ -167,12 +167,12 @@ const initialParty1Share = 100 - initialParty2Share;
             cy={getY(initialParty1Share)}
             r="13"
             fill="#F76F5C"
-            stroke="#FFFFFF"
+            stroke="var(--surface)"
             stroke-width="4"
           />
         </svg>
 
-        <p class="mt-3 text-center text-xs font-medium uppercase tracking-[0.12em] text-black/45">
+        <p class="mt-3 text-center text-xs font-medium uppercase tracking-[0.12em] text-subtle">
           Click and drag the point
         </p>
       </div>

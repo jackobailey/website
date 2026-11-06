@@ -6,12 +6,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        canvas: "#FFFFFF",
-        ink: "#111111",
-        muted: "#111111",
+        canvas: "rgb(var(--canvas-rgb) / <alpha-value>)",
+        surface: "rgb(var(--surface-rgb) / <alpha-value>)",
+        ink: "rgb(var(--ink-rgb) / <alpha-value>)",
+        subtle: "var(--text-muted)",
+        neutral: "rgb(var(--neutral-rgb) / <alpha-value>)",
+        muted: "rgb(var(--ink-rgb) / <alpha-value>)",
         accent: "#F76F5C",
         accentSoft: "rgb(247 111 92 / 0.14)",
-        line: "rgba(17, 17, 17, 0.12)"
+        line: "var(--line-color)"
       },
       fontFamily: {
         sans: ["\"Ubuntu Sans\"", "system-ui", "sans-serif"]

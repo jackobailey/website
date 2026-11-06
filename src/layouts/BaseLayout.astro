@@ -1,5 +1,6 @@
 ---
 import Header from "@/components/layout/Header.astro";
+import ColorScheme from "@/components/layout/ColorScheme.astro";
 import Favicon from "@/components/layout/Favicon.astro";
 import Footer from "@/components/layout/Footer.astro";
 import "@/styles/global.css";
@@ -29,6 +30,7 @@ const structuredItems = structuredData
   <head>
     <meta charset="utf-8" />
     <Favicon />
+    <ColorScheme />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
@@ -58,7 +60,7 @@ const structuredItems = structuredData
     <slot name="head" />
   </head>
   <body class="relative flex min-h-screen flex-col">
-    <a href="#content" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-white">
+    <a href="#content" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-canvas">
       Skip to content
     </a>
     <Header />

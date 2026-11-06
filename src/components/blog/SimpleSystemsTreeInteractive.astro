@@ -1,7 +1,7 @@
 ---
-const DARK = "#111111";
-const LINE = "#D2D2D2";
-const SECONDARY_FILL = "rgba(17, 17, 17, 0.04)";
+const DARK = "var(--ink)";
+const LINE = "var(--border-color)";
+const SECONDARY_FILL = "rgb(var(--ink-rgb)/0.04)";
 const NODE_RADIUS = 32;
 const NODE_LABEL_SIZE = 18;
 const CONNECTOR_WIDTH = 2.5;
@@ -65,7 +65,7 @@ function getNode(nodeId: string, nodes: TreeNodes) {
 
 function getNodeStyle(kind: TreeNodeKind) {
   if (kind === "district") {
-    return { fill: DARK, text: "#FFFFFF", stroke: DARK };
+    return { fill: DARK, text: "var(--canvas)", stroke: DARK };
   }
 
   if (kind === "primary") {
@@ -79,7 +79,7 @@ function getNodeStyle(kind: TreeNodeKind) {
   return {
     fill: SECONDARY_FILL,
     text: DARK,
-    stroke: "rgba(17, 17, 17, 0.14)"
+    stroke: "rgb(var(--ink-rgb)/0.14)"
   };
 }
 
@@ -127,7 +127,7 @@ const trees = [firstPastThePost, partyListPr];
   <div class="grid xl:grid-cols-2">
     {
       trees.map((tree, index) => (
-        <div class:list={["h-full p-5 sm:p-6", index > 0 && "border-t border-black/10 xl:border-l xl:border-t-0"]}>
+        <div class:list={["h-full p-5 sm:p-6", index > 0 && "border-t border-neutral/10 xl:border-l xl:border-t-0"]}>
           <p class="eyebrow">
             {tree.title}
           </p>

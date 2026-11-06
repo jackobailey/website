@@ -67,12 +67,12 @@ function renderOrder(groups: PartyWithSeats[][]) {
     <span key={group.map((party) => party.id).join("-")}>
       {group.map((party, partyIndex) => (
         <span key={party.id}>
-          {partyIndex > 0 && <span className="px-[0.18rem] text-[#111111] sm:px-1">=</span>}
+          {partyIndex > 0 && <span className="px-[0.18rem] text-ink sm:px-1">=</span>}
           <span style={{ color: party.color }}>{party.shortLabel}</span>
         </span>
       ))}
       {groupIndex < groups.length - 1 && (
-        <span className="px-[0.18rem] text-[#111111] sm:px-1">&gt;</span>
+        <span className="px-[0.18rem] text-ink sm:px-1">&gt;</span>
       )}
     </span>
   ));
@@ -119,8 +119,8 @@ export default function RankSizePrincipleInteractive() {
         <div className="px-5 pb-5 sm:px-6 sm:pb-6">
           <div className="overflow-x-auto px-4">
             <table className="border-collapse">
-              <thead className="border-b border-black/8">
-                <tr className="text-left text-xs font-semibold uppercase tracking-[0.16em] text-black/50 sm:text-[0.82rem]">
+              <thead className="border-b border-neutral/[0.08]">
+                <tr className="text-left text-xs font-semibold uppercase tracking-[0.16em] text-subtle sm:text-[0.82rem]">
                   <th className="px-0 py-3 pl-4 pr-6 sm:pr-8">Party</th>
                   <th className="px-4 py-3 text-center">Votes</th>
                   <th className="px-4 py-3">
@@ -131,10 +131,10 @@ export default function RankSizePrincipleInteractive() {
               <tbody>
                 {parties.map((party, index) => (
                   <tr key={party.id}>
-                    <td className="px-0 py-3 pl-4 text-sm font-semibold text-[#111111] sm:pr-8 sm:text-[0.98rem]">
+                    <td className="px-0 py-3 pl-4 text-sm font-semibold text-ink sm:pr-8 sm:text-[0.98rem]">
                       <span style={{ color: party.color }}>{party.label}</span>
                     </td>
-                    <td className="px-4 py-3 text-center text-sm font-semibold tabular-nums text-[#111111] sm:text-[0.98rem]">
+                    <td className="px-4 py-3 text-center text-sm font-semibold tabular-nums text-ink sm:text-[0.98rem]">
                       {party.votes}%
                     </td>
                     <td className="px-4 py-3">
@@ -145,14 +145,14 @@ export default function RankSizePrincipleInteractive() {
                           type="button"
                           onClick={() => updateSeatCount(index, -1)}
                           disabled={party.currentSeats === 0}
-                          className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#F76F5C] text-sm font-semibold text-white transition hover:bg-[#E56553] disabled:cursor-not-allowed disabled:bg-black/10 disabled:text-white/70 disabled:hover:bg-black/10"
+                          className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#F76F5C] text-sm font-semibold text-white transition hover:bg-[#E56553] disabled:cursor-not-allowed disabled:bg-neutral/10 disabled:text-white/70 disabled:hover:bg-neutral/10"
                           aria-label={`Decrease seats for ${party.label}`}
                         >
                           -
                         </button>
 
                         <span
-                          className="min-w-6 text-center text-sm font-semibold tabular-nums text-[#111111] sm:min-w-7 sm:text-[0.98rem]"
+                          className="min-w-6 text-center text-sm font-semibold tabular-nums text-ink sm:min-w-7 sm:text-[0.98rem]"
                           aria-live="polite"
                         >
                           {party.currentSeats}
@@ -175,22 +175,22 @@ export default function RankSizePrincipleInteractive() {
           </div>
         </div>
 
-        <div className="border-t border-black/8 px-5 py-5 sm:px-6 sm:py-6">
+        <div className="border-t border-neutral/[0.08] px-5 py-5 sm:px-6 sm:py-6">
           <div className="flex flex-wrap items-start justify-between gap-4 px-4">
             <div className="min-w-0 space-y-2 sm:pl-4">
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-black/45 sm:text-[0.72rem] sm:tracking-[0.16em]">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-subtle sm:text-[0.72rem] sm:tracking-[0.16em]">
                 Votes
               </p>
-              <p className="whitespace-nowrap text-[0.95rem] font-semibold text-[#111111] sm:text-[0.98rem]">
+              <p className="whitespace-nowrap text-[0.95rem] font-semibold text-ink sm:text-[0.98rem]">
                 {renderOrder(voteOrder)}
               </p>
             </div>
 
             <div className="min-w-0 space-y-2 sm:text-center">
-              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-black/45 sm:text-[0.72rem] sm:tracking-[0.16em]">
+              <p className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-subtle sm:text-[0.72rem] sm:tracking-[0.16em]">
                 Seats
               </p>
-              <p className="whitespace-nowrap text-[0.95rem] font-semibold text-[#111111] sm:text-[0.98rem]">
+              <p className="whitespace-nowrap text-[0.95rem] font-semibold text-ink sm:text-[0.98rem]">
                 {renderOrder(seatOrder)}
               </p>
             </div>
@@ -199,10 +199,10 @@ export default function RankSizePrincipleInteractive() {
               <div
                 className={`ml-auto flex ${SEATS_CONTROL_WIDTH_CLASS} flex-col items-end gap-2 text-right sm:items-center sm:text-center`}
               >
-                <p className="whitespace-nowrap text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-black/45 sm:text-[0.72rem] sm:tracking-[0.16em]">
+                <p className="whitespace-nowrap text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-subtle sm:text-[0.72rem] sm:tracking-[0.16em]">
                   Violations
                 </p>
-                <p className="whitespace-nowrap text-[0.95rem] font-semibold tabular-nums text-[#111111] sm:text-[0.98rem]">
+                <p className="whitespace-nowrap text-[0.95rem] font-semibold tabular-nums text-ink sm:text-[0.98rem]">
                   {violatingPairs}
                 </p>
               </div>

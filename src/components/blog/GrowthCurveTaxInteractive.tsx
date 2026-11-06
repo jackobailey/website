@@ -8,7 +8,7 @@ import {
 } from "react";
 
 const ACCENT = "#F76F5C";
-const GRADUATE_COLOUR = "#3B0F70";
+const GRADUATE_COLOUR = "var(--chart-purple)";
 const MAX_INCOME = 250_000;
 const SLOPE_SCALE = 50_000;
 
@@ -265,10 +265,10 @@ function SliderControl({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-4">
-        <label htmlFor={id} className="block text-sm font-semibold text-[#111111]">
+        <label htmlFor={id} className="block text-sm font-semibold text-ink">
           {label}
         </label>
-        <span className="text-sm font-semibold tabular-nums text-[#111111]">
+        <span className="text-sm font-semibold tabular-nums text-ink">
           {displayValue}
         </span>
       </div>
@@ -381,7 +381,7 @@ export default function GrowthCurveTaxInteractive() {
     <div className="not-prose my-10 w-full max-w-full">
       <section className="interactive-panel overflow-hidden">
         <div className="grid lg:grid-cols-[minmax(18rem,0.82fr)_minmax(0,1.18fr)]">
-          <div className="border-b border-black/8 p-4 sm:p-6 lg:border-b-0 lg:border-r">
+          <div className="border-b border-neutral/[0.08] p-4 sm:p-6 lg:border-b-0 lg:border-r">
             <p className="eyebrow">Parameters</p>
 
             <div className="mt-6 space-y-6">
@@ -460,7 +460,7 @@ export default function GrowthCurveTaxInteractive() {
                   y={chartLayout.plot.top}
                   width={chartLayout.plotWidth}
                   height={chartLayout.plotHeight}
-                  fill="rgba(17, 17, 17, 0.025)"
+                  fill="rgb(var(--ink-rgb)/0.025)"
                 />
 
                 {chart.yTicks.map((tick) => {
@@ -473,13 +473,13 @@ export default function GrowthCurveTaxInteractive() {
                         x2={chartLayout.width - chartLayout.plot.right}
                         y1={y}
                         y2={y}
-                        stroke="rgba(17, 17, 17, 0.08)"
+                        stroke="rgb(var(--ink-rgb)/0.08)"
                       />
                       <text
                         x={chartLayout.plot.left - 10}
                         y={y + 4}
                         textAnchor="end"
-                        className="fill-black/45 text-[0.72rem] font-semibold"
+                        className="fill-subtle text-[0.72rem] font-semibold"
                       >
                         {formatPercent(tick)}
                       </text>
@@ -497,13 +497,13 @@ export default function GrowthCurveTaxInteractive() {
                         x2={x}
                         y1={chartLayout.plot.top}
                         y2={chartLayout.height - chartLayout.plot.bottom}
-                        stroke="rgba(17, 17, 17, 0.06)"
+                        stroke="rgb(var(--ink-rgb)/0.06)"
                       />
                       <text
                         x={x}
                         y={chartLayout.height - 22}
                         textAnchor="middle"
-                        className="fill-black/45 text-[0.72rem] font-semibold"
+                        className="fill-subtle text-[0.72rem] font-semibold"
                       >
                         {formatIncome(tick)}
                       </text>
@@ -517,7 +517,7 @@ export default function GrowthCurveTaxInteractive() {
                     x2={chartLayout.width - chartLayout.plot.right}
                     y1={chart.mapY(0)}
                     y2={chart.mapY(0)}
-                    stroke="rgba(17, 17, 17, 0.3)"
+                    stroke="rgb(var(--ink-rgb)/0.3)"
                     strokeDasharray="5 5"
                   />
                 )}
@@ -527,14 +527,14 @@ export default function GrowthCurveTaxInteractive() {
                   x2={chartLayout.plot.left}
                   y1={chartLayout.plot.top}
                   y2={chartLayout.height - chartLayout.plot.bottom}
-                  stroke="rgba(17, 17, 17, 0.28)"
+                  stroke="rgb(var(--ink-rgb)/0.28)"
                 />
                 <line
                   x1={chartLayout.plot.left}
                   x2={chartLayout.width - chartLayout.plot.right}
                   y1={chartLayout.height - chartLayout.plot.bottom}
                   y2={chartLayout.height - chartLayout.plot.bottom}
-                  stroke="rgba(17, 17, 17, 0.28)"
+                  stroke="rgb(var(--ink-rgb)/0.28)"
                 />
 
                 <path
@@ -566,7 +566,7 @@ export default function GrowthCurveTaxInteractive() {
                       x2={hoverDetails.x}
                       y1={chartLayout.plot.top}
                       y2={chartLayout.height - chartLayout.plot.bottom}
-                      stroke="rgba(17, 17, 17, 0.28)"
+                      stroke="rgb(var(--ink-rgb)/0.28)"
                       strokeDasharray="4 5"
                     />
                     <circle
@@ -574,7 +574,7 @@ export default function GrowthCurveTaxInteractive() {
                       cy={hoverDetails.graduateY}
                       r="4.5"
                       fill={GRADUATE_COLOUR}
-                      stroke="#FFFFFF"
+                      stroke="var(--surface)"
                       strokeWidth="2.5"
                     />
                     <circle
@@ -582,7 +582,7 @@ export default function GrowthCurveTaxInteractive() {
                       cy={hoverDetails.nonGraduateY}
                       r="5"
                       fill={ACCENT}
-                      stroke="#FFFFFF"
+                      stroke="var(--surface)"
                       strokeWidth="2.5"
                     />
                     <rect
@@ -591,13 +591,13 @@ export default function GrowthCurveTaxInteractive() {
                       width={chartLayout.tooltipWidth}
                       height={chartLayout.tooltipHeight}
                       rx="8"
-                      fill="rgba(255, 255, 255, 0.96)"
-                      stroke="rgba(17, 17, 17, 0.14)"
+                      fill="rgb(var(--surface-rgb)/0.96)"
+                      stroke="rgb(var(--ink-rgb)/0.14)"
                     />
                     <text
                       x={hoverDetails.tooltipX + 12}
                       y={hoverDetails.tooltipY + 19}
-                      className="fill-[#111111] text-[0.72rem] font-semibold"
+                      className="fill-ink text-[0.72rem] font-semibold"
                     >
                       {formatIncome(hoverDetails.income)}
                     </text>
@@ -610,7 +610,7 @@ export default function GrowthCurveTaxInteractive() {
                     <text
                       x={hoverDetails.tooltipX + 26}
                       y={hoverDetails.tooltipY + 43}
-                      className="fill-[#111111] text-[0.68rem] font-semibold"
+                      className="fill-ink text-[0.68rem] font-semibold"
                     >
                       Non-graduate {formatPercent(hoverDetails.nonGraduateRate, 1)}
                     </text>
@@ -623,7 +623,7 @@ export default function GrowthCurveTaxInteractive() {
                     <text
                       x={hoverDetails.tooltipX + 26}
                       y={hoverDetails.tooltipY + 63}
-                      className="fill-[#111111] text-[0.68rem] font-semibold"
+                      className="fill-ink text-[0.68rem] font-semibold"
                     >
                       Graduate {formatPercent(hoverDetails.graduateRate, 1)}
                     </text>
@@ -634,7 +634,7 @@ export default function GrowthCurveTaxInteractive() {
                   x={chartLayout.plot.left + chartLayout.plotWidth / 2}
                   y={chartLayout.height - 4}
                   textAnchor="middle"
-                  className="fill-black/55 text-[0.72rem] font-semibold uppercase tracking-[0.14em]"
+                  className="fill-subtle text-[0.72rem] font-semibold uppercase tracking-[0.14em]"
                 >
                   Income
                 </text>
@@ -645,25 +645,25 @@ export default function GrowthCurveTaxInteractive() {
                   transform={`rotate(-90 ${yAxisLabelX} ${
                     chartLayout.plot.top + chartLayout.plotHeight / 2
                   })`}
-                  className="fill-black/55 text-[0.72rem] font-semibold uppercase tracking-[0.14em]"
+                  className="fill-subtle text-[0.72rem] font-semibold uppercase tracking-[0.14em]"
                 >
                   Tax rate
                 </text>
               </svg>
             </div>
 
-            <div className="mx-auto mt-4 grid max-w-lg grid-cols-[minmax(4.8rem,auto)_repeat(3,minmax(0,1fr))] items-baseline gap-x-2 gap-y-1 border-t border-black/8 pt-4 sm:gap-x-4">
+            <div className="mx-auto mt-4 grid max-w-lg grid-cols-[minmax(4.8rem,auto)_repeat(3,minmax(0,1fr))] items-baseline gap-x-2 gap-y-1 border-t border-neutral/[0.08] pt-4 sm:gap-x-4">
               <span aria-hidden="true" />
               {RATE_READOUT_INCOMES.map((readout) => (
                 <p
                   key={readout.label}
-                  className="text-center text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-black/45 sm:text-[0.68rem] sm:tracking-[0.14em]"
+                  className="text-center text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-subtle sm:text-[0.68rem] sm:tracking-[0.14em]"
                 >
                   {readout.label}
                 </p>
               ))}
 
-              <p className="pr-1 text-right text-[0.62rem] font-semibold uppercase tracking-[0.06em] text-black/45 sm:text-[0.68rem] sm:tracking-[0.1em]">
+              <p className="pr-1 text-right text-[0.62rem] font-semibold uppercase tracking-[0.06em] text-subtle sm:text-[0.68rem] sm:tracking-[0.1em]">
                 Non-Graduate
               </p>
               {RATE_READOUT_INCOMES.map((readout) => (
@@ -675,20 +675,20 @@ export default function GrowthCurveTaxInteractive() {
                 </p>
               ))}
 
-              <p className="pr-1 text-right text-[0.62rem] font-semibold uppercase tracking-[0.06em] text-black/45 sm:text-[0.68rem] sm:tracking-[0.1em]">
+              <p className="pr-1 text-right text-[0.62rem] font-semibold uppercase tracking-[0.06em] text-subtle sm:text-[0.68rem] sm:tracking-[0.1em]">
                 Graduate
               </p>
               {RATE_READOUT_INCOMES.map((readout) => (
                 <p
                   key={`graduate-${readout.label}`}
-                  className="text-center text-sm font-semibold tabular-nums text-[#3B0F70] sm:text-base"
+                  className="text-center text-sm font-semibold tabular-nums text-[var(--chart-purple)] sm:text-base"
                 >
                   {formatPercent(calculateGraduateTaxRate(parameters, readout.income), 1)}
                 </p>
               ))}
             </div>
 
-            <div className="mt-5 grid grid-cols-2 gap-2 border-t border-black/8 pt-4 sm:flex sm:flex-wrap sm:justify-center sm:gap-1.5">
+            <div className="mt-5 grid grid-cols-2 gap-2 border-t border-neutral/[0.08] pt-4 sm:flex sm:flex-wrap sm:justify-center sm:gap-1.5">
               {SCENARIOS.map((scenario) => {
                 const isActive = activeScenario === scenario.id;
 
@@ -710,7 +710,7 @@ export default function GrowthCurveTaxInteractive() {
               <button
                 type="button"
                 onClick={resetParameters}
-                className="w-full rounded-full border border-black/15 bg-white px-3 py-2 text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-[#111111] transition hover:border-[#F76F5C] hover:text-[#F76F5C] focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2 sm:w-auto"
+                className="w-full rounded-full border border-neutral/15 bg-surface px-3 py-2 text-[0.62rem] font-semibold uppercase tracking-[0.08em] text-ink transition hover:border-[#F76F5C] hover:text-[#F76F5C] focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2 sm:w-auto"
               >
                 Reset
               </button>

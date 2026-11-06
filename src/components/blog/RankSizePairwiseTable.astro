@@ -101,8 +101,8 @@ const outcomes = [
 
     <div class="relative overflow-x-auto px-4 pb-5 pt-1 sm:px-6 sm:pb-6 sm:pt-1" tabindex="0" role="region" aria-label="The product of signs table">
       <table class="border-collapse">
-        <thead class="border-b border-black/8">
-          <tr class="text-center text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-black/50 sm:text-[0.82rem] sm:tracking-[0.16em]">
+        <thead class="border-b border-neutral/[0.08]">
+          <tr class="text-center text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-subtle sm:text-[0.82rem] sm:tracking-[0.16em]">
             <th class="px-2 py-3 sm:px-4">Votes</th>
             <th class="px-2 py-3 sm:px-4">Seats</th>
             <th class="px-2 py-3 text-center sm:px-4">Product</th>
@@ -118,21 +118,21 @@ const outcomes = [
             outcomes.map((outcome) => (
               <tr
                 class:list={[
-                  "rank-size-table-row text-[#111111] transition duration-200",
-                  outcome.groupEnd ? "border-b border-black/14" : "border-b border-black/6"
+                  "rank-size-table-row text-ink transition duration-200",
+                  outcome.groupEnd ? "border-b border-neutral/[0.14]" : "border-b border-neutral/[0.06]"
                 ]}
                 data-group={outcome.group}
                 data-rank-size-state={outcome.consistent ? "consistent" : "inconsistent"}
               >
                 <td class="px-2 py-3 text-center text-[0.95rem] font-semibold whitespace-nowrap sm:px-4 sm:text-[0.98rem]">
-                  <span class="text-[#FF4136]">Red</span>
-                  <span class="px-1.5 text-[#111111] sm:px-2">{outcome.votes}</span>
-                  <span class="text-[#0074D9]">Blue</span>
+                  <span class="text-[var(--chart-red)]">Red</span>
+                  <span class="px-1.5 text-ink sm:px-2">{outcome.votes}</span>
+                  <span class="text-[var(--chart-blue)]">Blue</span>
                 </td>
                 <td class="px-2 py-3 text-center text-[0.95rem] font-semibold whitespace-nowrap sm:px-4 sm:text-[0.98rem]">
-                  <span class="text-[#FF4136]">Red</span>
-                  <span class="px-1.5 text-[#111111] sm:px-2">{outcome.seats}</span>
-                  <span class="text-[#0074D9]">Blue</span>
+                  <span class="text-[var(--chart-red)]">Red</span>
+                  <span class="px-1.5 text-ink sm:px-2">{outcome.seats}</span>
+                  <span class="text-[var(--chart-blue)]">Blue</span>
                 </td>
                 <td class="px-2 py-3 text-center text-[0.9rem] font-semibold tabular-nums whitespace-nowrap sm:px-4 sm:text-[0.98rem]">
                   <span class="rank-size-product" aria-label={`${outcome.leftFactor} times ${outcome.rightFactor} equals ${outcome.result}`}>
@@ -147,7 +147,7 @@ const outcomes = [
                   <span
                     class:list={[
                       "rank-size-indicator inline-flex h-6 w-6 items-center justify-center rounded-full sm:h-7 sm:w-7",
-                      outcome.consistent ? "text-[#111111]" : "text-accent"
+                      outcome.consistent ? "text-ink" : "text-accent"
                     ]}
                     aria-hidden="true"
                   >
@@ -170,11 +170,11 @@ const outcomes = [
 
 <style>
   .rank-size-table-row {
-    background: rgba(255, 255, 255, 0);
+    background: rgb(var(--surface-rgb)/0);
   }
 
   .rank-size-table-row[data-group="positive"] {
-    background: rgba(17, 17, 17, 0.018);
+    background: rgb(var(--ink-rgb)/0.018);
   }
 
   .rank-size-table-row[data-group="negative"] {
@@ -182,11 +182,11 @@ const outcomes = [
   }
 
   .rank-size-table-row[data-group="zero"] {
-    background: rgba(17, 17, 17, 0.03);
+    background: rgb(var(--ink-rgb)/0.03);
   }
 
   .rank-size-indicator {
-    background: rgba(17, 17, 17, 0.05);
+    background: rgb(var(--ink-rgb)/0.05);
   }
 
   .rank-size-product {
@@ -203,7 +203,7 @@ const outcomes = [
   [data-rank-size-pairwise-table]:has(
       .rank-size-table-row[data-rank-size-state="consistent"]:hover
     ) .rank-size-table-row[data-rank-size-state="consistent"] {
-    background: rgba(17, 17, 17, 0.065);
+    background: rgb(var(--ink-rgb)/0.065);
   }
 
   [data-rank-size-pairwise-table]:has(
@@ -224,7 +224,7 @@ const outcomes = [
   [data-rank-size-pairwise-table]:has(
       .rank-size-table-row[data-rank-size-state="consistent"]:hover
     ) .rank-size-table-row[data-rank-size-state="consistent"] .rank-size-indicator {
-    background: rgba(17, 17, 17, 0.09);
+    background: rgb(var(--ink-rgb)/0.09);
   }
 
   [data-rank-size-pairwise-table]:has(

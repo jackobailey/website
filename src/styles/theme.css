@@ -1,0 +1,46 @@
+/* Shared by the editorial site and standalone explorers. System preference is
+   the only theme control; CSS also responds immediately when that changes. */
+:root {
+  color-scheme: light;
+  --canvas-rgb: 255 255 255;
+  --surface-rgb: 255 255 255;
+  --ink-rgb: 17 17 17;
+  --neutral-rgb: 0 0 0;
+  --canvas: rgb(var(--canvas-rgb));
+  --surface: rgb(var(--surface-rgb));
+  --ink: rgb(var(--ink-rgb));
+  --text-secondary: #444;
+  --text-muted: #666;
+  --line-color: rgb(var(--ink-rgb) / 0.12);
+  --border-color: #dedede;
+  --border-strong: #bbb;
+  --surface-soft: #f3f3f3;
+  --surface-highlight: #fff0ed;
+  --chart-purple: #3b0f70;
+  --chart-blue: #0074d9;
+  --chart-red: #ff4136;
+  --badge-blue: #005090;
+  --badge-red: #9f251d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --canvas-rgb: 24 25 27;
+    --surface-rgb: 33 35 38;
+    --ink-rgb: 236 237 239;
+    --neutral-rgb: 236 237 239;
+    --text-secondary: #c7c9ce;
+    --text-muted: #b0b4bc;
+    --line-color: rgb(var(--ink-rgb) / 0.18);
+    --border-color: #41454c;
+    --border-strong: #69717c;
+    --surface-soft: #2b2e33;
+    --surface-highlight: #422c2a;
+    --chart-purple: #bb9ae8;
+    --chart-blue: #68b3f4;
+    --chart-red: #ff8078;
+    --badge-blue: #91caff;
+    --badge-red: #ffa39c;
+  }
+}

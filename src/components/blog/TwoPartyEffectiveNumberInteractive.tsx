@@ -63,20 +63,20 @@ export default function TwoPartyEffectiveNumberInteractive() {
     <div className="not-prose my-10">
       <section className="interactive-panel overflow-hidden">
         <div className="grid lg:grid-cols-[minmax(250px,0.76fr)_minmax(0,1.24fr)]">
-          <div className="border-b border-black/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
+          <div className="border-b border-neutral/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
             <p className="eyebrow whitespace-nowrap">The Two Party Case</p>
 
             <div className="mt-6 space-y-5">
-              <div className="flex items-end justify-between gap-4 border-b border-black/10 pb-4">
+              <div className="flex items-end justify-between gap-4 border-b border-neutral/10 pb-4">
                 <div>
-                  <p className="text-sm leading-6 text-black/70">Party 1</p>
-                  <p className="text-3xl font-semibold tracking-tight tabular-nums text-[#111111]">
+                  <p className="text-sm leading-6 text-neutral/70">Party 1</p>
+                  <p className="text-3xl font-semibold tracking-tight tabular-nums text-ink">
                     {party1Share}%
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm leading-6 text-black/70">Party 2</p>
-                  <p className="text-3xl font-semibold tracking-tight tabular-nums text-[#111111]">
+                  <p className="text-sm leading-6 text-neutral/70">Party 2</p>
+                  <p className="text-3xl font-semibold tracking-tight tabular-nums text-ink">
                     {party2Share}%
                   </p>
                 </div>
@@ -86,11 +86,11 @@ export default function TwoPartyEffectiveNumberInteractive() {
                 <div className="flex items-center justify-between gap-4">
                   <label
                     htmlFor="two-party-share"
-                    className="block text-sm font-semibold text-[#111111]"
+                    className="block text-sm font-semibold text-ink"
                   >
                     Party 1 vote share
                   </label>
-                  <span className="text-sm font-semibold tabular-nums text-[#111111]">
+                  <span className="text-sm font-semibold tabular-nums text-ink">
                     {party1Share}%
                   </span>
                 </div>
@@ -125,10 +125,10 @@ export default function TwoPartyEffectiveNumberInteractive() {
                       x2={CHART_WIDTH - PADDING.right}
                       y1={y}
                       y2={y}
-                      stroke="rgba(17,17,17,0.12)"
+                      stroke="rgb(var(--ink-rgb)/0.12)"
                       strokeDasharray="4 5"
                     />
-                    <text x="60" y={y + 8} fontSize="24" fill="#111111">
+                    <text x="60" y={y + 8} fontSize="24" fill="var(--ink)">
                       {formatTick(tick)}
                     </text>
                   </g>
@@ -145,14 +145,14 @@ export default function TwoPartyEffectiveNumberInteractive() {
                       x2={x}
                       y1={PADDING.top}
                       y2={CHART_HEIGHT - PADDING.bottom}
-                      stroke="rgba(17,17,17,0.08)"
+                      stroke="rgb(var(--ink-rgb)/0.08)"
                     />
                     <text
                       x={x}
                       y={CHART_HEIGHT - PADDING.bottom + 34}
                       textAnchor="middle"
                       fontSize="24"
-                      fill="#111111"
+                      fill="var(--ink)"
                     >
                       {tick}%
                     </text>
@@ -165,14 +165,14 @@ export default function TwoPartyEffectiveNumberInteractive() {
                 x2={PADDING.left}
                 y1={PADDING.top}
                 y2={CHART_HEIGHT - PADDING.bottom}
-                stroke="rgba(17,17,17,0.22)"
+                stroke="rgb(var(--ink-rgb)/0.22)"
               />
               <line
                 x1={PADDING.left}
                 x2={CHART_WIDTH - PADDING.right}
                 y1={CHART_HEIGHT - PADDING.bottom}
                 y2={CHART_HEIGHT - PADDING.bottom}
-                stroke="rgba(17,17,17,0.22)"
+                stroke="rgb(var(--ink-rgb)/0.22)"
               />
 
               <path
@@ -189,7 +189,7 @@ export default function TwoPartyEffectiveNumberInteractive() {
                 x2={pointX}
                 y1={pointY}
                 y2={CHART_HEIGHT - PADDING.bottom}
-                stroke="rgba(17,17,17,0.18)"
+                stroke="rgb(var(--ink-rgb)/0.18)"
                 strokeDasharray="4 5"
               />
               <line
@@ -197,15 +197,15 @@ export default function TwoPartyEffectiveNumberInteractive() {
                 x2={pointX}
                 y1={pointY}
                 y2={pointY}
-                stroke="rgba(17,17,17,0.18)"
+                stroke="rgb(var(--ink-rgb)/0.18)"
                 strokeDasharray="4 5"
               />
 
-              <circle cx={pointX} cy={pointY} r="13" fill="#F76F5C" stroke="#FFFFFF" strokeWidth="4" />
+              <circle cx={pointX} cy={pointY} r="13" fill="#F76F5C" stroke="var(--surface)" strokeWidth="4" />
 
               <g transform={`translate(${calloutX}, ${calloutY})`}>
-                <rect width={calloutWidth} height={calloutHeight} rx="14" fill="rgba(255,255,255,0.82)" />
-                <text x={calloutWidth / 2} y="26" textAnchor="middle" fontSize="22" fontWeight="600" fill="#111111">
+                <rect width={calloutWidth} height={calloutHeight} rx="14" fill="rgb(var(--surface-rgb)/0.82)" />
+                <text x={calloutWidth / 2} y="26" textAnchor="middle" fontSize="22" fontWeight="600" fill="var(--ink)">
                   N₂ = {effectiveNumber.toFixed(2)}
                 </text>
               </g>
@@ -215,7 +215,7 @@ export default function TwoPartyEffectiveNumberInteractive() {
                 y={CHART_HEIGHT - 10}
                 textAnchor="middle"
                 fontSize="24"
-                fill="#111111"
+                fill="var(--ink)"
               >
                 Party 1 Vote Share
               </text>
@@ -225,7 +225,7 @@ export default function TwoPartyEffectiveNumberInteractive() {
                 transform={`rotate(-90 30 ${(PADDING.top + CHART_HEIGHT - PADDING.bottom) / 2})`}
                 textAnchor="middle"
                 fontSize="24"
-                fill="#111111"
+                fill="var(--ink)"
               >
                 Effective Parties
               </text>

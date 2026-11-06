@@ -42,7 +42,7 @@ const artwork = getWritingArtwork(post.slug);
   }
 
   .home-article__link:focus-visible {
-    outline: 2px solid #111;
+    outline: 2px solid var(--ink);
     outline-offset: 5px;
   }
 
@@ -58,7 +58,7 @@ const artwork = getWritingArtwork(post.slug);
 
   time {
     display: block;
-    color: #666;
+    color: var(--text-muted);
     font-size: 11px;
     line-height: 1.4;
     letter-spacing: 0.08em;
@@ -76,7 +76,7 @@ const artwork = getWritingArtwork(post.slug);
 
   p {
     margin: 0;
-    color: #444;
+    color: var(--text-secondary);
     font-size: 15px;
     line-height: 1.45;
     text-wrap: pretty;

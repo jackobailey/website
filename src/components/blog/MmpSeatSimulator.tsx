@@ -235,24 +235,24 @@ export default function MmpSeatSimulator() {
   return (
     <div className="not-prose article-table article-table--wide my-10">
       <section className="interactive-panel overflow-hidden">
-        <div className="grid border-b border-black/8 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-          <div className="border-b border-black/8 p-5 sm:p-6 md:border-b-0 md:border-r">
+        <div className="grid border-b border-neutral/[0.08] md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+          <div className="border-b border-neutral/[0.08] p-5 sm:p-6 md:border-b-0 md:border-r">
             <p className="eyebrow">MMP Simulator</p>
             <div className="mt-5 space-y-3">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-black/45">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-subtle">
                     District
                   </p>
-                  <p className="mt-1 text-2xl font-semibold tabular-nums text-[#111111]">
+                  <p className="mt-1 text-2xl font-semibold tabular-nums text-ink">
                     {formatSeatCount(result.districtSeats)}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-black/45">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-subtle">
                     List
                   </p>
-                  <p className="mt-1 text-2xl font-semibold tabular-nums text-[#111111]">
+                  <p className="mt-1 text-2xl font-semibold tabular-nums text-ink">
                     {formatSeatCount(result.listSeats)}
                   </p>
                 </div>
@@ -273,12 +273,12 @@ export default function MmpSeatSimulator() {
           </div>
 
           <div className="flex flex-col items-center justify-center p-5 text-center sm:p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-black/45">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-subtle">
               Disproportionality
             </p>
-            <p className="mt-3 text-4xl font-semibold tabular-nums text-[#111111]">
+            <p className="mt-3 text-4xl font-semibold tabular-nums text-ink">
               {result.normalisedGallagher.toFixed(1)}
-              <span className="text-xl font-semibold text-black/45">/100</span>
+              <span className="text-xl font-semibold text-subtle">/100</span>
             </p>
           </div>
         </div>
@@ -294,8 +294,8 @@ export default function MmpSeatSimulator() {
                 <col className="w-[11%]" />
                 <col className="w-[28%]" />
               </colgroup>
-              <thead className="border-b border-black/8">
-                <tr className="text-left text-[0.64rem] font-semibold uppercase tracking-[0.1em] text-black/45 sm:text-xs sm:tracking-[0.14em]">
+              <thead className="border-b border-neutral/[0.08]">
+                <tr className="text-left text-[0.64rem] font-semibold uppercase tracking-[0.1em] text-subtle sm:text-xs sm:tracking-[0.14em]">
                   <th className="py-3 pr-2">Party</th>
                   <th className="px-1 py-3 text-right sm:px-2">List vote</th>
                   <th className="px-1 py-3 text-right sm:px-2">District</th>
@@ -306,32 +306,32 @@ export default function MmpSeatSimulator() {
               </thead>
               <tbody>
                 {result.partyResults.map((party) => (
-                  <tr key={party.id} className="border-b border-black/6 last:border-b-0">
+                  <tr key={party.id} className="border-b border-neutral/[0.06] last:border-b-0">
                     <td className="py-3 pr-2">
                       <div className="flex min-w-0 items-center gap-2 sm:gap-3">
                         <span
                           className="h-2.5 w-2.5 shrink-0 rounded-full sm:h-3 sm:w-3"
                           style={{ backgroundColor: party.color }}
                         />
-                        <span className="min-w-0 text-xs font-semibold leading-4 text-[#111111] sm:text-sm">
+                        <span className="min-w-0 text-xs font-semibold leading-4 text-ink sm:text-sm">
                           {party.label}
                         </span>
                       </div>
                     </td>
-                    <td className="px-1 py-3 text-right text-xs tabular-nums text-[#111111] sm:px-2 sm:text-sm">
+                    <td className="px-1 py-3 text-right text-xs tabular-nums text-ink sm:px-2 sm:text-sm">
                       {formatPercent(party.voteShare)}
                     </td>
-                    <td className="px-1 py-3 text-right text-xs tabular-nums text-[#111111] sm:px-2 sm:text-sm">
+                    <td className="px-1 py-3 text-right text-xs tabular-nums text-ink sm:px-2 sm:text-sm">
                       {party.districtSeats}
                     </td>
-                    <td className="px-1 py-3 text-right text-xs tabular-nums text-[#111111] sm:px-2 sm:text-sm">
+                    <td className="px-1 py-3 text-right text-xs tabular-nums text-ink sm:px-2 sm:text-sm">
                       {party.listSeats}
                     </td>
-                    <td className="px-1 py-3 text-right text-xs font-semibold tabular-nums text-[#111111] sm:px-2 sm:text-sm">
+                    <td className="px-1 py-3 text-right text-xs font-semibold tabular-nums text-ink sm:px-2 sm:text-sm">
                       {party.totalSeats}
                     </td>
                     <td className="py-3 pl-2 sm:pl-3">
-                      <div className="h-2 w-full rounded-full bg-black/8">
+                      <div className="h-2 w-full rounded-full bg-neutral/[0.08]">
                         <div
                           className="h-2 rounded-full"
                           style={{
@@ -346,7 +346,7 @@ export default function MmpSeatSimulator() {
               </tbody>
             </table>
           </div>
-          <p className="mt-4 text-xs leading-5 text-black/45">
+          <p className="mt-4 text-xs leading-5 text-subtle">
             Note: District results may not replicate the 2024 election exactly, as this simulation
             is based on regional top-ups and reallocates seats within regions using the largest
             remainder method.

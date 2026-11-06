@@ -33,7 +33,7 @@ export default function VoteShareSimulator({
   return (
     <div className="space-y-6">
       <div className="space-y-3">
-        <label htmlFor="swing" className="block text-sm font-semibold text-[#111111]">
+        <label htmlFor="swing" className="block text-sm font-semibold text-ink">
           Uniform swing between Labour and Conservative: {swing > 0 ? "+" : ""}
           {swing.toFixed(1)} points to Labour
         </label>
@@ -47,7 +47,7 @@ export default function VoteShareSimulator({
           onChange={(event) => setSwing(Number(event.target.value))}
           className="w-full accent-[#F76F5C]"
         />
-        <p className="text-sm leading-6 text-[#111111]">
+        <p className="text-sm leading-6 text-ink">
           This is a simple explainer. It is not a forecast. It shows how a modest swing can change the headline even when other parties are stable.
         </p>
       </div>
@@ -56,10 +56,10 @@ export default function VoteShareSimulator({
         {parties.map((party) => (
           <div key={party.label} className="space-y-1">
             <div className="flex items-center justify-between text-sm">
-              <span className="font-medium text-[#111111]">{party.label}</span>
-              <span className="text-[#111111]">{party.value.toFixed(1)}%</span>
+              <span className="font-medium text-ink">{party.label}</span>
+              <span className="text-ink">{party.value.toFixed(1)}%</span>
             </div>
-            <div className="h-3 rounded-full bg-white/35 shadow-[inset_0_1px_0_rgba(255,255,255,0.72)]">
+            <div className="h-3 rounded-full bg-surface/35 shadow-[inset_0_1px_0_rgb(var(--surface-rgb)/0.72)]">
               <div
                 className="h-3 rounded-full"
                 style={{
@@ -72,9 +72,9 @@ export default function VoteShareSimulator({
         ))}
       </div>
 
-      <div className="rounded-[1.25rem] border border-white/55 bg-white/38 p-4 text-sm text-[#111111] backdrop-blur-xl">
+      <div className="rounded-[1.25rem] border border-white/55 bg-surface/[0.38] p-4 text-sm text-ink backdrop-blur-xl">
         Labour lead over Conservative:{" "}
-        <span className="font-semibold text-[#111111]">
+        <span className="font-semibold text-ink">
           {lead > 0 ? "+" : ""}
           {lead.toFixed(1)} points
         </span>

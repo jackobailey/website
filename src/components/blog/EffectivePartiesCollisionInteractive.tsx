@@ -10,7 +10,7 @@ const DEFAULT_RED_STEPS = SHARE_STEPS / 2;
 const MAX_DT_MS = 32;
 const MIN_SPEED = 96;
 const MAX_SPEED = 152;
-const PURPLE = "#3B0F70";
+const PURPLE = "var(--chart-purple)";
 const RED = "#F76F5C";
 const PARTY_COLORS = [PURPLE, RED] as const;
 
@@ -375,11 +375,11 @@ export default function EffectivePartiesCollisionInteractive() {
     <div className="not-prose my-10 w-full max-w-full">
       <section className="interactive-panel overflow-hidden">
         <div className="grid lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:items-stretch">
-          <div className="border-b border-black/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
+          <div className="border-b border-neutral/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
             <p className="eyebrow">Collision Model</p>
 
             <div className="mt-6 space-y-6">
-              <div className="space-y-3 border-b border-black/10 pb-6">
+              <div className="space-y-3 border-b border-neutral/10 pb-6">
                 <input
                   id="red-share"
                   type="range"
@@ -398,12 +398,12 @@ export default function EffectivePartiesCollisionInteractive() {
                       style={{ backgroundColor: PURPLE }}
                       aria-hidden="true"
                     />
-                    <span className="text-sm font-semibold tabular-nums text-[#111111]">
+                    <span className="text-sm font-semibold tabular-nums text-ink">
                       {purplePercentage}%
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold tabular-nums text-[#111111]">
+                    <span className="text-sm font-semibold tabular-nums text-ink">
                       {redPercentage}%
                     </span>
                     <span
@@ -415,24 +415,24 @@ export default function EffectivePartiesCollisionInteractive() {
                 </div>
               </div>
 
-              <div className="border-b border-black/10 pb-6">
-                <p className="text-sm font-semibold tracking-tight text-[#111111] sm:text-base">
+              <div className="border-b border-neutral/10 pb-6">
+                <p className="text-sm font-semibold tracking-tight text-ink sm:text-base">
                   Expected N<sub>2</sub>:{" "}
                   <span className="tabular-nums">{expectedN2.toFixed(2)}</span>
                 </p>
-                <p className="mt-2 text-sm font-semibold tracking-tight text-[#111111] sm:text-base">
+                <p className="mt-2 text-sm font-semibold tracking-tight text-ink sm:text-base">
                   Observed N<sub>2</sub>: <span className="tabular-nums">{observedN2}</span>
                 </p>
-                <div className="mt-4 space-y-2 border-t border-black/10 pt-4">
-                  <p className="text-sm font-semibold tracking-tight text-[#111111] sm:text-base">
+                <div className="mt-4 space-y-2 border-t border-neutral/10 pt-4">
+                  <p className="text-sm font-semibold tracking-tight text-ink sm:text-base">
                     Total:{" "}
-                    <span className="tabular-nums text-[#111111]">
+                    <span className="tabular-nums text-ink">
                       {formatCount(stats.total)}
                     </span>
                   </p>
-                  <p className="text-sm font-semibold tracking-tight text-[#111111] sm:text-base">
+                  <p className="text-sm font-semibold tracking-tight text-ink sm:text-base">
                     Similar:{" "}
-                    <span className="tabular-nums text-[#111111]">
+                    <span className="tabular-nums text-ink">
                       {formatCount(stats.sameColor)}
                     </span>
                   </p>
@@ -451,7 +451,7 @@ export default function EffectivePartiesCollisionInteractive() {
                 <button
                   type="button"
                   onClick={handleRestartClick}
-                  className="inline-flex w-full items-center justify-center rounded-full border border-black/15 px-5 py-3 text-sm font-semibold tracking-[0.08em] text-[#111111] transition-colors duration-150 hover:border-[#F76F5C] hover:text-[#F76F5C] focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2"
+                  className="inline-flex w-full items-center justify-center rounded-full border border-neutral/15 px-5 py-3 text-sm font-semibold tracking-[0.08em] text-ink transition-colors duration-150 hover:border-[#F76F5C] hover:text-[#F76F5C] focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2"
                 >
                   Restart
                 </button>
@@ -463,7 +463,7 @@ export default function EffectivePartiesCollisionInteractive() {
             <div
               ref={simulationBoxRef}
               className="interactive-subpanel h-full min-h-[320px] w-full overflow-hidden p-0 lg:min-h-0"
-              style={{ background: "rgba(17,17,17,0.035)" }}
+              style={{ background: "rgb(var(--ink-rgb)/0.035)" }}
             >
               <svg
                 viewBox={`0 0 ${boxSize.width} ${boxSize.height}`}

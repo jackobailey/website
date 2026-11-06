@@ -46,18 +46,18 @@ export default function EffectivePartyInteractive() {
     <div className="not-prose my-10">
       <section className="interactive-panel overflow-hidden">
         <div className="grid lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
-          <div className="border-b border-black/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
+          <div className="border-b border-neutral/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
             <p className="eyebrow">Overview</p>
-            <p className="mt-3 text-sm leading-6 text-[#111111]">
+            <p className="mt-3 text-sm leading-6 text-ink">
               The simplest model linking effective parties (N<sub>2</sub>) and actual parties (N
               <sub>0</sub>) is:
             </p>
-            <p className="mt-5 text-center text-3xl font-semibold tracking-tight text-[#111111] sm:text-[2.2rem]">
+            <p className="mt-5 text-center text-3xl font-semibold tracking-tight text-ink sm:text-[2.2rem]">
               N<sub className="text-base align-sub sm:text-lg">2</sub> = N
               <sub className="text-base align-sub sm:text-lg">0</sub>
               <sup className="text-base align-super sm:text-lg">&theta;</sup>
             </p>
-            <p className="mt-4 text-sm leading-6 text-black/70">
+            <p className="mt-4 text-sm leading-6 text-neutral/70">
               The parameter &theta; determines the concentration of political support across
               parties. When &theta; = 1, there are as many effective as actual parties. As
               &theta; moves from 1 to 0, the effective number of parties falls towards 1.
@@ -70,11 +70,11 @@ export default function EffectivePartyInteractive() {
                 <div className="flex items-center justify-between gap-4">
                   <label
                     htmlFor="effective-party-n0"
-                    className="block text-sm font-semibold text-[#111111]"
+                    className="block text-sm font-semibold text-ink"
                   >
                     Actual parties (N<sub>0</sub>)
                   </label>
-                  <span className="text-sm font-semibold tabular-nums text-[#111111]">{n0}</span>
+                  <span className="text-sm font-semibold tabular-nums text-ink">{n0}</span>
                 </div>
                 <input
                   id="effective-party-n0"
@@ -92,11 +92,11 @@ export default function EffectivePartyInteractive() {
                 <div className="flex items-center justify-between gap-4">
                   <label
                     htmlFor="effective-party-theta"
-                    className="block text-sm font-semibold text-[#111111]"
+                    className="block text-sm font-semibold text-ink"
                   >
                     Concentration parameter (&theta;)
                   </label>
-                  <span className="text-sm font-semibold tabular-nums text-[#111111]">
+                  <span className="text-sm font-semibold tabular-nums text-ink">
                     {theta.toFixed(2)}
                   </span>
                 </div>
@@ -114,13 +114,13 @@ export default function EffectivePartyInteractive() {
 
               <div className="space-y-3">
                 <div className="space-y-1">
-                  <div className="flex items-center justify-between text-sm text-[#111111]">
+                  <div className="flex items-center justify-between text-sm text-ink">
                     <span>
                       Effective parties (N<sub>2</sub>)
                     </span>
                     <span className="tabular-nums">{n2.toFixed(2)}</span>
                   </div>
-                  <div className="h-3 rounded-full bg-black/8">
+                  <div className="h-3 rounded-full bg-neutral/[0.08]">
                     <div
                       className="h-3 rounded-full bg-[#F76F5C]"
                       style={{ width: `${relativeWidth}%` }}
@@ -129,7 +129,7 @@ export default function EffectivePartyInteractive() {
                 </div>
               </div>
 
-              <p className="text-sm leading-6 text-black/70">{getInteractiveDescription(n0, theta)}</p>
+              <p className="text-sm leading-6 text-neutral/70">{getInteractiveDescription(n0, theta)}</p>
             </div>
           </div>
         </div>

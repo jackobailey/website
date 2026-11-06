@@ -8,20 +8,20 @@ const DIFFERENCE_STATES = {
   positive: {
     label: "Positive",
     summary: "Red ahead",
-    answerClass: "text-[#FF4136]",
-    badgeClass: "border-[#FF4136]/15 bg-[#FF4136]/10 text-[#9F251D]"
+    answerClass: "text-[var(--chart-red)]",
+    badgeClass: "border-[#FF4136]/15 bg-[#FF4136]/10 text-[var(--badge-red)]"
   },
   zero: {
     label: "Zero",
     summary: "Red and Blue tied",
-    answerClass: "text-[#111111]",
-    badgeClass: "border-black/10 bg-black/[0.05] text-[#111111]"
+    answerClass: "text-ink",
+    badgeClass: "border-neutral/10 bg-neutral/[0.05] text-ink"
   },
   negative: {
     label: "Negative",
     summary: "Blue ahead",
-    answerClass: "text-[#0074D9]",
-    badgeClass: "border-[#0074D9]/15 bg-[#0074D9]/10 text-[#005090]"
+    answerClass: "text-[var(--chart-blue)]",
+    badgeClass: "border-[#0074D9]/15 bg-[#0074D9]/10 text-[var(--badge-blue)]"
   }
 } as const;
 
@@ -82,7 +82,7 @@ export default function SignsAndDifferencesInteractive() {
                 <div className="flex items-center justify-between gap-4">
                   <label
                     htmlFor={redId}
-                    className="flex items-center gap-3 text-sm font-semibold text-[#111111]"
+                    className="flex items-center gap-3 text-sm font-semibold text-ink"
                   >
                     <span
                       aria-hidden="true"
@@ -92,7 +92,7 @@ export default function SignsAndDifferencesInteractive() {
                     Red
                   </label>
 
-                  <span className="text-sm font-semibold tabular-nums text-[#111111]">
+                  <span className="text-sm font-semibold tabular-nums text-ink">
                     {formatShare(redShare)}
                   </span>
                 </div>
@@ -121,7 +121,7 @@ export default function SignsAndDifferencesInteractive() {
                 <div className="flex items-center justify-between gap-4">
                   <label
                     htmlFor={blueId}
-                    className="flex items-center gap-3 text-sm font-semibold text-[#111111]"
+                    className="flex items-center gap-3 text-sm font-semibold text-ink"
                   >
                     <span
                       aria-hidden="true"
@@ -131,7 +131,7 @@ export default function SignsAndDifferencesInteractive() {
                     Blue
                   </label>
 
-                  <span className="text-sm font-semibold tabular-nums text-[#111111]">
+                  <span className="text-sm font-semibold tabular-nums text-ink">
                     {formatShare(blueShare)}
                   </span>
                 </div>
@@ -161,7 +161,7 @@ export default function SignsAndDifferencesInteractive() {
           <div className="flex items-center justify-center px-5 lg:self-center lg:px-0">
             <div
               aria-hidden="true"
-              className="h-px w-20 bg-black/10 lg:h-24 lg:w-px"
+              className="h-px w-20 bg-neutral/10 lg:h-24 lg:w-px"
             />
           </div>
 
@@ -169,17 +169,17 @@ export default function SignsAndDifferencesInteractive() {
             <div className="flex h-full min-h-full flex-col items-center justify-center text-center">
               <div aria-live="polite">
                 <span className="sr-only">{liveDescription}</span>
-                <p className="grid grid-cols-[5ch_1.25ch_5ch_1.25ch_6ch] items-end gap-y-2 text-[1.05rem] font-semibold tracking-tight text-[#111111] sm:text-[1.25rem] lg:text-[1.4rem]">
-                  <span className="tabular-nums text-center text-[#FF4136]">
+                <p className="grid grid-cols-[5ch_1.25ch_5ch_1.25ch_6ch] items-end gap-y-2 text-[1.05rem] font-semibold tracking-tight text-ink sm:text-[1.25rem] lg:text-[1.4rem]">
+                  <span className="tabular-nums text-center text-[var(--chart-red)]">
                     {formatShare(redShare)}
                   </span>
-                  <span aria-hidden="true" className="text-center text-black/35">
+                  <span aria-hidden="true" className="text-center text-subtle">
                     −
                   </span>
-                  <span className="tabular-nums text-center text-[#0074D9]">
+                  <span className="tabular-nums text-center text-[var(--chart-blue)]">
                     {formatShare(blueShare)}
                   </span>
-                  <span aria-hidden="true" className="text-center text-black/35">
+                  <span aria-hidden="true" className="text-center text-subtle">
                     =
                   </span>
                   <output
@@ -199,7 +199,7 @@ export default function SignsAndDifferencesInteractive() {
                   {differenceState.label}
                 </span>
 
-                <p className="text-sm font-medium text-black/65">{differenceState.summary}</p>
+                <p className="text-sm font-medium text-neutral/65">{differenceState.summary}</p>
               </div>
             </div>
           </div>

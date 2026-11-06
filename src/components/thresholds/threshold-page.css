@@ -1,14 +1,13 @@
+@import "../../styles/theme.css";
 @import "@fontsource/ubuntu-sans/latin-400.css";
 @import "@fontsource/ubuntu-sans/latin-500.css";
 @import "@fontsource/ubuntu-sans/latin-600.css";
 
 /* The interactive owns its shell so it can ship without shared site changes. */
 :root {
-  color-scheme: light;
   --sans: "Ubuntu Sans", Arial, sans-serif;
-  --ink: #111;
-  --muted: #666;
-  --line: #dedede;
+  --muted: var(--text-muted);
+  --line: var(--border-color);
   --accent: #f76f5c;
   --page-width: 1120px;
   --gutter: 48px;
@@ -18,7 +17,7 @@
   tab-size: 4;
 }
 *, *::before, *::after { box-sizing: border-box; border: 0 solid #e5e7eb; }
-body { min-height: 100vh; margin: 0; background: #fff; color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+body { min-height: 100vh; margin: 0; background: var(--canvas); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
 h1, h2, p, figure { margin: 0; }
 a { color: inherit; text-decoration: inherit; transition: color 150ms ease, text-decoration-color 150ms ease; }
 input { margin: 0; font: inherit; color: inherit; }
@@ -27,7 +26,7 @@ svg { display: block; vertical-align: middle; max-width: 100%; }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 [hidden] { display: none !important; }
 .sr-only, .threshold-skip-link:not(:focus) { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-.threshold-skip-link:focus { position: absolute; top: 16px; left: 16px; z-index: 50; padding: 8px 16px; border-radius: 999px; background: var(--ink); color: #fff; }
+.threshold-skip-link:focus { position: absolute; top: 16px; left: 16px; z-index: 50; padding: 8px 16px; border-radius: 999px; background: var(--ink); color: var(--canvas); }
 .page-shell { width: min(calc(100% - var(--gutter) * 2), var(--page-width)); margin-inline: auto; }
 .footer-icon-link:hover { color: var(--accent); }
 .site-footer { padding: 37px 0 34px; font-size: 13px; }

@@ -39,33 +39,33 @@ const initialPoint = getPointFromShares(initialShares.party1, initialShares.part
 <div class="not-prose my-10" data-three-party-vote-share-interactive>
   <section class="interactive-panel overflow-hidden">
     <div class="grid lg:grid-cols-[minmax(250px,0.72fr)_minmax(0,1.28fr)]">
-      <div class="border-b border-black/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
+      <div class="border-b border-neutral/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
         <p class="eyebrow">The Three Party Case</p>
 
         <div class="mt-6 space-y-5">
-          <div class="grid grid-cols-3 gap-4 border-b border-black/10 pb-4">
+          <div class="grid grid-cols-3 gap-4 border-b border-neutral/10 pb-4">
             <div>
-              <p class="text-sm leading-6 text-black/70">Party 1</p>
+              <p class="text-sm leading-6 text-neutral/70">Party 1</p>
               <p
-                class="text-base font-semibold tracking-tight tabular-nums text-[#111111] sm:text-[1.4rem]"
+                class="text-base font-semibold tracking-tight tabular-nums text-ink sm:text-[1.4rem]"
                 data-party1-value
               >
                 {initialShares.party1}%
               </p>
             </div>
             <div>
-              <p class="text-sm leading-6 text-black/70">Party 2</p>
+              <p class="text-sm leading-6 text-neutral/70">Party 2</p>
               <p
-                class="text-base font-semibold tracking-tight tabular-nums text-[#111111] sm:text-[1.4rem]"
+                class="text-base font-semibold tracking-tight tabular-nums text-ink sm:text-[1.4rem]"
                 data-party2-value
               >
                 {initialShares.party2}%
               </p>
             </div>
             <div>
-              <p class="text-sm leading-6 text-black/70">Party 3</p>
+              <p class="text-sm leading-6 text-neutral/70">Party 3</p>
               <p
-                class="text-base font-semibold tracking-tight tabular-nums text-[#111111] sm:text-[1.4rem]"
+                class="text-base font-semibold tracking-tight tabular-nums text-ink sm:text-[1.4rem]"
                 data-party3-value
               >
                 {initialShares.party3}%
@@ -73,7 +73,7 @@ const initialPoint = getPointFromShares(initialShares.party1, initialShares.part
             </div>
           </div>
 
-          <p class="text-sm leading-6 text-black/70">
+          <p class="text-sm leading-6 text-neutral/70">
             Once there are three parties, the possible results are not fixed to a line. Instead,
             they spread out and can sit anywhere across a plane. In particular, a triangle.
           </p>
@@ -94,7 +94,7 @@ const initialPoint = getPointFromShares(initialShares.party1, initialShares.part
             y1={origin.y}
             x2={origin.x + 1.04 * (vertex1.x - origin.x)}
             y2={origin.y + 1.04 * (vertex1.y - origin.y)}
-            stroke="rgba(17,17,17,0.24)"
+            stroke="rgb(var(--ink-rgb)/0.24)"
             stroke-width="2"
             stroke-linecap="round"
           />
@@ -103,7 +103,7 @@ const initialPoint = getPointFromShares(initialShares.party1, initialShares.part
             y1={origin.y}
             x2={origin.x + 1.05 * (vertex2.x - origin.x)}
             y2={origin.y + 1.05 * (vertex2.y - origin.y)}
-            stroke="rgba(17,17,17,0.24)"
+            stroke="rgb(var(--ink-rgb)/0.24)"
             stroke-width="2"
             stroke-linecap="round"
           />
@@ -112,7 +112,7 @@ const initialPoint = getPointFromShares(initialShares.party1, initialShares.part
             y1={origin.y}
             x2={origin.x + 1.05 * (vertex3.x - origin.x)}
             y2={origin.y + 1.05 * (vertex3.y - origin.y)}
-            stroke="rgba(17,17,17,0.24)"
+            stroke="rgb(var(--ink-rgb)/0.24)"
             stroke-width="2"
             stroke-linecap="round"
           />
@@ -127,7 +127,7 @@ const initialPoint = getPointFromShares(initialShares.party1, initialShares.part
                   y={point.y + 6}
                   text-anchor="end"
                   font-size="18"
-                  fill="#111111"
+                  fill="var(--ink)"
                 >
                   {tick}%
                 </text>
@@ -145,7 +145,7 @@ const initialPoint = getPointFromShares(initialShares.party1, initialShares.part
                   y={point.y - 12}
                   text-anchor="middle"
                   font-size="18"
-                  fill="#111111"
+                  fill="var(--ink)"
                 >
                   {tick}%
                 </text>
@@ -163,7 +163,7 @@ const initialPoint = getPointFromShares(initialShares.party1, initialShares.part
                   y={point.y + 6}
                   text-anchor="end"
                   font-size="18"
-                  fill="#111111"
+                  fill="var(--ink)"
                 >
                   {tick}%
                 </text>
@@ -191,12 +191,12 @@ const initialPoint = getPointFromShares(initialShares.party1, initialShares.part
             cy={initialPoint.y}
             r="13"
             fill="#F76F5C"
-            stroke="#FFFFFF"
+            stroke="var(--surface)"
             stroke-width="4"
           />
         </svg>
 
-        <p class="mt-1 text-center text-xs font-medium uppercase tracking-[0.12em] text-black/45">
+        <p class="mt-1 text-center text-xs font-medium uppercase tracking-[0.12em] text-subtle">
           Click and drag the point
         </p>
       </div>

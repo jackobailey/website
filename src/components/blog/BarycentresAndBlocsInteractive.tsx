@@ -8,9 +8,9 @@ import {
 } from "react";
 
 const ACCENT = "#F76F5C";
-const BLOCS_COLOUR = "#3B0F70";
+const BLOCS_COLOUR = "var(--chart-purple)";
 const PARTY_POSITION_COLOURS = [BLOCS_COLOUR, "#B5367A", ACCENT] as const;
-const INK = "#111111";
+const INK = "var(--ink)";
 const DEFAULT_SHARES = [50, 25, 25] as const;
 const DEFAULT_POSITIONS = [-3.5, 0, 3.5] as const;
 const PARTIES = ["Party 1", "Party 2", "Party 3"] as const;
@@ -1028,7 +1028,7 @@ function PartySlider({
     <div className="grid grid-cols-[minmax(0,1fr)_3.25rem_auto] items-center gap-2">
       <div className="relative h-8 px-3.5">
         <div className="relative h-full">
-          <div className="absolute left-0 right-0 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-black/10" />
+          <div className="absolute left-0 right-0 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-neutral/10" />
           <div
             aria-hidden="true"
             className="absolute left-0 top-1/2 h-1.5 -translate-y-1/2 rounded-full"
@@ -1068,7 +1068,7 @@ function PartySlider({
           </span>
         </div>
       </div>
-      <span className="text-right text-sm font-semibold tabular-nums text-[#111111]">
+      <span className="text-right text-sm font-semibold tabular-nums text-ink">
         {formattedValue}
       </span>
       <button
@@ -1077,7 +1077,7 @@ function PartySlider({
         className={`grid h-7 w-7 place-items-center rounded-full border transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2 ${
           isLocked
             ? "border-[#F76F5C]/40 bg-[#F76F5C]/10 text-[#F76F5C]"
-            : "border-black/10 bg-black/[0.025] text-black/50 hover:text-[#111111]"
+            : "border-neutral/10 bg-neutral/[0.025] text-subtle hover:text-ink"
         }`}
         aria-label={lockLabel}
         aria-pressed={isLocked}
@@ -1257,14 +1257,14 @@ export default function BarycentresAndBlocsInteractive() {
     <div className="not-prose my-10 w-full max-w-full">
       <section className="interactive-panel overflow-hidden">
         <div className="grid lg:grid-cols-[minmax(290px,0.92fr)_minmax(0,1.08fr)]">
-          <div className="border-b border-black/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
+          <div className="border-b border-neutral/10 p-6 sm:p-7 lg:border-b-0 lg:border-r">
             <p className="eyebrow">Barycentres &amp; Blocs</p>
 
             <div className="mt-6 space-y-6">
               <div className="space-y-5">
                 <div className="space-y-5">
                   <div className="space-y-3">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-black/45">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-subtle">
                       Vote Share
                     </p>
                     {shares.map((share, index) => {
@@ -1297,8 +1297,8 @@ export default function BarycentresAndBlocsInteractive() {
                     })}
                   </div>
 
-                  <div className="space-y-3 border-t border-black/10 pt-4">
-                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-black/45">
+                  <div className="space-y-3 border-t border-neutral/10 pt-4">
+                    <p className="text-xs font-semibold uppercase tracking-[0.14em] text-subtle">
                       Ideological Position
                     </p>
                     {positions.map((position, index) => {
@@ -1335,12 +1335,12 @@ export default function BarycentresAndBlocsInteractive() {
                 </div>
               </div>
 
-              <div className="border-t border-black/10 pt-5">
+              <div className="border-t border-neutral/10 pt-5">
                 <div className="grid grid-cols-[minmax(0,1fr)_3.25rem_auto] items-center gap-x-2 gap-y-3">
                   <div className="relative h-8 px-3.5">
                     <label
                       htmlFor={effectivePartiesControlId}
-                      className="absolute -left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-[#111111]"
+                      className="absolute -left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-ink"
                     >
                       N<sub>2</sub>
                     </label>
@@ -1369,7 +1369,7 @@ export default function BarycentresAndBlocsInteractive() {
                   </div>
                   <output
                     htmlFor={`${shareControlIds.join(" ")} ${effectivePartiesControlId}`}
-                    className="text-right text-sm font-semibold tabular-nums text-[#111111]"
+                    className="text-right text-sm font-semibold tabular-nums text-ink"
                     aria-live="polite"
                   >
                     {effectiveParties.toFixed(2)}
@@ -1380,7 +1380,7 @@ export default function BarycentresAndBlocsInteractive() {
                     className={`row-span-2 grid h-7 w-7 shrink-0 place-items-center self-center rounded-full border transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-[#F76F5C] focus:ring-offset-2 ${
                       areContoursLocked
                         ? "border-[#F76F5C]/40 bg-[#F76F5C]/10 text-[#F76F5C]"
-                        : "border-black/10 bg-black/[0.025] text-black/50 hover:text-[#111111]"
+                        : "border-neutral/10 bg-neutral/[0.025] text-subtle hover:text-ink"
                     }`}
                     aria-label={contourLockLabel}
                     aria-pressed={areContoursLocked}
@@ -1392,7 +1392,7 @@ export default function BarycentresAndBlocsInteractive() {
                   <div className="relative h-8 px-3.5">
                     <label
                       htmlFor={effectiveBlocsControlId}
-                      className="absolute -left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-[#111111]"
+                      className="absolute -left-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-ink"
                     >
                       B<sub>2</sub>
                     </label>
@@ -1426,7 +1426,7 @@ export default function BarycentresAndBlocsInteractive() {
                     htmlFor={`${shareControlIds.join(" ")} ${positionControlIds.join(
                       " "
                     )} ${effectiveBlocsControlId}`}
-                    className="text-right text-sm font-semibold tabular-nums text-[#111111]"
+                    className="text-right text-sm font-semibold tabular-nums text-ink"
                     aria-live="polite"
                   >
                     {effectiveBlocs.toFixed(2)}
@@ -1457,7 +1457,7 @@ export default function BarycentresAndBlocsInteractive() {
             >
               <polygon
                 points={VERTICES.map((vertex) => `${vertex.x},${vertex.y}`).join(" ")}
-                fill="rgba(17,17,17,0.025)"
+                fill="rgb(var(--ink-rgb)/0.025)"
               />
 
               {GRID_TICKS.map((tick) =>
@@ -1471,7 +1471,7 @@ export default function BarycentresAndBlocsInteractive() {
                       y1={line.start.y}
                       x2={line.end.x}
                       y2={line.end.y}
-                      stroke="rgba(17,17,17,0.09)"
+                      stroke="rgb(var(--ink-rgb)/0.09)"
                       strokeWidth="1.5"
                     />
                   );
@@ -1481,7 +1481,7 @@ export default function BarycentresAndBlocsInteractive() {
               <polygon
                 points={VERTICES.map((vertex) => `${vertex.x},${vertex.y}`).join(" ")}
                 fill="none"
-                stroke="rgba(17,17,17,0.38)"
+                stroke="rgb(var(--ink-rgb)/0.38)"
                 strokeWidth="3"
                 strokeLinejoin="round"
               />
@@ -1532,8 +1532,8 @@ export default function BarycentresAndBlocsInteractive() {
                   width="144"
                   height="58"
                   rx="18"
-                  fill="rgba(255,255,255,0.82)"
-                  stroke="rgba(17,17,17,0.08)"
+                  fill="rgb(var(--surface-rgb)/0.82)"
+                  stroke="rgb(var(--ink-rgb)/0.08)"
                 />
                 <line
                   x1="18"
@@ -1563,7 +1563,7 @@ export default function BarycentresAndBlocsInteractive() {
               </g>
 
               <circle cx={point.x} cy={point.y} r="22" fill={ACCENT} opacity="0.18" />
-              <circle cx={point.x} cy={point.y} r="12" fill={ACCENT} stroke="#FFFFFF" strokeWidth="4" />
+              <circle cx={point.x} cy={point.y} r="12" fill={ACCENT} stroke="var(--surface)" strokeWidth="4" />
 
               <text
                 x={VERTICES[0].x}

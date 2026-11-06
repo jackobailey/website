@@ -24,3 +24,11 @@
 @media (min-width: 801px) {
   .brexit-explorer .map-legend { max-width: 350px; }
 }
+
+@media (prefers-color-scheme: dark) {
+  .brexit-explorer { --map-background: #283630; }
+  .brexit-explorer .map-attribution { background: rgb(var(--surface-rgb) / 0.9); }
+  .brexit-scale-directions, .brexit-share-labels { color: var(--text-muted); }
+  .brexit-explorer .bar-interval, .brexit-explorer .bar-interval::before,
+  .brexit-explorer .bar-interval::after { box-shadow: 0 0 0 1px rgb(var(--canvas-rgb) / 0.8); }
+}

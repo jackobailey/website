@@ -1,3 +1,4 @@
+@import '../../styles/theme.css';
 @import '@fontsource/ubuntu-sans/400.css';
 @import '@fontsource/ubuntu-sans/500.css';
 @import '@fontsource/ubuntu-sans/600.css';
@@ -150,3 +151,36 @@ h1, h2, h3, p { margin: 0; }
 }
 @media (max-width: 380px), (min-width: 801px) and (max-width: 900px) { .map-legend ul { grid-template-columns: repeat(3, auto); } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; } }
+
+/* Keep party colours and vote-share scales intact while adapting the map UI. */
+@media (prefers-color-scheme: dark) {
+  :root { color: var(--ink); background: var(--canvas); --muted: var(--text-muted); --rule: var(--border-color); }
+  button:hover, a:hover { color: var(--ink); }
+  button:focus-visible, a:focus-visible, input:focus-visible, [tabindex]:focus-visible,
+  .search-field:focus-within { outline-color: #8ac3e6; }
+  .map-panel, .ward-map.leaflet-container, .loading-state { background: #283238; }
+  .skip-link, .search-field, .search-results, .map-controls button, .map-status,
+  .ward-details, .retry-button, .method-dialog, .ward-tooltip { background: var(--surface); color: var(--ink); }
+  .search-field input { color: var(--ink); }
+  .search-field input::placeholder, .map-legend li, .vote-share-ticks,
+  .method-content p { color: var(--muted); }
+  .search-results li[aria-selected='true'], .map-controls button:hover,
+  .legend-party:hover, .dialog-close { background: var(--surface-soft); color: var(--ink); }
+  .map-controls button, .map-legend, .vote-share-gradient, .retry-button { border-color: var(--rule); }
+  .map-legend { background: rgb(var(--surface-rgb) / 0.96); }
+  .legend-party[aria-pressed='true'] { color: var(--ink); border-color: var(--border-strong); background: var(--surface-soft); }
+  .map-attribution { color: var(--muted); background: rgb(var(--surface-rgb) / 0.9); }
+  .bar-track { background: #3d444c; }
+  .bar-interval, .bar-interval::before, .bar-interval::after {
+    background: var(--ink);
+    box-shadow: 0 0 0 1px rgb(var(--canvas-rgb) / 0.8);
+  }
+  .chart-axis { border-color: var(--border-strong); }
+  .chart-axis span::before { background: var(--border-strong); }
+  .interval-key svg { color: var(--ink); }
+  .ward-notice { background: var(--surface-soft); color: var(--text-secondary); }
+  .leaflet-tooltip-top.ward-tooltip::before { border-top-color: var(--surface); }
+  .leaflet-tooltip-bottom.ward-tooltip::before { border-bottom-color: var(--surface); }
+  .leaflet-tooltip-left.ward-tooltip::before { border-left-color: var(--surface); }
+  .leaflet-tooltip-right.ward-tooltip::before { border-right-color: var(--surface); }
+}

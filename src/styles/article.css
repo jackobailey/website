@@ -21,7 +21,7 @@
 
 .article-deck {
   margin-top: 1.4rem;
-  color: #555;
+  color: var(--text-muted);
   font-size: clamp(1.125rem, 1.8vw, 1.375rem);
   line-height: 1.55;
   text-wrap: pretty;
@@ -33,11 +33,11 @@
   gap: 0.5rem 1.25rem;
   align-items: baseline;
   margin-top: 1rem;
-  color: #555;
+  color: var(--text-muted);
   font-size: 0.875rem;
 }
 
-.article-updated { margin-top: 0.5rem; color: #555; font-size: 0.8125rem; }
+.article-updated { margin-top: 0.5rem; color: var(--text-muted); font-size: 0.8125rem; }
 
 .article-media,
 .article-reading {
@@ -65,14 +65,14 @@
   position: sticky;
   top: 2rem;
   padding-top: 0.8rem;
-  border-top: 1px solid #dedede;
+  border-top: 1px solid var(--border-color);
   font-size: 0.875rem;
   line-height: 1.5;
 }
 
 .article-rail__title {
   margin-bottom: 0.9rem;
-  color: #555;
+  color: var(--text-muted);
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -80,7 +80,7 @@
 }
 
 .article-rail ul { display: flex; flex-direction: column; gap: 0.65rem; }
-.article-rail a { text-decoration: underline; text-decoration-color: #d0d0d0; text-underline-offset: 4px; }
+.article-rail a { text-decoration: underline; text-decoration-color: var(--border-color); text-underline-offset: 4px; }
 .article-rail a:hover { text-decoration-color: #f76f5c; }
 .article-share .meta-inline-link { font: inherit; text-align: left; }
 .article-topics { grid-column: 1; grid-row: 1; }
@@ -155,7 +155,7 @@
 .article-related {
   width: min(calc(100% - 96px), 70rem);
   margin: 5rem auto 0;
-  border-top: 1px solid #111;
+  border-top: 1px solid var(--ink);
   padding-top: 1.5rem;
 }
 
@@ -165,8 +165,8 @@
 .article-related__link img { width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; }
 .article-related h3 { margin-top: 1rem; font-size: 1.375rem; font-weight: 700; letter-spacing: -0.025em; line-height: 1.2; text-wrap: balance; }
 .article-related__link:hover h3 { text-decoration: underline; text-decoration-color: #f76f5c; text-underline-offset: 4px; }
-.article-related li > p { margin-top: 0.65rem; color: #555; font-size: 1rem; line-height: 1.6; }
-.article-page :is(a, button):focus-visible { outline: 2px solid #111; outline-offset: 5px; }
+.article-related li > p { margin-top: 0.65rem; color: var(--text-muted); font-size: 1rem; line-height: 1.6; }
+.article-page :is(a, button):focus-visible { outline: 2px solid var(--ink); outline-offset: 5px; }
 
 @media (max-width: 1199px) {
   .article-reading {
@@ -229,4 +229,4 @@
   text-decoration: none;
 }
 
-.article-share .share-icon:hover { background: #f3f3f3; }
+.article-share .share-icon:hover { background: var(--surface-soft); }
