@@ -1,6 +1,28 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { Code } from "astro:components";
+import type { ThemeRegistration } from "shiki";
 import "@/styles/poli10302.css";
+
+const codeTheme: ThemeRegistration = {
+  name: "poli10302",
+  type: "light",
+  colors: { "editor.background": "#F0EEEE", "editor.foreground": "#111111" },
+  tokenColors: [
+    { scope: ["keyword", "storage", "support.type"], settings: { foreground: "#3B0F70", fontStyle: "bold" } },
+    { scope: ["entity.name.function", "support.function", "variable"], settings: { foreground: "#6E1E81" } },
+    { scope: ["string"], settings: { foreground: "#A1307E" } },
+    { scope: ["constant.numeric", "constant.language"], settings: { foreground: "#6E1E81" } },
+    { scope: ["comment"], settings: { foreground: "#555555", fontStyle: "italic" } },
+    { scope: ["keyword.operator"], settings: { foreground: "#111111" } }
+  ]
+};
+
+const skills = [
+  { id: "meet-the-data", label: "Working with data in R", short: "Data in R" },
+  { id: "make-a-first-plot", label: "Data visualisation", short: "Charts" },
+  { id: "think-critically", label: "Critical interpretation", short: "Critical thinking" }
+];
 
 const dataCode = `library(ggplot2)
 library(poli10302)
@@ -43,16 +65,19 @@ const plotCode = `ggplot(turnout_data, aes(x = interest, y = turnout)) +
         </div>
         <div class="lab-body">
           <nav class="lab-nav lab-rail" aria-label="On this page"><h2>On this page</h2><ol><li><a href="#before-you-start">Before you start</a></li><li><a href="#meet-the-data">Meet the data</a></li><li><a href="#make-a-first-plot">Make a first plot</a></li><li><a href="#think-critically">Think critically</a></li><li><a href="#takeaway">Takeaway</a></li></ol></nav>
-          <aside class="lab-skills lab-rail" aria-labelledby="cv-skills-title"><h2 id="cv-skills-title">CV Skills</h2><ul><li>Working with data in R</li><li>Data visualisation</li><li>Interpreting evidence</li><li>Critical thinking</li></ul></aside>
+          <aside class="lab-skills lab-rail" aria-labelledby="cv-skills-title">
+            <h2 id="cv-skills-title">CV Skills</h2>
+            <ul>{skills.map((skill) => <li class="skill-item" data-skill={skill.id} data-reached="false"><span class="skill-check" aria-hidden="true"></span><span>{skill.label}<span class="sr-only skill-status"> — not yet reached</span></span></li>)}</ul>
+          </aside>
           <div class="lab-content">
             <div class="lab-callout lab-intro"><p><strong>In this lab</strong> you will explore an illustrative relationship between political interest and turnout, make a graph in R, and practise interpreting it carefully.</p><p><strong>By the end, you should be able to:</strong> read a small dataset, produce a bar chart, and explain the difference between an association and a causal claim.</p></div>
             <section id="before-you-start"><h2>Before you start</h2><p>Open RStudio and create a new R script. Run the code blocks in order. The figures below are <strong>synthetic</strong>: they are invented for teaching and are not estimates from an election or survey.</p></section>
             <section id="meet-the-data"><p class="section-number">01 / Explore</p><h2>Meet the data</h2><p>The example summarises reported turnout for three levels of political interest. Each row represents a group, not an individual respondent.</p>
-              <div class="code-block"><div class="code-top"><span>R</span><button type="button" class="copy-code">Copy code</button></div><pre><code>{dataCode}</code></pre></div>
+              <div class="code-block"><div class="code-top"><span>R <span class="code-scroll-hint">· Scroll sideways ↔</span></span><button type="button" class="copy-code">Copy code</button></div><Code code={dataCode} lang="r" theme={codeTheme} /></div>
               <div class="lab-callout lab-task"><h3>Your turn</h3><ol><li>How many rows and columns are there?</li><li>What does the value <code>61</code> represent in this example?</li><li>Which group has the highest reported turnout?</li></ol></div>
             </section>
             <section id="make-a-first-plot"><p class="section-number">02 / Visualise</p><h2>Make a first plot</h2><p>A bar chart can help us compare the groups. Run this code, then look at the axis labels and the height of each bar.</p>
-              <div class="code-block"><div class="code-top"><span>R</span><button type="button" class="copy-code">Copy code</button></div><pre><code>{plotCode}</code></pre></div>
+              <div class="code-block"><div class="code-top"><span>R <span class="code-scroll-hint">· Scroll sideways ↔</span></span><button type="button" class="copy-code">Copy code</button></div><Code code={plotCode} lang="r" theme={codeTheme} /></div>
               <figure class="lab-figure"><img src="/poli10302/turnout-example.png" alt="Bar chart of synthetic reported turnout: 42 percent for low interest, 61 percent for medium interest, and 79 percent for high interest." loading="lazy" /><figcaption>An illustrative example using synthetic data.</figcaption></figure>
               <div class="lab-callout lab-task"><h3>Your turn</h3><ol><li>Describe the pattern in one sentence.</li><li>Calculate the difference in turnout between the low- and high-interest groups, in percentage points.</li><li>Change the chart title in the code and run it again.</li></ol></div>
             </section>
@@ -62,8 +87,46 @@ const plotCode = `ggplot(turnout_data, aes(x = interest, y = turnout)) +
         </div>
       </article>
     </div>
+    <div class="skill-progress" aria-hidden="true" hidden>
+      <span class="skill-progress-title">CV Skills</span>
+      <ul>{skills.map((skill) => <li class="skill-item" data-skill={skill.id} data-reached="false"><span class="skill-check"></span><span>{skill.short}</span></li>)}</ul>
+    </div>
   </div>
   <script>
+    const skillItems = document.querySelectorAll<HTMLElement>(".lab-skills .skill-item");
+    const skillRail = document.querySelector<HTMLElement>(".lab-skills");
+    const compactProgress = document.querySelector<HTMLElement>(".skill-progress");
+    const reached = new Set<string>();
+    let updateScheduled = false;
+
+    const updateSkills = () => {
+      updateScheduled = false;
+      skillItems.forEach((item) => {
+        const id = item.dataset.skill;
+        const section = id && document.getElementById(id);
+        if (!id || !section || reached.has(id) || section.getBoundingClientRect().top > window.innerHeight * 0.6) return;
+        reached.add(id);
+        document.querySelectorAll<HTMLElement>(`[data-skill="${id}"]`).forEach((matchingItem) => {
+          matchingItem.dataset.reached = "true";
+          const status = matchingItem.querySelector<HTMLElement>(".skill-status");
+          if (status) status.textContent = " — section reached";
+        });
+      });
+      if (skillRail && compactProgress) {
+        compactProgress.hidden = skillRail.getBoundingClientRect().bottom > 0;
+      }
+    };
+
+    const scheduleSkillsUpdate = () => {
+      if (updateScheduled) return;
+      updateScheduled = true;
+      window.requestAnimationFrame(updateSkills);
+    };
+    window.addEventListener("scroll", scheduleSkillsUpdate, { passive: true });
+    window.addEventListener("resize", scheduleSkillsUpdate);
+    window.addEventListener("pageshow", scheduleSkillsUpdate);
+    scheduleSkillsUpdate();
+
     document.querySelectorAll<HTMLButtonElement>(".copy-code").forEach((button) => {
       button.addEventListener("click", async () => {
         const code = button.closest(".code-block")?.querySelector("code")?.textContent;
