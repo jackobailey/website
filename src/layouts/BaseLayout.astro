@@ -13,9 +13,10 @@ interface Props {
   title?: string;
   description?: string;
   structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
+  hideSiteChrome?: boolean;
 }
 
-const { title, description = siteConfig.description, structuredData } = Astro.props;
+const { title, description = siteConfig.description, structuredData, hideSiteChrome = false } = Astro.props;
 const pageTitle = title ? `${siteConfig.name} | ${title}` : `${siteConfig.name} | Political Scientist`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://example.com").toString();
 const structuredItems = structuredData
@@ -63,11 +64,11 @@ const structuredItems = structuredData
     <a href="#content" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-canvas">
       Skip to content
     </a>
-    <Header />
+    {!hideSiteChrome && <Header />}
     <main id="content" class="relative z-10 flex-1">
       <slot />
     </main>
-    <Footer />
+    {!hideSiteChrome && <Footer />}
 
     <script is:inline>
       (() => {
