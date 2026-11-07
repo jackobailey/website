@@ -1,0 +1,80 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import "@/styles/poli10302.css";
+
+const dataCode = `library(ggplot2)
+library(poli10302)
+
+turnout_data <- data.frame(
+  interest = factor(c("Low", "Medium", "High"),
+                    levels = c("Low", "Medium", "High")),
+  turnout = c(42, 61, 79)
+)
+turnout_data`;
+const plotCode = `ggplot(turnout_data, aes(x = interest, y = turnout)) +
+  geom_col(fill = poli10302_colours[["magenta"]], width = 0.6) +
+  scale_y_continuous(limits = c(0, 100),
+                     labels = function(x) paste0(x, "%")) +
+  labs(title = "Political interest and reported turnout",
+       subtitle = "An illustrative example",
+       x = "Political interest", y = "Reported turnout") +
+  theme_poli10302(source = "Source: synthetic demonstration data")`;
+---
+<BaseLayout title="Lab 1: why do people vote?" description="An indicative Making Sense of Politics worksheet on political interest and turnout.">
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+  <div class="course-page">
+    <div class="course-wrap">
+      <div class="course-topline"><a class="course-back" href="/poli10302/">← All worksheets</a><img class="course-logo" src="/poli10302/logo.svg" alt="Making Sense of Politics" /></div>
+      <article class="lab">
+        <header class="lab-heading">
+          <p class="eyebrow">Making Sense of Politics <span aria-hidden="true">/</span> Lab 01</p>
+          <h1>Why do people vote?</h1>
+          <p class="lab-subtitle">Indicative worksheet preview</p>
+        </header>
+        <!-- This self-contained media area can be replaced by a future animated hero. -->
+        <div class="lab-hero" aria-hidden="true">
+          <svg viewBox="0 0 1100 300" preserveAspectRatio="xMidYMid slice" focusable="false">
+            <circle cx="545" cy="150" r="119" fill="none" stroke="#e7d8e4" stroke-width="1"/><circle cx="545" cy="150" r="83" fill="none" stroke="#e7d8e4" stroke-width="1"/>
+            <path d="M96 209 C255 205 289 93 434 142 S665 203 785 114 964 112 1028 91" fill="none" stroke="#b86b99" stroke-width="2" stroke-dasharray="4 9"/>
+            <g fill="#3b0f70"><circle cx="160" cy="178" r="5"/><circle cx="257" cy="167" r="7"/><circle cx="391" cy="113" r="5"/><circle cx="492" cy="178" r="6"/><circle cx="623" cy="121" r="5"/><circle cx="744" cy="149" r="7"/><circle cx="889" cy="86" r="5"/><circle cx="978" cy="119" r="6"/></g>
+            <g fill="#a1307e"><circle cx="196" cy="214" r="5"/><circle cx="324" cy="125" r="6"/><circle cx="447" cy="166" r="5"/><circle cx="557" cy="126" r="8"/><circle cx="681" cy="181" r="5"/><circle cx="828" cy="106" r="6"/><circle cx="933" cy="147" r="4"/></g>
+            <g fill="#d4446d"><circle cx="219" cy="154" r="4"/><circle cx="351" cy="172" r="4"/><circle cx="531" cy="195" r="5"/><circle cx="598" cy="160" r="4"/><circle cx="771" cy="97" r="5"/><circle cx="868" cy="138" r="4"/></g>
+          </svg>
+        </div>
+        <div class="lab-body">
+          <nav class="lab-nav" aria-label="On this page"><p>On this page</p><ol><li><a href="#before-you-start">Before you start</a></li><li><a href="#meet-the-data">Meet the data</a></li><li><a href="#make-a-first-plot">Make a first plot</a></li><li><a href="#think-critically">Think critically</a></li><li><a href="#takeaway">Takeaway</a></li></ol></nav>
+          <div class="lab-content">
+            <div class="lab-callout lab-intro"><p><strong>In this lab</strong> you will explore an illustrative relationship between political interest and turnout, make a graph in R, and practise interpreting it carefully.</p><p><strong>By the end, you should be able to:</strong> read a small dataset, produce a bar chart, and explain the difference between an association and a causal claim.</p></div>
+            <section id="before-you-start"><h2>Before you start</h2><p>Open RStudio and create a new R script. Run the code blocks in order. The figures below are <strong>synthetic</strong>: they are invented for teaching and are not estimates from an election or survey.</p></section>
+            <section id="meet-the-data"><p class="section-number">01 / Explore</p><h2>Meet the data</h2><p>The example summarises reported turnout for three levels of political interest. Each row represents a group, not an individual respondent.</p>
+              <div class="code-block"><div class="code-top"><span>R</span><button type="button" class="copy-code">Copy code</button></div><pre><code>{dataCode}</code></pre></div>
+              <div class="lab-callout lab-task"><h3>Your turn</h3><ol><li>How many rows and columns are there?</li><li>What does the value <code>61</code> represent in this example?</li><li>Which group has the highest reported turnout?</li></ol></div>
+            </section>
+            <section id="make-a-first-plot"><p class="section-number">02 / Visualise</p><h2>Make a first plot</h2><p>A bar chart can help us compare the groups. Run this code, then look at the axis labels and the height of each bar.</p>
+              <div class="code-block"><div class="code-top"><span>R</span><button type="button" class="copy-code">Copy code</button></div><pre><code>{plotCode}</code></pre></div>
+              <figure class="lab-figure"><img src="/poli10302/turnout-example.png" alt="Bar chart of synthetic reported turnout: 42 percent for low interest, 61 percent for medium interest, and 79 percent for high interest." loading="lazy" /><figcaption>An illustrative example using synthetic data.</figcaption></figure>
+              <div class="lab-callout lab-task"><h3>Your turn</h3><ol><li>Describe the pattern in one sentence.</li><li>Calculate the difference in turnout between the low- and high-interest groups, in percentage points.</li><li>Change the chart title in the code and run it again.</li></ol></div>
+            </section>
+            <section id="think-critically"><p class="section-number">03 / Interpret</p><h2>Think critically</h2><div class="lab-callout lab-note"><p><strong>Association is not the same as causation.</strong> A pattern in the data does not, by itself, tell us why it exists.</p></div><p>Imagine that someone concludes: “Increasing political interest will definitely make people vote.”</p><ol><li>Why does this example alone not establish that claim?</li><li>Suggest another factor that might be related to both interest and turnout.</li><li>What additional evidence could help you assess the explanation?</li></ol></section>
+            <section id="takeaway"><p class="section-number">04 / Reflect</p><h2>Takeaway</h2><p>Write two or three sentences that describe the pattern and acknowledge one limitation. Bring your answer to the next discussion.</p></section>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+  <script>
+    document.querySelectorAll<HTMLButtonElement>(".copy-code").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const code = button.closest(".code-block")?.querySelector("code")?.textContent;
+        if (!code) return;
+        try {
+          await navigator.clipboard.writeText(code);
+          button.textContent = "Copied";
+        } catch {
+          button.textContent = "Select code to copy";
+        }
+        window.setTimeout(() => { button.textContent = "Copy code"; }, 2500);
+      });
+    });
+  </script>
+</BaseLayout>

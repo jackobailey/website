@@ -20,7 +20,9 @@ export default defineConfig({
     tailwind({
       applyBaseStyles: false
     }),
-    sitemap()
+    sitemap({
+      filter: (page) => !new URL(page).pathname.startsWith("/poli10302/")
+    })
   ],
   markdown: {
     remarkPlugins: [remarkMath],
