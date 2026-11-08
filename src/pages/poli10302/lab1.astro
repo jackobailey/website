@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import CourseLogo from "@/components/poli10302/CourseLogo.astro";
 import { Code } from "astro:components";
 import type { ThemeRegistration } from "shiki";
 import "@/styles/poli10302.css";
@@ -46,7 +47,7 @@ const plotCode = `ggplot(turnout_data, aes(x = interest, y = turnout)) +
   <meta slot="head" name="robots" content="noindex, nofollow" />
   <div class="course-page">
     <div class="course-wrap lab-wrap">
-      <div class="course-topline"><a class="course-back" href="/poli10302/">← All worksheets</a><img class="course-logo" src="/poli10302/logo.svg" alt="Making Sense of Politics." /></div>
+      <div class="course-topline"><a class="course-back" href="/poli10302/">← All worksheets</a><CourseLogo /></div>
       <article class="lab">
         <header class="lab-heading">
           <p class="eyebrow">Computer Lab 1</p>
