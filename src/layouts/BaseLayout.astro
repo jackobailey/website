@@ -14,9 +14,10 @@ interface Props {
   description?: string;
   structuredData?: Record<string, unknown> | Array<Record<string, unknown>>;
   hideSiteChrome?: boolean;
+  courseTheme?: boolean;
 }
 
-const { title, description = siteConfig.description, structuredData, hideSiteChrome = false } = Astro.props;
+const { title, description = siteConfig.description, structuredData, hideSiteChrome = false, courseTheme = false } = Astro.props;
 const pageTitle = title ? `${siteConfig.name} | ${title}` : `${siteConfig.name} | Political Scientist`;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://example.com").toString();
 const structuredItems = structuredData
@@ -27,11 +28,11 @@ const structuredItems = structuredData
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class:list={[{ "course-theme": courseTheme }]}>
   <head>
     <meta charset="utf-8" />
     <Favicon />
-    <ColorScheme />
+    {courseTheme ? <><meta name="color-scheme" content="light" /><meta name="theme-color" content="#faf8f6" /></> : <ColorScheme />}
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
