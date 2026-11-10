@@ -9,14 +9,18 @@
   color: #76677c;
 }
 
-.poll-mark[data-verdict="correct"] { color: #24664b; }
-.poll-mark[data-verdict="incorrect"] { color: #963e53; }
+.poll-mark[data-verdict="correct"] { color: var(--purple); }
+.poll-mark[data-verdict="incorrect"] { color: #f76f5c; }
+
+.poll-mark[data-verdict="correct"],
+.poll-mark[data-verdict="incorrect"] { background-color: currentColor; }
 
 .poll-mark[data-verdict]::before,
 .poll-mark[data-verdict]::after {
   position: absolute;
   top: 50%;
   left: 50%;
+  color: #fff;
 }
 
 .poll-mark[data-verdict="correct"]::before {
