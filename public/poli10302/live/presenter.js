@@ -6,16 +6,25 @@ if (location.protocol !== "file:" && window.top === window) {
   document.body.append(status);
   let publishing;
   let lastSent;
+  let startFresh = false;
+  const entry = new URL(location.href);
+  if (entry.searchParams.get("new") === "1" && entry.hash === "#/join") {
+    entry.searchParams.delete("new");
+    history.replaceState(history.state, "", entry);
+    startFresh = window.confirm("Start a fresh poll round? This clears the previous round’s votes.");
+  }
 
   async function sendSlide(id) {
+    const newRound = startFresh && id === "join";
     try {
       const response = await fetch("api/control", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id }),
+        body: JSON.stringify({ id, newRound }),
         signal: AbortSignal.timeout(6000)
       });
       if (!response.ok) throw new Error("Lecture unavailable");
+      if (newRound) startFresh = false;
       lastSent = id;
       status.textContent = "Follow-along live";
       return true;
@@ -53,10 +62,6 @@ function showPollResults(deck, publish) {
   if (!options) return;
   const slide = options.closest("section");
   const summary = document.querySelector("#class-poll .poll-summary");
-  const actions = document.querySelector("#class-poll .poll-actions");
-  const reveal = actions.querySelector('[data-action="reveal"]');
-  const simulate = actions.querySelector('[data-action="simulate"]');
-  const reset = actions.querySelector('[data-action="reset"]');
   const rows = [...options.children].map(option => {
     const label = document.createElement("span");
     label.textContent = option.textContent;
@@ -65,7 +70,6 @@ function showPollResults(deck, publish) {
     return { row: option, text: label.textContent, label, track: option.querySelector(".poll-result-track"),
       count: option.querySelector(".poll-result-count") };
   });
-  actions.hidden = false;
   let state;
   let pending = false;
   let refreshing;
@@ -75,9 +79,6 @@ function showPollResults(deck, publish) {
   function render() {
     const onPoll = state?.id === "class-poll";
     const results = state?.results;
-    reveal.disabled = pending || !state?.open;
-    simulate.disabled = pending || !state?.open || Boolean(state.simulated);
-    reset.disabled = pending || !onPoll;
     options.classList.toggle("has-results", Boolean(results));
     const liveTotal = results ? Object.values(results.live).reduce((sum, count) => sum + count, 0) : 0;
     const demoTotal = results?.demo ? Object.values(results.demo).reduce((sum, count) => sum + count, 0) : 0;
@@ -96,7 +97,7 @@ function showPollResults(deck, publish) {
       const tally = demoTotal ? `${live} live · ${demo} simulated` : `${live} live`;
       if (count.textContent !== tally) count.textContent = tally;
     }
-    const label = failure || (results ? `Answer revealed · ${liveTotal} live · ${demoTotal} simulated`
+    const label = failure || (results ? `Answer revealed · ${liveTotal} live${demoTotal ? ` · ${demoTotal} simulated` : ""}`
       : onPoll ? `${state.voted} ${state.voted === 1 ? "student has" : "students have"} voted`
       : "Use a show of hands if the live poll is unavailable.");
     if (summary.textContent !== label) summary.textContent = label;
@@ -129,8 +130,7 @@ function showPollResults(deck, publish) {
     }
   }
 
-  async function changePoll(action, fromClicker = false) {
-    if (pending || (!fromClicker && state?.id !== "class-poll")) return;
+  async function revealPoll() {
     pending = true;
     refreshing = null;
     render();
@@ -139,11 +139,11 @@ function showPollResults(deck, publish) {
       state = await readState();
       if (deck.getCurrentSlide() !== slide) return;
       if (state.id !== slide.id) throw new Error("Poll not live");
-      if (action === "reveal" && state.revealed) return;
+      if (state.revealed) return;
       const response = await fetch("api/poll-demo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action, round: state.round }),
+        body: JSON.stringify({ action: "reveal", round: state.round }),
         signal: AbortSignal.timeout(8000)
       });
       if (!response.ok) throw new Error("Poll update rejected");
@@ -151,11 +151,9 @@ function showPollResults(deck, publish) {
       advanceAfterFailure = false;
       failure = "";
     } catch {
-      if (fromClicker && deck.getCurrentSlide() === slide) {
+      if (deck.getCurrentSlide() === slide) {
         advanceAfterFailure = true;
         failure = "Live reveal unavailable. Press forward to advance.";
-      } else {
-        failure = "Poll update could not be confirmed. Please try again.";
       }
     } finally {
       pending = false;
@@ -166,7 +164,7 @@ function showPollResults(deck, publish) {
   slide.addEventListener("presenter-forward", event => {
     if (!event.detail.repeat && !pending && (state?.revealed || advanceAfterFailure)) return;
     event.preventDefault();
-    if (!event.detail.repeat && !pending) void changePoll("reveal", true);
+    if (!event.detail.repeat && !pending) void revealPoll();
   });
 
   render();
@@ -176,7 +174,4 @@ function showPollResults(deck, publish) {
     void refresh();
   });
   setInterval(refresh, 1500);
-  reveal.addEventListener("click", () => changePoll("reveal"));
-  simulate.addEventListener("click", () => changePoll("simulate"));
-  reset.addEventListener("click", () => changePoll("reset"));
 }

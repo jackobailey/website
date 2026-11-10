@@ -98,18 +98,4 @@
 .poll-result-count { font-size: .7em; text-align: right; }
 .reveal .poll-summary { margin: .65em 0; font-size: .8em; }
 
-.poll-actions button {
-  min-height: 42px;
-  margin-right: .5rem;
-  padding: .3em .75em;
-  border: 1px solid var(--purple);
-  border-radius: .35rem;
-  background: var(--paper);
-  color: var(--purple);
-  font: 400 18px Outfit, system-ui, sans-serif;
-  cursor: pointer;
-}
-
-.poll-actions button:disabled { opacity: .5; cursor: default; }
-
 .reveal .poll-result-track[hidden], .reveal .poll-result-count[hidden] { display: none; }

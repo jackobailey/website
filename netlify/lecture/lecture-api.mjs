@@ -82,8 +82,15 @@ export async function lectureApi(request, store, passwordHash) {
   if (!data || typeof data !== "object" || Array.isArray(data)) return json({ error: "format" }, 400);
 
   if (action === "control") {
-    const { id } = data;
+    const { id, newRound } = data;
     if (typeof id !== "string" || !/^[a-z][a-z0-9_-]{0,79}$/.test(id)) return json({ error: "slide" }, 400);
+    if (newRound === true && id !== "join") return json({ error: "slide" }, 400);
+    if (newRound === true) {
+      return change(store, "session", emptySession, () => ({
+        next: { ...emptySession, id, round: randomBytes(8).toString("hex") },
+        reply: json({ id })
+      }));
+    }
     return change(store, "session", emptySession, session => ({
       next: id === session.id ? null : { ...session, id, round: session.round ?? randomBytes(8).toString("hex") },
       reply: json({ id })
