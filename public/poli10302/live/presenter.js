@@ -135,11 +135,10 @@ function showPollResults(deck, publish) {
     refreshing = null;
     render();
     try {
-      if (fromClicker) {
-        if (!await publish() || deck.getCurrentSlide() !== slide) throw new Error("Poll not live");
-        state = await readState();
-      }
-      if (state?.id !== slide.id || deck.getCurrentSlide() !== slide) return;
+      if (!await publish()) throw new Error("Poll not live");
+      state = await readState();
+      if (deck.getCurrentSlide() !== slide) return;
+      if (state.id !== slide.id) throw new Error("Poll not live");
       if (action === "reveal" && state.revealed) return;
       const response = await fetch("api/poll-demo", {
         method: "POST",
