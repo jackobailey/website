@@ -1,5 +1,7 @@
 node_modules/
 dist/
+!public/poli10302/live/slides_files/libs/revealjs/dist/
+!public/poli10302/live/slides_files/libs/revealjs/dist/**
 output/
 .astro/
 .npm-cache/
