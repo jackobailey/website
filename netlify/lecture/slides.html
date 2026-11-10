@@ -482,6 +482,15 @@ Use a show of hands if the live poll is unavailable.
             event.defaultPrevented || Reveal.isOverview() || Reveal.isPaused() ||
             (event.target instanceof Element && event.target.closest("input, textarea, select, [contenteditable='true']"))) return;
         const current = Reveal.getCurrentSlide();
+        const forward = new CustomEvent("presenter-forward", {
+          cancelable: true,
+          detail: { repeat: event.repeat }
+        });
+        if (current && !current.dispatchEvent(forward)) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          return;
+        }
         if (current !== slide) enterSlide(current);
         const video = current && current.querySelector("video");
         if (!video) return;
