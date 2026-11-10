@@ -17,6 +17,7 @@
     "@astrojs/sitemap": "^3.0.0",
     "@astrojs/tailwind": "^6.0.0",
     "@fontsource/ubuntu-sans": "^5.2.10",
+    "@netlify/blobs": "10.7.13",
     "@tailwindcss/typography": "latest",
     "astro": "^5.0.0",
     "katex": "^0.16.38",

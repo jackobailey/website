@@ -1,0 +1,46 @@
+@font-face{font-family:Outfit;src:url('assets/fonts/Outfit-Regular.ttf') format('truetype');font-weight:400}
+@font-face{font-family:Outfit;src:url('assets/fonts/Outfit-Bold.ttf') format('truetype');font-weight:700}
+@font-face{font-family:'Fira Mono';src:url('assets/fonts/FiraMono-Regular.ttf') format('truetype');font-weight:400}
+@font-face{font-family:'Fira Mono';src:url('assets/fonts/FiraMono-Bold.ttf') format('truetype');font-weight:700}
+:root{--paper:#FAF8F6;--purple:#3B0F70;--ink:#111;--grey:#555;--line:#D8D8D8;--magenta:#A1307E;--panel:#F0EEEE}
+.reveal-viewport,.reveal{background:var(--paper);color:var(--ink);font-family:Outfit,sans-serif}
+.reveal .slides{background:transparent}
+.reveal{font-size:30px}.reveal .slides{text-align:left}.reveal .slides section{box-sizing:border-box;padding:62px 64px 48px}
+.reveal h1,.reveal h2,.reveal h3{font-family:Outfit,sans-serif;color:var(--purple);font-weight:700;letter-spacing:-.025em;text-transform:none;line-height:1.12}
+.reveal h1{font-size:2.3em}.reveal h2{font-size:1.5em;margin:0 0 .65em}.reveal h3{font-size:1em}.reveal p,.reveal li{line-height:1.36}.reveal li{margin:.28em 0}.reveal a{color:#6E1E81}
+.reveal .lead{font-size:1.12em}.slide-note{border-left:6px solid var(--magenta);padding:14px 20px;background:#fff}.slide-source{font-size:.6em;color:var(--grey);margin-top:8px}
+
+/* Ordinary slides reserve the right side for a visual. The cloud is a
+   placeholder when no visual is supplied; replace it with an image or code. */
+.reveal .slides section:not(#title-slide):not(.section-slide):not(.media-slide):not(.full-slide){height:720px;padding:62px 0 48px 64px}
+.reveal .slides section:not(#title-slide):not(.section-slide):not(.media-slide):not(.full-slide)>*:not(.slide-visual){max-width:610px}
+/* Extend the split past the 16:9 canvas without moving its content. */
+@media screen{html:not(.print-pdf) .reveal .slides section:not(#title-slide):not(.section-slide):not(.media-slide):not(.full-slide)::before{content:"";position:absolute;top:-100000px;bottom:-100000px;right:-100000px;width:calc(44% + 100000px);background:var(--panel);pointer-events:none}}
+.reveal .slides section:not(#title-slide):not(.section-slide):not(.media-slide):not(.full-slide):not(:has(.slide-visual))::after{content:"";position:absolute;right:0;top:0;width:44%;height:100%;background:var(--panel) url('assets/cloud.svg') center/65% auto no-repeat}
+.reveal .slides section .slide-visual{position:absolute;right:0;top:0;width:44%;height:100%;padding:48px 42px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;align-items:stretch;background:var(--panel);overflow:hidden}
+.reveal .slide-visual p{margin:0}.reveal .slide-visual img{display:block;width:100%;max-height:550px;object-fit:contain;margin:0 auto}.reveal .slide-visual .slide-source{margin-top:12px}
+.reveal .slides section .slide-visual.visual-photo{padding:0}.reveal .slide-visual.visual-photo p{width:100%;height:100%}.reveal .slide-visual.visual-photo img{width:100%;height:100%;max-width:none;max-height:none;object-fit:cover}
+.reveal .slide-visual .cell{min-height:0;max-height:100%;display:flex;flex-direction:column;justify-content:center}.reveal .slide-visual div.sourceCode{min-height:0;max-height:100%;background:transparent!important;border:0!important}.reveal .slide-visual pre{width:100%;margin:0;box-shadow:none;background:transparent!important;border:0!important;font-size:.63em}.reveal .slide-visual pre code{box-sizing:border-box;padding:0;max-height:624px;background:transparent;border:0;white-space:pre;overflow:auto}
+.reveal .slides section.section-slide{height:720px;padding:70px 80px}.reveal .slides section.section-slide.present{display:flex!important;align-items:center}.reveal .slides section.section-slide h2{font-size:2.5em;max-width:1000px;margin:0}
+.reveal .slides section.full-slide{height:720px;padding:62px 64px 48px}
+
+/* Local code font and the module palette for syntax highlighting. */
+code,pre,kbd,samp{font-family:'Fira Mono',monospace!important}
+code.sourceCode > span{color:#111!important}code.sourceCode span span,.hljs span{color:#111}
+code.sourceCode span.kw,code.sourceCode span.cf,code.sourceCode span.dt,code.sourceCode span.bu,.hljs-keyword,.hljs-built_in,.hljs-type{color:#3B0F70;font-weight:700}
+code.sourceCode span.fu,code.sourceCode span.va,code.sourceCode span.at,.hljs-title,.hljs-function,.hljs-attr,.hljs-variable{color:#6E1E81}
+code.sourceCode span.st,code.sourceCode span.ch,code.sourceCode span.ss,.hljs-string,.hljs-regexp{color:#A1307E}
+code.sourceCode span.dv,code.sourceCode span.bn,code.sourceCode span.fl,code.sourceCode span.cn,code.sourceCode span.im,.hljs-number,.hljs-literal,.hljs-symbol{color:#6E1E81}
+code.sourceCode span.co,code.sourceCode span.an,code.sourceCode span.cv,code.sourceCode span.do,.hljs-comment,.hljs-quote{color:#555;font-style:italic}
+code.sourceCode span.er,.hljs-error{color:#A1307E;font-weight:700}
+
+/* Media slides retain full-slide playback and web embeds. */
+.reveal .slides section.media-slide{padding:0!important;height:100%}
+.reveal .slides section.media-slide h2{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.reveal .media-slide .embed-frame,.reveal .media-slide .video-panel{position:absolute;inset:0;width:100%;height:100%;padding:0;margin:0;border:0;border-radius:0;overflow:hidden}
+.reveal .media-slide .embed-frame iframe,.reveal .media-slide .video-panel video{display:block;width:100%;height:100%;max-width:none;max-height:none;margin:0;border:0}
+.reveal .media-slide .video-panel video{object-fit:contain;background:#000;outline:none;box-shadow:none}
+.video-playback-notice{position:absolute;left:24px;bottom:24px;z-index:5;max-width:80%;padding:12px 18px;border-radius:6px;background:#fff;color:#3B0F70;font:700 22px Outfit,sans-serif}
+
+/* Image cold opens use Reveal backgrounds to cover the full viewport. */
+.reveal .cold-open-description{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}

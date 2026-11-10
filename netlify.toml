@@ -1,0 +1,7 @@
+[functions.lecture]
+  included_files = ["netlify/lecture/slides.html"]
+
+[[headers]]
+  for = "/poli10302/live/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

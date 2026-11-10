@@ -7,5 +7,6 @@
         "src/*"
       ]
     }
-  }
+  },
+  "exclude": ["dist", "node_modules", "public/poli10302/live"]
 }
