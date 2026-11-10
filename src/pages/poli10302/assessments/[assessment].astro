@@ -1,0 +1,66 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import CourseLogo from "@/components/poli10302/CourseLogo.astro";
+import "@/styles/poli10302.css";
+
+export function getStaticPaths() {
+  return [
+    {
+      params: { assessment: "1" },
+      props: {
+        name: "Data Journalism Article",
+        draftNote: "The submission deadline is still to be confirmed."
+      }
+    },
+    {
+      params: { assessment: "2" },
+      props: {
+        name: "Experimental Report",
+        draftNote: "The submission deadline and research questions are still to be confirmed."
+      }
+    }
+  ];
+}
+
+interface Props {
+  name: string;
+  draftNote?: string;
+}
+
+const { name, draftNote } = Astro.props;
+const { assessment } = Astro.params;
+const documentPath = `/poli10302/assessments/${assessment}`;
+const title = `Assessment ${assessment}: ${name}`;
+---
+<BaseLayout hideSiteChrome courseTheme title={`${title} | Making Sense of Politics`} description={`Brief and checklist for ${title}.`}>
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+  <div class="course-page">
+    <div class="course-wrap course-index">
+      <CourseLogo />
+      <p class="eyebrow">POLI10302 / Assessment {assessment}</p>
+      <h1>{name}</h1>
+      {draftNote && <p class="course-lead"><strong>Draft materials.</strong> {draftNote}</p>}
+      <ul class="assessment-documents" aria-label={`Assessment ${assessment} documents`}>
+        <li><a href={`${documentPath}/brief.pdf`}>Assessment brief (PDF)</a></li>
+        <li><a href={`${documentPath}/checklist.pdf`}>Student checklist (PDF)</a></li>
+      </ul>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .assessment-documents {
+    display: grid;
+    gap: 0.65rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .assessment-documents a {
+    display: inline-block;
+    padding-block: 0.4rem;
+    font-weight: 700;
+    text-decoration: underline;
+  }
+</style>

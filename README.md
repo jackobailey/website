@@ -32,3 +32,9 @@ npm run build
 - Build output is generated into `dist/`.
 - Local caches, Playwright screenshots, and other generated files are ignored via `.gitignore`.
 - `astro.config.mjs` sets the canonical production URL for sitemap and metadata output.
+
+## POLI10302 assessment documents
+
+Link Canvas to `/poli10302/assessments/1/` and `/poli10302/assessments/2/`. Each page links to `brief.pdf` and `checklist.pdf` in its own directory.
+
+To revise an assessment, render the PDFs from the Markdown sources in the teaching project's `_assessments/` directory. Replace the matching files in `public/poli10302/assessments/1/` or `public/poli10302/assessments/2/` and update the draft note in `src/pages/poli10302/assessments/[assessment].astro` when the outstanding details are confirmed. Keep the directory and PDF names unchanged when publishing to the site. The pages and PDFs are public by URL and excluded from search indexing.
