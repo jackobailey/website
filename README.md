@@ -38,3 +38,9 @@ npm run build
 Link Canvas to `/poli10302/assessments/1/` and `/poli10302/assessments/2/`. Each page links to `brief.pdf` and `checklist.pdf` in its own directory.
 
 To revise an assessment, render the PDFs from the Markdown sources in the teaching project's `_assessments/` directory. Replace the matching files in `public/poli10302/assessments/1/` or `public/poli10302/assessments/2/` and update the draft note in `src/pages/poli10302/assessments/[assessment].astro` when the outstanding details are confirmed. Keep the directory and PDF names unchanged when publishing to the site. The pages and PDFs are public by URL and excluded from search indexing.
+
+## POLI10302 lectures and workshops
+
+Canvas links use `/poli10302/lectures/1/` through `/poli10302/lectures/10/` and `/poli10302/workshops/1/` through `/poli10302/workshops/10/`. These unlisted URLs are reserved for student materials. The lecture URLs are for the student follow-along pages, with lecturer decks on their separate protected routes.
+
+When a session is ready, remove its numbered entry from `src/pages/poli10302/[sessionType]/[number].astro` and publish its student page at the same URL. Keep the other session numbers as written. For a static export placed in `public/`, include `noindex` on its HTML page.

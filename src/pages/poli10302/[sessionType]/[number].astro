@@ -1,0 +1,58 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import CourseLogo from "@/components/poli10302/CourseLogo.astro";
+import "@/styles/poli10302.css";
+
+export function getStaticPaths() {
+  const sessions = {
+    lectures: {
+      1: "Introduction",
+      2: "Surveys, sampling and data sources",
+      3: "Trends, measurement and comparisons",
+      4: "Groups and descriptive statistics",
+      5: "Visualisation and Assessment 1 briefing",
+      6: "Causation and experimental design",
+      7: "Treatment effects and differences in means",
+      8: "Regression for experiments",
+      9: "Uncertainty and treatment-effect heterogeneity",
+      10: "Industry guest event"
+    },
+    workshops: {
+      1: "Finding and importing data",
+      2: "Prepare data",
+      3: "Analyse data",
+      4: "Visualise data",
+      5: "Assessment 1 support",
+      6: "Describe experimental data",
+      7: "Estimate treatment effects",
+      8: "Interpret statistical evidence",
+      9: "Communicate research findings",
+      10: "Assessment 2 support"
+    }
+  };
+
+  return Object.entries(sessions).flatMap(([sessionType, titles]) =>
+    Object.entries(titles).map(([number, topic]) => ({
+      params: { sessionType, number },
+      props: { topic }
+    }))
+  );
+}
+
+const { sessionType, number } = Astro.params;
+const { topic } = Astro.props;
+const isLecture = sessionType === "lectures";
+const label = `${isLecture ? "Lecture" : "Workshop"} ${number}`;
+const materials = isLecture ? "Student materials" : "Workshop materials";
+---
+<BaseLayout hideSiteChrome courseTheme title={`${label} · ${topic} | Making Sense of Politics`} description={`${materials} for POLI10302 ${label.toLowerCase()}.`}>
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+  <div class="course-page">
+    <div class="course-wrap course-index">
+      <CourseLogo />
+      <p class="eyebrow">POLI10302 / {label}</p>
+      <h1>{topic}</h1>
+      <p class="course-lead">{materials} will appear here when available.</p>
+    </div>
+  </div>
+</BaseLayout>
