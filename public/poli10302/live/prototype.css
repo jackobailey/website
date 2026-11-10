@@ -73,23 +73,27 @@
   pointer-events: none;
 }
 
-.reveal .poll-options.has-results {
+.reveal .poll-options {
   display: grid;
   gap: 14px;
   margin: 1.25rem 0 0;
   list-style: none;
 }
 
-.reveal .poll-result {
+.reveal .poll-options > li {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 260px 205px;
-  gap: 24px;
+  grid-template-columns: 1.1em minmax(0, 1fr);
+  gap: 18px;
   align-items: center;
   margin: 0;
   padding: 12px 18px;
   background: #f0eaef;
   border-radius: 8px;
   font-size: .86em;
+}
+
+.reveal .poll-options.has-results > li {
+  grid-template-columns: 1.1em minmax(0, 1fr) 260px 205px;
 }
 
 .poll-result-track { display: flex; height: 12px; background: #dbcedc; border-radius: 8px; overflow: hidden; }

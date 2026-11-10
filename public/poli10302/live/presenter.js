@@ -63,11 +63,8 @@ function showPollResults(deck, publish) {
   const slide = options.closest("section");
   const summary = document.querySelector("#class-poll .poll-summary");
   const rows = [...options.children].map(option => {
-    const label = document.createElement("span");
-    label.textContent = option.textContent;
-    option.replaceChildren(label);
     option.insertAdjacentHTML("beforeend", '<span class="poll-result-track" aria-hidden="true"><span class="poll-result-live"></span><span class="poll-result-demo"></span></span><span class="poll-result-count"></span>');
-    return { row: option, text: label.textContent, label, track: option.querySelector(".poll-result-track"),
+    return { choice: option.dataset.choice, mark: option.querySelector(".poll-mark"), track: option.querySelector(".poll-result-track"),
       count: option.querySelector(".poll-result-count") };
   });
   let state;
@@ -83,11 +80,13 @@ function showPollResults(deck, publish) {
     const liveTotal = results ? Object.values(results.live).reduce((sum, count) => sum + count, 0) : 0;
     const demoTotal = results?.demo ? Object.values(results.demo).reduce((sum, count) => sum + count, 0) : 0;
     const total = liveTotal + demoTotal || 1;
-    for (const { row, text, label, track, count } of rows) {
-      const choice = row.dataset.choice;
-      row.classList.toggle("poll-result", Boolean(results));
-      const labelText = results?.answer === choice ? `${text} ✅` : text;
-      if (label.textContent !== labelText) label.textContent = labelText;
+    for (const { choice, mark, track, count } of rows) {
+      const verdict = results ? (results.answer === choice ? "correct" : "incorrect") : "";
+      if (mark.dataset.verdict !== verdict) {
+        mark.dataset.verdict = verdict;
+        mark.setAttribute("aria-hidden", String(!verdict));
+        mark.setAttribute("aria-label", verdict === "correct" ? "Correct answer" : verdict ? "Incorrect answer" : "");
+      }
       track.hidden = count.hidden = !results;
       if (!results) continue;
       const live = results.live[choice];

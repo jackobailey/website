@@ -90,6 +90,25 @@ h2 { color: var(--purple); font-size: clamp(1.9rem, 7vw, 3rem); line-height: 1.0
 
 .poll-choice:has(input:checked) { border-color: var(--purple); background: #f2eaf5; }
 .poll-choice input { accent-color: var(--purple); }
+
+.poll-options {
+  list-style: none;
+  padding: 0;
+}
+
+.poll-options > li {
+  display: grid;
+  grid-template-columns: 1.1em minmax(0, 1fr);
+  gap: .65em;
+  align-items: start;
+  padding: .35rem .65rem;
+  margin-bottom: .35rem;
+  border: 1px solid var(--line);
+  border-radius: .35rem;
+}
+
+.poll-options .poll-mark { margin-top: .23em; }
+
 .poll-status, .activity-note { font-size: .9rem; }
 label[for="eli5-draft"] { display: block; font-weight: 700; }
 
@@ -115,4 +134,4 @@ label[for="eli5-draft"] { display: block; font-weight: 700; }
 .eli5-example p { margin-bottom: 0; }
 
 .poll-progress { color: var(--purple); font-weight: 700; }
-.poll-answer { color: var(--purple); font-weight: 700; }
+.poll-answer { color: var(--purple); font-weight: 700; white-space: nowrap; }

@@ -94,10 +94,11 @@ function setupStudentPoll() {
     radio.name = "choice";
     radio.value = option.dataset.choice;
     radio.required = true;
-    label.append(radio, option.textContent);
+    const optionLabel = option.querySelector(".poll-option-label");
+    label.append(radio, optionLabel.textContent);
     fieldset.append(label);
-    option.append(result);
-    return { choice: radio.value, result };
+    optionLabel.append(result);
+    return { choice: radio.value, mark: option.querySelector(".poll-mark"), result };
   });
   options.after(form);
 
@@ -147,10 +148,16 @@ function setupStudentPoll() {
       : voted ? "Vote recorded."
       : failure || "The poll is open. You can submit one answer.";
     if (status.textContent !== label) status.textContent = label;
-    for (const { choice, result } of rows) {
-      const results = state?.results;
+    const results = state?.results;
+    for (const { choice, mark, result } of rows) {
+      const verdict = results ? (results.answer === choice ? "correct" : "incorrect") : "";
+      if (mark.dataset.verdict !== verdict) {
+        mark.dataset.verdict = verdict;
+        mark.setAttribute("aria-hidden", String(!verdict));
+        mark.setAttribute("aria-label", verdict === "correct" ? "Correct answer" : verdict ? "Incorrect answer" : "");
+      }
       const resultLabel = results
-        ? `${choice === results.answer ? " ✅" : ""} · ${results.live[choice]} live${results.demo ? ` · ${results.demo[choice]} simulated` : ""}`
+        ? ` · ${results.live[choice]} live${results.demo ? ` · ${results.demo[choice]} simulated` : ""}`
         : "";
       if (result.textContent !== resultLabel) result.textContent = resultLabel;
     }
