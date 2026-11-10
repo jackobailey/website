@@ -86,7 +86,7 @@ function showPollResults(deck, publish) {
     for (const { row, text, label, track, count } of rows) {
       const choice = row.dataset.choice;
       row.classList.toggle("poll-result", Boolean(results));
-      const labelText = results?.answer === choice ? `${text} · Correct answer` : text;
+      const labelText = results?.answer === choice ? `${text} ✅` : text;
       if (label.textContent !== labelText) label.textContent = labelText;
       track.hidden = count.hidden = !results;
       if (!results) continue;

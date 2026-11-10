@@ -150,7 +150,7 @@ function setupStudentPoll() {
     for (const { choice, result } of rows) {
       const results = state?.results;
       const resultLabel = results
-        ? `${choice === results.answer ? " · Correct answer" : ""} · ${results.live[choice]} live${results.demo ? ` · ${results.demo[choice]} simulated` : ""}`
+        ? `${choice === results.answer ? " ✅" : ""} · ${results.live[choice]} live${results.demo ? ` · ${results.demo[choice]} simulated` : ""}`
         : "";
       if (result.textContent !== resultLabel) result.textContent = resultLabel;
     }
