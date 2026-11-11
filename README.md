@@ -44,3 +44,7 @@ To revise an assessment, render the PDFs from the Markdown sources in the teachi
 Canvas links use `/poli10302/lectures/1/` through `/poli10302/lectures/10/` and `/poli10302/workshops/1/` through `/poli10302/workshops/10/`. These unlisted URLs are reserved for student materials. The lecture URLs are for the student follow-along pages, with lecturer decks on their separate protected routes.
 
 When a session is ready, remove its numbered entry from `src/pages/poli10302/[sessionType]/[number].astro` and publish its student page at the same URL. Keep the other session numbers as written. For a static export placed in `public/`, include `noindex` on its HTML page.
+
+## POLI10302 course handbook
+
+The draft handbook is available at `/poli10302/handbook/course-handbook.pdf`. Replace the PDF in `public/poli10302/handbook/` and publish to update it without changing the link. The file is public by URL and excluded from search indexing.
